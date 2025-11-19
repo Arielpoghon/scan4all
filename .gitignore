@@ -1,0 +1,32 @@
+# Binaries for programs and plugins
+.idea
+*.iml
+*.exe
+*.exe~
+*.dll
+*.so
+tmp/
+config/tools/
+db/51pwnCc/
+db/sqlite3.db
+*.dylib
+sqlite3.db
+tools/macOS
+release
+.DbCache
+scan4all_linux
+.DS_Store
+db/GeoIP2-City.mmdb.zip
+main
+scan4all
+config/rockyou.txt
+
+# Test binary, built with `go testnmanp -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+
+dist/
