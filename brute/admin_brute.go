@@ -1,5 +1,4 @@
 package brute
-
 import (
 	"crypto/md5"
 	"fmt"
