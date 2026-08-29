@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Jira Information Disclosure",
+    "Description": "Affected Atlassian Jira Server and Data Center versions allow unauthenticated users to enumerate users via an information disclosure vulnerability in QueryComponentRendererValue!Default.jspa endpoint. Affected versions are those before 8.5.13, versions 8.6.0 through 8.13.5, and versions 8.14.0 through 8.15.1",
+    "Product": "Grafana",
     "author": "chumeng",
     "Request":[
-        {
+                {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/secure/QueryComponentRendererValue!Default.jspa?assignee=user:admin",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,12 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
+                "Value": "jspa?name=admin"
+                },
                  {
                 "Operation": "code", 
                 "Key":"",
@@ -34,3 +30,4 @@
         "Next_decide":""
                 }
 ]}
+

