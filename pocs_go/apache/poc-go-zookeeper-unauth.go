@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// ZookeeperUnauthority zookeeper 未授权
+// ZookeeperUnauthority zookeeper unauthorized access
 //
 //	addr := args.Host + ":2181"
 func ZookeeperUnauthority(szUrl string) bool {

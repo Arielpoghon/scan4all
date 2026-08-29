@@ -10,7 +10,7 @@ import (
 func GetUrlFile(filename string) (urllist []string) {
 	fp, err := os.Open(filename)
 	if err != nil {
-		log.Println("无法打开url文件")
+		log.Println("Unable to open url file")
 		os.Exit(0)
 
 	}

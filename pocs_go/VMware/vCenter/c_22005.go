@@ -133,7 +133,7 @@ func Upload_shell(szUrl, log_param, agent_name, wb_str string) string {
 					io.Copy(io.Discard, resp.Body)
 					if resp.StatusCode == 200 {
 						szRst = szU
-						fmt.Println("[+] 上传成功，检查Webshell: " + szU)
+						fmt.Println("[+] Upload successful, checking Webshell: " + szU)
 					}
 				}
 			})

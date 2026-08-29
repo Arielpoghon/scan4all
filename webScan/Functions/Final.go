@@ -22,25 +22,25 @@ type all_result struct {
 func GetAllJson() []Configs.ExpJson {
 	FindResltAllJson := []string{}
 	FindResltAllJson, _ = FindFileAllJson(Configs.ConfigJsonMap.Exploit.Path, FindResltAllJson)
-	// 所有的json文件
+	// all json files
 	//for _, filename := range FindResltAllJson {
 	//	fmt.Println(filename)
 	//}
 	size := len(FindResltAllJson)
 	var AllExpJsonContent []Configs.ExpJson = make([]Configs.ExpJson, size)
 	for i := 0; i < size; i++ {
-		filevalue := LoadExpJsonAll(FindResltAllJson[i]) //获取每个输入json文件的内容
+		filevalue := LoadExpJsonAll(FindResltAllJson[i]) // get the content of each input json file
 
 		var expjson Configs.ExpJson
-		err := json.Unmarshal(filevalue, &expjson) //将每个json文件内容放到结构体数组中
+		err := json.Unmarshal(filevalue, &expjson) // put the content of each json file into the struct array
 		AllExpJsonContent[i] = expjson
-		//	fmt.Println(AllExpJsonContent[i])  详细每个json的内容
+		//	fmt.Println(AllExpJsonContent[i])  details of each json
 		if err != nil {
 			log.Println("Json file to load failed")
 			continue
 		}
 	}
-	return AllExpJsonContent //用于存放 返回的所有json内容
+	return AllExpJsonContent // used to store all the json content returned
 }
 
 func All_url_one_Json(oneExpjson Configs.ExpJson, urls <-chan string, result chan<- results, timeout_count map[string]int) {
@@ -90,7 +90,7 @@ func final_ALLurl_OneJson(timeout_count map[string]int) {
 	//results := make(chan bool, size+1)
 	jobs_url := make(chan string, size+1)
 	var oneExpjson Configs.ExpJson
-	LoadOneExpJson(Configs.UserObject.JsonFile, &oneExpjson) //载入一个expjson
+	LoadOneExpJson(Configs.UserObject.JsonFile, &oneExpjson) // load an expjson
 	for i := 0; i < Configs.UserObject.ThreadNum; i++ {
 		go All_url_one_Json(oneExpjson, jobs_url, result, timeout_count)
 	}

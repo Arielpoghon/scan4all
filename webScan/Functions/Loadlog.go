@@ -32,6 +32,6 @@ func Get_Time() string {
 	day := time.Now().Day()
 	hour := time.Now().Hour()
 	minute := time.Now().Minute()
-	now_time := fmt.Sprintf("%d年%d月%d日%d时%d分", year, month, day, hour, minute)
+	now_time := fmt.Sprintf("%d/%02d/%02d %02d:%02d", year, month, day, hour, minute)
 	return now_time
 }

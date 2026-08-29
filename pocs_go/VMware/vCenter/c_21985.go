@@ -24,7 +24,7 @@ func Upload(szUrl, b64_str string) {
 		if nil != resp {
 			io.Copy(io.Discard, resp.Body)
 			if resp.StatusCode == 200 {
-				fmt.Println("[+] 上传成功，开始命令执行.")
+				fmt.Println("[+] Upload successful, starting command execution.")
 			}
 		}
 	})
@@ -89,8 +89,8 @@ func Generate_xml(command string) []byte {
 
 func Zip_file(src string, xml_buf []byte) []byte {
 	var buf bytes.Buffer
-	zipWriter := zip.NewWriter(&buf) //初始化一个zip.Writer，用来将数据写入zip文件中
-	w2, err := zipWriter.Create(src) //创建一个io.Writer
+	zipWriter := zip.NewWriter(&buf) // initialize a zip.Writer to write data into a zip file
+	w2, err := zipWriter.Create(src) // create an io.Writer
 	if err != nil {
 		log.Println(err)
 		return nil

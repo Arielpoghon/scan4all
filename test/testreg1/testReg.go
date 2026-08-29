@@ -6,9 +6,9 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-// 测试正则表达式是否正确
+// test whether the regular expression is correct
 func main() {
-	// 中途控制关闭当前目标所有fuzz
+	// stop all fuzz for the current target midway
 	_, stop := context.WithCancel(util.Ctx_global)
 	stop()
 	stop()

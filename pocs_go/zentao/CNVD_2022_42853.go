@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// zentao/user-login.html SQL注入
+// zentao/user-login.html SQL injection
 func CNVD_2022_42853(u string) bool {
 	payload := "account='"
 	header := make(map[string]string)

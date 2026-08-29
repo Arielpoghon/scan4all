@@ -43,8 +43,8 @@ func FindFile(path, keyworld string) {
 	Configs.FindReslt = nil
 }
 
-// 搜索所有的json格式文件
-func FindFileAllJson(pathname string, FindResltAllJson []string) ([]string, error) { //s用于存储临时环境
+// search for all json format files
+func FindFileAllJson(pathname string, FindResltAllJson []string) ([]string, error) { // used to store the temporary environment
 
 	fromSlash := filepath.FromSlash(pathname)
 	rd, err := ioutil.ReadDir(pathname)

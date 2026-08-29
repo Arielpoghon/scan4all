@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-//session泄露&&文件上传getshell
+//session leak && file upload getshell
 
 func SessionUpload(u string) bool {
 	if session := getsession(u); session != "" {

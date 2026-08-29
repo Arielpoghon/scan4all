@@ -186,7 +186,7 @@ func NetBIOS1(info *HostInfo) (nbname NbnsName, err error) {
 		item_content := bytes.ReplaceAll(ret[index+4:index+4+item_length], []byte{0x00}, []byte{})
 		index += 4 + item_length
 		if string(item_type) == "\x07\x00" {
-			//Time stamp, 暂时不想处理
+			//Time stamp, do not want to handle it for now
 		} else if NetBIOS_ITEM_TYPE[string(item_type)] != "" {
 			nbname.msg += fmt.Sprintf("%-22s: %s\n", NetBIOS_ITEM_TYPE[string(item_type)], string(item_content))
 		} else if string(item_type) == "\x00\x00" {

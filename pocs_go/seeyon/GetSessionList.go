@@ -4,7 +4,7 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-//getSessionList.jsp session 泄露
+//getSessionList.jsp session leak
 
 func GetSessionList(u string) bool {
 	if req, err := util.HttpRequset(u+"/yyoa/ext/https/getSessionList.jsp?cmd=getAll", "GET", "", false, nil); err == nil {

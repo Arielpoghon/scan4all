@@ -29,7 +29,7 @@ func confirmtoken(target, token string) {
 	}
 }
 
-// 检查 token 有效性
+// check the validity of a token
 func DoChecheToken(target, token string) {
 	confirmtoken(target, token)
 }

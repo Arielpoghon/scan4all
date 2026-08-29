@@ -26,7 +26,7 @@ func Between(str, starting, ending string) string {
 
 func check(target string) {
 	user_agent := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36"
-	/*构造payload*/
+	/*construct payload*/
 	if !strings.Contains(target, "http") {
 		target = "http://" + target
 	}
@@ -60,7 +60,7 @@ func check(target string) {
 
 func enumerate(target string) {
 	user_agent := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36"
-	/*构造payload*/
+	/*construct payload*/
 	if !strings.Contains(target, "http") {
 		target = "http://" + target
 	}
@@ -117,7 +117,7 @@ func enumerate(target string) {
 }
 
 func getlegacydn(target, email string) {
-	/*构造payload*/
+	/*construct payload*/
 	if !strings.Contains(target, "http") {
 		target = "http://" + target
 	}

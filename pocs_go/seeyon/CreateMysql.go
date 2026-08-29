@@ -4,7 +4,7 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-//createMysql.jsp 数据库敏感信息泄
+//createMysql.jsp database sensitive information leak
 
 func CreateMysql(u string) bool {
 	var vuln = false

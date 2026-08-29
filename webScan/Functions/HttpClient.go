@@ -94,7 +94,7 @@ func UClient(method, url string, filestruct Configs.FileNameStruct, body io.Read
 		return
 	}
 	bodyWrite.Close()
-	// 创建请求
+	// create the request
 	contentType := bodyWrite.FormDataContentType()
 	client.DoGetWithClient4SetHd(client.Client, url, http.MethodPost, bodyBuf, func(resp1 *http.Response, err error, szU string) {
 		if nil != err {
