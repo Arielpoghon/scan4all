@@ -13,35 +13,35 @@ import (
 	"strings"
 )
 
-// 异常页面数据库
+// Error page database
 type ErrPage struct {
 	gorm.Model
-	FingerprintsTag string `json:"fingerprintsTag"` // 指纹标签,带标签是指纹数据，不是异常数据
-	Title           string `json:"title"`           // 标题
+	FingerprintsTag string `json:"fingerprintsTag"` // fingerprint tag; tagged data is fingerprint data, not error data
+	Title           string `json:"title"`           // title
 	Body            string `json:"body"`            // body
-	BodyLen         int    `json:"bodyLen"`         // body len
-	BodyHash        string `json:"bodyHash"`        // body hash， Favicohash4key
+	BodyLen         int    `json:"bodyLen"`         // body length
+	BodyHash        string `json:"bodyHash"`        // body hash, Favicohash4key
 	BodyMd5         string `json:"bodyMd5"`         // body md5
-	HitCnt          uint32 `json:"hitCnt"`          // 命中统计
+	HitCnt          uint32 `json:"hitCnt"`          // hit statistics
 }
 
 var (
-	page404Title []string // 404 标题库、正文库
-	asz404Url    []string // 404url,智能学习
+	page404Title []string // 404 title library, body library
+	asz404Url    []string // 404 urls, smart learning
 )
 
-// 异常、404、500、505 标题、内容 存在到信息库
-//  允许正则表达式
+// Store error, 404, 500, 505 titles and contents in the information database
+//  Regex is allowed
 //go:embed dicts/fuzz404.txt
 var fuzz404 string
 
-// 常见404 url 列表,智能学习
+// Common 404 url list, smart learning
 //go:embed dicts/404url.txt
 var sz404Url string
 
 var asz404UrlKey = "asz404Url"
 
-// 初始化字典到库中，且防止重复
+// Initialize dictionaries into the database and prevent duplicates
 func init() {
 	util.RegInitFunc(func() {
 		fuzz404 = util.GetVal4File("fuzz404", fuzz404)
@@ -52,19 +52,19 @@ func init() {
 		if nil == err && 0 < len(data) {
 			aT1 := asz404Url
 			if nil != json.Unmarshal(data, &asz404Url) {
-				asz404Url = aT1 // 容错
+				asz404Url = aT1 // fault tolerance
 			}
 		}
 		util.InitDb(&ErrPage{})
 	})
 }
 
-// 智能学习: 非正常页面，并记录到库中永久使用,使用该方法到页面
-// 要么是异常页面，要么是需要学习到指纹，带标记带
-//  0、识别学习过的url就跳过
-//  1、body 学习
-//  2、标题 学习
-//  3、url 去重记录
+// Smart learning: non-normal pages are recorded in the database for permanent use; pages handled by this method
+// are either error pages or need fingerprint learning, with a tag
+//  0、Skip urls already learned
+//  1、Learn body
+//  2、Learn title
+//  3、Deduplicate url records
 func StudyErrPageAI(req *util.Response, page *util.Page, fingerprintsTag string) {
 	if nil == req || nil == page || "" == req.Body {
 		return
@@ -73,7 +73,7 @@ func StudyErrPageAI(req *util.Response, page *util.Page, fingerprintsTag string)
 		var data = &ErrPage{}
 		body := []byte(req.Body)
 		szHs, szMd5 := fingerprint.GetHahsMd5(body)
-		// 这里后期优化基于其他查询
+		// Optimize later based on other queries
 		r1 := util.GetOne[ErrPage](data, "bodyHash=? and bodyMd5=?", szHs, szMd5)
 		if nil != r1 {
 			data = r1
@@ -84,7 +84,7 @@ func StudyErrPageAI(req *util.Response, page *util.Page, fingerprintsTag string)
 			if "" != fingerprintsTag {
 				data.FingerprintsTag = fingerprintsTag
 			}
-			// 学些匹配，不重复再记录
+			// Learn matching, do not record duplicates
 			if bRst, _ := CheckRepeat(data); !bRst {
 				util.Create[ErrPage](*data)
 			}
@@ -92,10 +92,10 @@ func StudyErrPageAI(req *util.Response, page *util.Page, fingerprintsTag string)
 	})
 }
 
-// 相似度精准度
+// Similarity precision
 var fXsdPrecision float64 = 0.96
 
-// 判断库中是否已经存在
+// Check whether it already exists in the database
 func CheckRepeat(data *ErrPage) (bool, *ErrPage) {
 	var aRst []ErrPage
 	aRst1 := util.GetSubQueryLists[ErrPage, ErrPage](*data, "", aRst, 10000, 0)
@@ -113,7 +113,7 @@ func CheckRepeat(data *ErrPage) (bool, *ErrPage) {
 	return false, nil
 }
 
-// 检测是否为异常页面，包括状态码检测
+// Detect whether it is an error page, including status code detection
 func CheckIsErrPageAI(req *util.Response, page *util.Page) bool {
 	body := []byte(req.Body)
 	szHs, szMd5 := fingerprint.GetHahsMd5(body)
@@ -123,22 +123,22 @@ func CheckIsErrPageAI(req *util.Response, page *util.Page) bool {
 	bRst, _ := CheckRepeat(data)
 	if false == bRst && (0 < len(data.Title) || 0 < len(data.Body)) {
 		for _, x := range page404Title {
-			// 异常页面标题检测成功
+			// Error page title detection succeeded
 			if 0 < len(data.Title) && (util.StrContains(x, data.Title) || util.StrContains(data.Title, x)) || 0 < len(data.Body) && util.StrContains(data.Body, x) {
 				util.Create[ErrPage](*data)
 				return true
 			}
 			u01, err := url.Parse(strings.TrimSpace(*page.Url))
 			if nil == err && 2 < len(u01.Path) {
-				// 加 404 url判断
+				// Add 404 url detection
 				if pkg.Contains4sub[string](asz404Url, u01.Path) {
 					return true
 				}
-				// 添加到 asz404Url, 保存到库中
+				// Add to asz404Url, save to the database
 				if 404 == req.StatusCode {
 					go func() {
 						asz404Url = append(asz404Url, u01.Path)
-						util.PutAny[[]string](asz404UrlKey, asz404Url) // 404 path 缓存起来，永久复用
+						util.PutAny[[]string](asz404UrlKey, asz404Url) // Cache 404 path for permanent reuse
 					}()
 				}
 			}
@@ -147,7 +147,7 @@ func CheckIsErrPageAI(req *util.Response, page *util.Page) bool {
 	return bRst
 }
 
-// 获取标题
+// Get title
 func Gettitle(body string) *string {
 	body = strings.ToLower(body)
 	title := ""

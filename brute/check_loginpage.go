@@ -42,9 +42,9 @@ func CheckLoginPage(inputurl string, resp *httpx.Response) bool {
 				if err != nil {
 					return false
 				}
-				// 转换为绝对的可访问的url
+				// Convert to an absolute accessible url
 				hrefurl := u.ResolveReference(href)
-				// 原理，css中包含了login
+				// Principle: the css contains "login"
 				if reqcss, err := util.HttpRequset(hrefurl.String(), "GET", "", true, nil); err == nil {
 					if util.StrContains(reqcss.Body, "login") {
 						return true

@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-// 这里后期优化：
-// 1、基于字典
-// 2、相同url，相同 body.len只做一次匹配
-// 3、支持多地方调用
-// 4、所有异常页面 > 400 > 500都做异常页面fuzz指纹
+// Optimize here later:
+// 1、Based on dictionary
+// 2、Same url, same body length only matches once
+// 3、Support multiple call sites
+// 4、All error pages > 400 > 500 are fuzzed for error page fingerprints
 func Addfingerprints404(technologies []string, req *util.Response, oPage *util.Page) []string {
 	var szKey string
 	if nil != oPage {
@@ -28,11 +28,11 @@ func Addfingerprints404(technologies []string, req *util.Response, oPage *util.P
 	if 0 < util.CheckShiroCookie(req.Header) {
 		technologies = append(technologies, "Shiro")
 	}
-	// StatusCode 404，这里会有误报，当请求当路径中包含了ThinkPHP，有些site返回当结果会看包涵全路径信息
+	// StatusCode 404, there may be false positives here. When the requested path contains ThinkPHP, some sites return results that include the full path information
 	if util.StrContains(req.Body, "thinkphp") || -1 < strings.Index(strings.ToLower(*oPage.Url), strings.ToLower("/Runtime/Logs/")) {
 		technologies = append(technologies, "ThinkPHP")
 	}
-	// 这里需要斟酌
+	// This needs consideration
 	if util.StrContains(req.Body, "Hypertext Transfer Protocol") {
 		technologies = append(technologies, "Weblogic")
 	}
@@ -58,7 +58,7 @@ func Addfingerprintsnormal(payload string, technologies []string, req *util.Resp
 	return append(technologies, a...)
 }
 
-// 正常页面指纹处理
+// Normal page fingerprint processing
 func Addfingerprintsnormal1(payload string, technologies []string, req *util.Response, fuzzPage *util.Page) []string {
 	// StatusCode 200, 301, 302, 401, 500
 	switch payload {

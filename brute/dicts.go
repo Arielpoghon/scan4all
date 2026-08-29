@@ -12,11 +12,11 @@ type UserPass struct {
 }
 
 var (
-	tomcatuserpass   = []UserPass{} // tomcat user pass 字典
-	jbossuserpass    = []UserPass{} // jboss user pass 字典
-	top100pass       = []string{}   // top 100 密码，用于 http爆破
-	weblogicuserpass = []UserPass{} // weblogic user pass 字典
-	filedic          = []string{}   // fuzz字典
+	tomcatuserpass   = []UserPass{} // tomcat user pass dictionary
+	jbossuserpass    = []UserPass{} // jboss user pass dictionary
+	top100pass       = []string{}   // top 100 passwords, used for http brute-force
+	weblogicuserpass = []UserPass{} // weblogic user pass dictionary
+	filedic          = []string{}   // fuzz dictionary
 	SelfHd           = []string{}
 )
 
@@ -25,12 +25,12 @@ var (
 //go:embed dicts/selfHd.txt
 var selfHds string
 
-// http 爆破user
+// http brute-force user
 //
 //go:embed dicts/httpuser.txt
 var httpuser string
 
-// http 爆破密码字典
+// http brute-force password dictionary
 //
 //go:embed dicts/httpass.txt
 var httpass string
@@ -69,7 +69,7 @@ func CvtLines(s string) []string {
 	return strings.Split(s, "\n")
 }
 
-// http 密码爆破user
+// http brute-force user
 var basicusers []string
 
 func init() {

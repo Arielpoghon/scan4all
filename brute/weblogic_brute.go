@@ -5,11 +5,11 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-// weblogic默认的登陆尝试次数为5次，
+// Weblogic's default number of login attempts is 5 times;
 //
-//	5次失败则weblogic用户锁定，即使你已经找到正确的密码，也不能登陆到console
-//	默认的锁定时间为30分钟，后期可以设置策略，自动后台运行，每30分钟走一轮不重复的密码
-//	后期再优化间隔35分钟后继续后面的密码
+//	After 5 failed attempts the weblogic user is locked, and even if you have found the correct password you cannot log in to the console
+//	The default lockout time is 30 minutes. Later a policy can be set to run automatically in the background, doing one round of non-repeating passwords every 30 minutes
+//	Later optimize the interval to continue with the remaining passwords after 35 minutes
 func Weblogic_brute(url string) (username string, password string) {
 	if req, err := util.HttpRequset(url+"/console/login/LoginForm.jsp", "GET", "", false, nil); err == nil {
 		if req.StatusCode == 200 {

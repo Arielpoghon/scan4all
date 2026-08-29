@@ -4,29 +4,29 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-// 优化应该考虑
+// Optimization considerations
 //
-//	1、一天内相同目标的结果缓存，只执行一次
-//	2、应该考虑多线程并发执行
+//	1、All results for the same target within a day are cached and only executed once
+//	2、Multi-threaded concurrent execution should be considered
 func Basic_brute(url string) (username string, password string) {
 	if req, err := util.HttpRequsetBasic("asdasdascsacacs", "adcadcadcadcadcadc", url, "HEAD", "", false, nil); err == nil {
-		// 超文本传输​​协议(HTTP) 401 Unauthorized 客户端错误状态响应代码表示客户端请求尚未完成，因为它缺少所请求资源的有效身份验证凭据
-		// https://www.jianshu.com/p/ca3e561e09ae
+		// Hypertext Transfer Protocol (HTTP) 401 Unauthorized is a client error status response code indicating that the client request has not been completed because it lacks valid authentication credentials for the requested resource
+		// https://www.shuzhiduo.com/A/1y345GonJN/
 		if req.StatusCode == 401 {
 			for useri := range basicusers {
 				for passi := range top100pass {
 					if req2, err2 := util.HttpRequsetBasic(basicusers[useri], top100pass[passi], url, "HEAD", "", false, nil); err2 == nil {
-						// 403 Forbidden 是HTTP协议中的一个HTTP状态码（Status Code）。403状态码意为服务器成功解析请求但是客户端没有访问该资源的权限
-						// 理论上可能存在： https://zhuanlan.zhihu.com/p/270297661
-						// 1、成功爆破后，页面跳转（3XX），
-						// 2、402 Payment Required（要求付款）
-						// 403 Forbidden（被禁止）；
-						// 404 Not Found（找不到）
-						// 405 Method Not Allowed（不允许的方法）
-						// 406 Not Acceptable（不可接受）
-						// 407 Proxy Authentication Required（需要代理身份验证）
-						// 408 Request Timeout（请求超时）410 Gone（不存在） 409 Conflict（冲突）
-						// 400 Bad Request（错误请求）
+						// 403 Forbidden is an HTTP status code in the HTTP protocol. A 403 status code means the server successfully parsed the request but the client does not have permission to access the resource
+						// Theoretically possible: https://www.netspotapp.com/blog/hosting/403-forbidden.html
+						// 1、After a successful brute-force, the page redirects (3XX)
+						// 2、402 Payment Required
+						// 3、403 Forbidden
+						// 4、404 Not Found
+						// 5、405 Method Not Allowed
+						// 6、406 Not Acceptable
+						// 7、407 Proxy Authentication Required
+						// 8、408 Request Timeout, 410 Gone, 409 Conflict
+						// 9、400 Bad Request
 						if req2.StatusCode != 401 && req2.StatusCode != 400 && req2.StatusCode != 408 && req2.StatusCode < 405 {
 							//pkg.LogJson(rst.Result{PluginName: pkg.GetPluginName("Basic_brute"), StatusCode: req2.StatusCode, URL: url, Technologies: []string{fmt.Sprintf("Found vuln basic password|%s:%s|%s", basicusers[useri], top100pass[passi], url)}})
 							return basicusers[useri], top100pass[passi]

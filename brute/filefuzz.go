@@ -21,27 +21,27 @@ import (
 	"time"
 )
 
-// 备份、敏感文件后缀
+// Backup and sensitive file suffixes
 //
 //go:embed dicts/bakSuffix.txt
 var bakSuffix string
 
-// 备份、敏感文件 http头类型 ContentType 检测
+// Backup/sensitive file HTTP header Content-Type detection
 //
 //go:embed dicts/fuzzContentType1.txt
 var fuzzct string
 
-// 敏感文件前缀
+// Sensitive file prefixes
 //
 //go:embed dicts/prefix.txt
 var szPrefix string
 
 var (
-	ret            = []string{} // 敏感信息文件字典
-	prefix, suffix []string     // 敏感信息字典: 前缀、后缀
+	ret            = []string{} // sensitive information file dictionary
+	prefix, suffix []string     // sensitive information dictionary: prefix, suffix
 )
 
-// 生成敏感信息字典
+// Generate sensitive information dictionary
 func InitGeneral() int {
 	szPrefix = util.GetVal4File("prefix", szPrefix)
 	prefix = strings.Split(strings.TrimSpace(szPrefix), "\n")
@@ -56,14 +56,14 @@ func InitGeneral() int {
 	return len(ret)
 }
 
-// 请求url并返回自定义对象
+// Request url and return a custom object
 func reqPage(u string) (*util.Page, *util.Response, error) {
 	page := &util.Page{Url: &u}
 	var method = "GET"
 	for _, ext := range suffix {
 		if strings.HasSuffix(u, ext) {
 			page.IsBackUpPath = true
-			method = "HEAD" // 节约请求时间
+			method = "HEAD" // saves request time
 		}
 	}
 	header := make(map[string]string)
@@ -78,7 +78,7 @@ func reqPage(u string) (*util.Page, *util.Response, error) {
 	header["Cookie"] = "JSESSIONID=" + RandStr4Cookie + ";rememberMe=123"
 	if req, err := util.HttpRequset(u, method, "", false, header); err == nil && nil != req && nil != req.Header {
 		//if pkg.IntInSlice(req.StatusCode, []int{301, 302, 307, 308}) {
-		// 简单粗暴效率高
+		// Simple and crude, high efficiency
 		if 300 <= req.StatusCode && req.StatusCode < 400 {
 			page.Is302 = true
 		}
@@ -88,10 +88,10 @@ func reqPage(u string) (*util.Page, *util.Response, error) {
 		page.BodyLen = len(req.Body)
 		page.Title = Gettitle(req.Body)
 		page.LocationUrl = &req.Location
-		//  敏感文件头信息检测
+		//  Sensitive file header information detection
 		page.IsBackUpPage = CheckBakPage(req)
-		// https://zh.m.wikipedia.org/zh-hans/HTTP_403
-		// 403 Forbidden 是HTTP协议中的一个HTTP状态码（Status Code）。403状态码意为服务器成功解析请求但是客户端没有访问该资源的权限
+		// https://en.wikipedia.org/wiki/HTTP_403
+		// 403 Forbidden is an HTTP status code in the HTTP protocol. A 403 status code means the server successfully parsed the request but the client does not have permission to access the resource
 		page.Is403 = req.StatusCode == 403
 		return page, req, err
 	} else {
@@ -99,14 +99,14 @@ func reqPage(u string) (*util.Page, *util.Response, error) {
 	}
 }
 
-// 敏感文件头信息检测:
+// Sensitive file header information detection:
 //
-//	检测头信息是否有敏感文件、本份文件、流文件等敏感信息
+//	Detect whether the header contains sensitive file, backup file, stream file, and other sensitive information
 func CheckBakPage(req *util.Response) bool {
 	if x0, ok := (*req.Header)["Content-Type"]; ok && 0 < len(x0) {
 		x0B := []byte(x0[0])
 		for _, reg := range regs {
-			// 找到对应等正则
+			// Find the corresponding regex
 			if r1, ok := regsMap[reg]; ok {
 				if r1.Match(x0B) {
 					return true
@@ -117,12 +117,12 @@ func CheckBakPage(req *util.Response) bool {
 	return false
 }
 
-// 备份、敏感文件 http头类型 ContentType 检测,正则
+// Backup/sensitive file HTTP header Content-Type detection, regex
 var regs []string
 
 var (
-	regsMap          = make(map[string]*regexp.Regexp) // fuzz 正则库
-	disabledFileFuzz = false                           // 是否开启fuzz
+	regsMap          = make(map[string]*regexp.Regexp) // fuzz regex library
+	disabledFileFuzz = false                           // whether fuzz is enabled
 	NoDoPath         sync.Map
 	NoDoPathInit     = false
 )
@@ -139,7 +139,7 @@ func DoInitMap() {
 	}
 }
 
-// 初始化字典、数组等
+// Initialize dictionaries, arrays, etc.
 func init() {
 	util.RegInitFunc(func() {
 		bakSuffix = util.GetVal4File("bakSuffix", bakSuffix)
@@ -148,7 +148,7 @@ func init() {
 		InitGeneral()
 		regs = strings.Split(strings.TrimSpace(fuzzct), "\n")
 		var err error
-		// 初始化多时候一次性编译，否则会影响效率
+		// Compile all at once during initialization, otherwise it affects efficiency
 		for _, reg := range regs {
 			regsMap[reg], err = regexp.Compile(reg)
 			if nil != err {
@@ -156,23 +156,23 @@ func init() {
 			}
 		}
 		//regs = append(regs, ret...)
-		// 基于工厂方法构建
+		// Build based on factory method
 		util.EngineFuncFactory(Const.ScanType_WebDirScan, func(evt *models.EventData, args ...interface{}) {
 			filePaths, fileFuzzTechnologies := FileFuzz(evt.Task.ScanWeb, 200, 100, "")
 			util.SendEngineLog(evt, Const.ScanType_WebDirScan, filePaths, fileFuzzTechnologies)
 		})
 
-		// 注册一个
+		// Register one
 	})
 }
 
-// 绝对404请求文件前缀
+// Absolute 404 request file prefix
 //var file_not_support = "file_not_support"
 
-// 绝对404请求文件
+// Absolute 404 request file
 //var RandStr = file_not_support + "_scan4all"
 
-// 随机10个字符串
+// Random 10-character string
 var RandStr4Cookie = util.RandStringRunes(10)
 
 type FuzzData struct {
@@ -183,13 +183,13 @@ type FuzzData struct {
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 var (
 	r001 = regexp.MustCompile(`\.(aac)|(abw)|(arc)|(avif)|(avi)|(azw)|(bin)|(bmp)|(bz)|(bz2)|(cda)|(csh)|(css)|(csv)|(doc)|(docx)|(eot)|(epub)|(gz)|(gif)|(ico)|(ics)|(jar)|(jpeg)|(jpg)|(js)|(json)|(jsonld)|(mid)|(midi)|(mjs)|(mp3)|(mp4)|(mpeg)|(mpkg)|(odp)|(ods)|(odt)|(oga)|(ogv)|(ogx)|(opus)|(otf)|(png)|(pdf)|(php)|(ppt)|(pptx)|(rar)|(rtf)|(sh)|(svg)|(tar)|(tif)|(tiff)|(ts)|(ttf)|(txt)|(vsd)|(wav)|(weba)|(webm)|(webp)|(woff)|(woff2)|(xhtml)|(xls)|(xlsx)|(xml)|(xul)|(zip)|(3gp)|(3g2)|(7z)$`)
-	cT1  = make(chan struct{}, 1) // 每次只允许1个url fuzz
+	cT1  = make(chan struct{}, 1) // only allow 1 url fuzz at a time
 )
 
-// 重写了fuzz：优化流程、优化算法、修复线程安全bug、增加智能功能
+// Rewritten fuzz: optimized flow, optimized algorithm, fixed thread-safety bug, added intelligent features
 //
-//	两次  ioutil.ReadAll(resp.Body)，第二次就会 Read返回EOF error
-//	去除指纹请求的路径，避免重复
+//	Calling ioutil.ReadAll(resp.Body) twice, the second read returns an EOF error
+//	Remove the fingerprint request path to avoid duplication
 func FileFuzz(u string, indexStatusCode int, indexContentLength int, indexbody string) ([]string, []string) {
 	if util.TestRepeat(u) {
 		return []string{}, []string{}
@@ -206,35 +206,35 @@ func FileFuzz(u string, indexStatusCode int, indexContentLength int, indexbody s
 	if nil == err {
 		u = u01.Scheme + "://" + u01.Host + "/"
 	}
-	// 用host，确保https、http只走一种协议即可
+	// Use host to ensure only one protocol (https or http) is used
 	if disabledFileFuzz || util.TestRepeat(u01.Host, "FileFuzz") {
 		return []string{}, []string{}
 	}
 	//log.Println("start file fuzz", u)
 	var (
-		//path404               = RandStr // 绝对404页面路径
-		errorTimes   int32    = 0 // 错误计数器，> 20则退出fuzz
-		technologies []string     // 指纹数据
-		path         []string     // 成功页面路径
+		//path404               = RandStr // absolute 404 page path
+		errorTimes   int32    = 0 // error counter, exit fuzz if > 20
+		technologies []string     // fingerprint data
+		path         []string     // successful page paths
 	)
 	url404, url404req, err, ok := util.TestIs404Page(u) //reqPage(u + path404)
 	if err == nil && ok && nil != url404req {
-		// 升级协议
+		// Upgrade protocol
 		if "" != url404req.Protocol && !strings.Contains(url404req.Protocol, "HTTP/1.") {
 			u = "https://" + u01.Host + "/"
 		}
 		go util.CheckHeader(url404req.Header, u)
-		// 跳过当前目标所有的fuzz,后续所有的fuzz都无意义了
+		// Skip all fuzz for the current target; all subsequent fuzz is meaningless
 		if 200 == url404.StatusCode || 301 == url404.StatusCode || 302 == url404.StatusCode {
 			return []string{}, []string{}
 		}
-		// 其实这里无论状态码是什么，都是404
-		// 所有异常页面 > 400 > 500都做异常页面fuzz指纹
-		// 提高精准度，可以只考虑404
+		// In fact, regardless of the status code here, it is all 404
+		// All error pages > 400 > 500 are fuzzed for error page fingerprints
+		// To improve precision, only 404 needs to be considered
 		//if url404req.StatusCode > 400 {
 		if url404req.StatusCode == 404 {
-			technologies = Addfingerprints404(technologies, url404req, url404) //基于404页面文件扫描指纹添加
-			StudyErrPageAI(url404req, url404, "")                              // 异常页面学习
+			technologies = Addfingerprints404(technologies, url404req, url404) // Add fingerprint based on 404 page file scan
+			StudyErrPageAI(url404req, url404, "")                              // Error page learning
 		} else {
 			return []string{}, []string{}
 		}
@@ -242,17 +242,17 @@ func FileFuzz(u string, indexStatusCode int, indexContentLength int, indexbody s
 		return []string{}, []string{}
 	}
 	var wg sync.WaitGroup
-	// 中途控制关闭当前目标所有fuzz
-	// 终止fuzz任务
+	// Control to close all fuzz for the current target mid-way
+	// Terminate the fuzz task
 	ctx, stop := context.WithCancel(util.Ctx_global)
-	// 终止 接收结果任务
+	// Terminate the result receiving task
 	ctx2, stop2 := context.WithCancel(util.Ctx_global)
-	// 控制 fuzz 线程数
+	// Control the number of fuzz threads
 	var ch = make(chan struct{}, util.Fuzzthreads)
-	// 异步接收结果
+	// Asynchronously receive results
 	var async_data = make(chan *FuzzData, util.Fuzzthreads*2)
 	var async_technologies = make(chan []string, util.Fuzzthreads*2)
-	// 字典长度的 30% 的错误
+	// Errors at 30% of the dictionary length
 	var MaxErrorTimes int32 = int32(util.GetValAsInt("MaxErrorTimes", 50)) //int32(float32(len(filedic)) * 0.005)
 	if strings.HasPrefix(url404req.Protocol, "HTTP/2") || strings.HasPrefix(url404req.Protocol, "HTTP/3") {
 		MaxErrorTimes = int32(len(filedic))
@@ -271,7 +271,7 @@ func FileFuzz(u string, indexStatusCode int, indexContentLength int, indexbody s
 	var lst200 *util.Response
 	t001 := time.NewTicker(3 * time.Second)
 	var nCnt int32 = 0
-	// 异步 接收 fuzz 结果
+	// Asynchronously receive fuzz results
 	go func() {
 		defer stop()
 		for {
@@ -290,7 +290,7 @@ func FileFuzz(u string, indexStatusCode int, indexContentLength int, indexbody s
 					}
 					lst200 = x1.Req.Resqonse
 					if len(path) > nStop {
-						stop() //发停止指令
+						stop() // Send stop command
 						atomic.AddInt32(&errorTimes, MaxErrorTimes)
 						return
 					}
@@ -312,11 +312,11 @@ func FileFuzz(u string, indexStatusCode int, indexContentLength int, indexbody s
 BreakAll:
 	for _, payload := range filedic {
 		payload = strings.TrimSpace(payload)
-		// httpx 跑过的这里不再重复跑
+		// Paths already run by httpx are not re-run here
 		if _, ok := NoDoPath.Load(payload); ok {
 			continue
 		}
-		// 接收到停止信号
+		// Stop signal received
 		if errorTimes >= MaxErrorTimes {
 			stop()
 			break
@@ -332,12 +332,12 @@ BreakAll:
 				go func(payload string) {
 					payload = strings.TrimSpace(payload)
 					defer func() {
-						<-ch // 并发控制
+						<-ch // concurrency control
 						wg.Done()
 					}()
 					atomic.AddInt32(&nCnt, 1)
 					select {
-					case <-ctx.Done(): // 00-捕获所有线程关闭信号，并退出，close for all
+					case <-ctx.Done(): // 00-Capture all thread close signals and exit, close for all
 						atomic.AddInt32(&errorTimes, MaxErrorTimes)
 						return
 					default:
@@ -345,12 +345,12 @@ BreakAll:
 						//	stop()
 						//	return
 						//}
-						// 01-异常>20关闭所有fuzz
+						// 01-if errors > 20, close all fuzz
 						if errorTimes >= MaxErrorTimes {
-							stop() //发停止指令
+							stop() // Send stop command
 							return
 						}
-						// 修复url，默认 认为 payload 不包含/
+						// Fix url; by default assume payload does not contain /
 						szUrl := u + payload
 						if strings.HasPrefix(payload, "/") && endP {
 							szUrl = u + payload[1:]
@@ -360,7 +360,7 @@ BreakAll:
 							if 200 == req.StatusCode {
 								if nil == lst200 {
 									lst200 = req
-								} else if lst200.Body == req.Body { // 无意义的 200
+								} else if lst200.Body == req.Body { // meaningless 200
 									return
 								}
 								if oU1, err := url.Parse(szUrl); nil == err {
@@ -379,53 +379,53 @@ BreakAll:
 								}
 							}
 							go util.CheckHeader(req.Header, u)
-							// 02-状态码和req1相同，且与req1相似度>9.5，关闭所有fuzz
+							// 02-Same status code as req1 and similarity > 9.5, close all fuzz
 							fXsd := strsim.Compare(url404req.Body, req.Body)
 							bBig95 := 0.95 < fXsd
 							//if "/bea_wls_internal/classes/mejb@/org/omg/stub/javax/management/j2ee/_ManagementHome_Stub.class" == payload {
 							//	log.Println("start debug")
 							//}
 							if url404.StatusCode == fuzzPage.StatusCode && bBig95 {
-								stop() //发停止指令
+								stop() // Send stop command
 								atomic.AddInt32(&errorTimes, MaxErrorTimes)
 								return
 							}
 							var path1, technologies1 = []string{}, []string{}
-							// 03-异常页面（>400），或相似度与404匹配
+							// 03-Error page (>400) or similarity matches 404
 							if fuzzPage.StatusCode >= 400 || bBig95 || fuzzPage.StatusCode != 200 {
-								// 03.01-异常页面指纹匹配
-								technologies = Addfingerprints404(technologies, req, fuzzPage) //基于404页面文件扫描指纹添加
-								// 03.02-与绝对404相似度低于0.8，添加body 404 body list
-								// 03.03-添加404titlelist
+								// 03.01-Error page fingerprint matching
+								technologies = Addfingerprints404(technologies, req, fuzzPage) // Add fingerprint based on 404 page file scan
+								// 03.02-Similarity to absolute 404 below 0.8, add body 404 body list
+								// 03.03-Add 404 title list
 								if 0.8 > fXsd && fuzzPage.StatusCode != 200 && fuzzPage.StatusCode != url404.StatusCode {
-									StudyErrPageAI(req, fuzzPage, "") // 异常页面学习
+									StudyErrPageAI(req, fuzzPage, "") // Error page learning
 								}
-								// 04-403： 403 by pass
+								// 04-403: 403 bypass
 								if fuzzPage.Is403 && !url404.Is403 {
 									a11 := ByPass403(&u, &payload, &wg)
-									// 表示 ByPass403 成功了, 结果、控制台输出点什么？
+									// Means ByPass403 succeeded; output the result to console?
 									if 0 < len(a11) {
 										async_data <- &FuzzData{Path: &a11, Req: fuzzPage}
 									}
 								}
 								return
 							}
-							// 当前和绝对404不等于404，后续的比较也没有意义了，都等于[200,301,302]都没有意义了，都说明没有fuzz成功
+							// Current and absolute 404 are not 404, subsequent comparisons are meaningless; all equal to [200, 301, 302], all meaningless, all indicate fuzz failed
 							if url404.StatusCode != 404 && url404.StatusCode == fuzzPage.StatusCode {
 								return
 							}
 
-							// 05-跳转检测,即便是跳转，如果和绝对404不一样，说明检测成功
+							// 05-Redirect detection; even if redirected, if different from absolute 404, detection succeeded
 							//if CheckDirckt(fuzzPage, req) && url404.StatusCode != fuzzPage.StatusCode {
 							//	return
 							//}
-							// 1、状态码和绝对404一样 2、智能识别算出来
+							// 1、Status code same as absolute 404 2、Computed via smart recognition
 							is404Page := url404.StatusCode == fuzzPage.StatusCode || CheckIsErrPageAI(req, fuzzPage)
-							// 06-成功页面, 非异常页面
+							// 06-Successful page, not an error page
 							if !is404Page || 200 == fuzzPage.StatusCode && url404.StatusCode != fuzzPage.StatusCode {
-								// 1、指纹匹配
-								technologies1 = Addfingerprintsnormal(payload, technologies1, req, fuzzPage) // 基于200页面文件扫描指纹添加
-								// 2、成功fuzz路径结果添加
+								// 1、Fingerprint matching
+								technologies1 = Addfingerprintsnormal(payload, technologies1, req, fuzzPage) // Add fingerprint based on 200 page file scan
+								// 2、Add successful fuzz path results
 								path1 = append(path1, *fuzzPage.Url)
 							}
 							if 0 < len(path1) {
@@ -434,8 +434,8 @@ BreakAll:
 							if 0 < len(technologies1) {
 								async_technologies <- technologies1
 							}
-						} else { // 这里应该元子操作
-							if nil != err {
+					} else { // this should be an atomic operation
+						if nil != err {
 								//if nil != client && strings.Contains(err.Error(), " connect: connection reset by peer") {
 								//	client.Client = client.GetClient(nil)
 								//}
@@ -449,7 +449,7 @@ BreakAll:
 			}
 		}
 	}
-	// 默认情况等待所有结束
+	// By default wait for all to finish
 	wg.Wait()
 	if 0 < len(path) {
 		util.SendLog(u, "brute", strings.Join(path, "\n"), "")
@@ -462,23 +462,23 @@ BreakAll:
 		util.SendLog(u, "brute", strings.Join(technologies, "\n"), "")
 	}
 
-	stop() //发停止指令
+	stop() // Send stop command
 	<-time.After(time.Second * 2)
 	stop2()
 	return path, technologies
 }
 
-// html跳转
+// html redirect
 var reg1 = regexp.MustCompile("(?i)<meta.*http-equiv\\s*=\\s*\"refresh\".*content\\s*=\\s*\"5;\\s*url=")
 
-// js跳转
+// js redirect
 var reg2 = regexp.MustCompile("(window|self|top)\\.location\\.href\\s*=")
 
-// 跳转检测
+// Redirect detection
 //
-//	1、状态码跳转：301 代表永久性转移(Permanently Moved)；302 redirect: 302 代表暂时性转移(Temporarily Moved )
-//	2、html刷新跳转
-//	3、js 跳转
+//	1、Status code redirect: 301 means Permanently Moved; 302 redirect means Temporarily Moved
+//	2、html refresh redirect
+//	3、js redirect
 func CheckDirckt(fuzzPage *util.Page, req *util.Response) bool {
 	if nil == fuzzPage || nil == req {
 		return false
@@ -487,7 +487,7 @@ func CheckDirckt(fuzzPage *util.Page, req *util.Response) bool {
 	// 01 redirect:
 	if 302 == req.StatusCode || 301 == req.StatusCode {
 		return true
-	} else if 0 < len(data) && (0 < len(reg1.Find(data)) || 0 < len(reg2.Find(data))) { // html刷新跳转;js 跳转
+	} else if 0 < len(data) && (0 < len(reg1.Find(data)) || 0 < len(reg2.Find(data))) { // html refresh redirect; js redirect
 		return true
 	}
 	return false
