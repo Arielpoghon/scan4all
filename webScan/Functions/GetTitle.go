@@ -19,7 +19,7 @@ type Gettitle_result struct {
 	url        string
 }
 
-func url_handle(url []string) (urls []string) { //对原始url进行处理，判断是否http开头
+func url_handle(url []string) (urls []string) { // process original urls, check whether they start with http
 
 	size := len(url)
 	for i := 0; i < size; i++ {
@@ -53,7 +53,7 @@ func GetUrlTitle() {
 		filename = Configs.UserObject.File
 	}
 	urllist := GetUrlFile(filename)
-	title_urllist := url_handle(urllist) //已经修改过前缀的
+	title_urllist := url_handle(urllist) // with prefix already modified
 	size := len(title_urllist)
 
 	jobs_url := make(chan string, size+1)
@@ -81,7 +81,7 @@ func GetUrlTitle() {
 	defer fp_succ.Close()
 }
 
-// geg title
+// get title
 func GetUrlTitle_handle(urls <-chan string, Get_title_res chan<- Gettitle_result) {
 	var res Gettitle_result
 	var result_title string
@@ -106,7 +106,7 @@ func GetUrlTitle_handle(urls <-chan string, Get_title_res chan<- Gettitle_result
 					res.rescode = Resp.StatusCode
 					re_result := reg.FindAllStringSubmatch(string(body), -1)
 					if re_result == nil {
-						result_title = "未获取到标题"
+						result_title = "failed to obtain title"
 					} else {
 						result_title = re_result[0][1]
 					}

@@ -73,7 +73,7 @@ var (
 					if !ok {
 						return types.ValOrErr(rhs, "unexpected type '%v' passed to bcontains", rhs.Type())
 					}
-					// 不区分大小写包含
+					// Case-insensitive contains
 					return types.Bool(strings.Contains(strings.ToLower(string(v1)), strings.ToLower(string(v2))))
 				},
 			},
@@ -474,7 +474,7 @@ func NewFunctionImplOptions(reg ref.TypeRegistry) []cel.ProgramOption {
 	return newOptions
 }
 
-// xray dns反连平台 目前只支持dnslog.cn和ceye.io
+// xray DNS reverse-connection platform; currently only supports dnslog.cn and ceye.io
 func xrayNewReverse() (reverse *structs.Reverse) {
 	var (
 		urlStr string
@@ -521,7 +521,7 @@ func reverseCheck(r *structs.Reverse, timeout int64) bool {
 		}
 		content, _ := requests.GetRespBody(resp)
 
-		if !bytes.Contains(content, []byte(`"data": []`)) { // api返回结果不为空
+		if !bytes.Contains(content, []byte(`"data": []`)) { // API returns non-empty results
 			return true
 		}
 		return false
@@ -534,7 +534,7 @@ func reverseCheck(r *structs.Reverse, timeout int64) bool {
 		}
 		content, _ := requests.GetRespBody(resp)
 
-		if bytes.Contains(content, []byte(sub)) { // api返回结果存在域名
+		if bytes.Contains(content, []byte(sub)) { // API results contain the domain
 			return true
 		}
 		return false

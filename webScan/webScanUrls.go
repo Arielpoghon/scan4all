@@ -37,7 +37,7 @@ type ExpJsons struct {
 	} `json:"Request"`
 }
 
-// 集成 webscan
+// integrated webscan
 func CheckUrls(buf *bytes.Buffer) {
 	if nil == buf {
 		return

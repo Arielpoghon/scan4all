@@ -22,7 +22,7 @@ func InitReversePlatform(api, domain string) {
 	} else {
 		ReversePlatformType = structs.ReverseType_DnslogCN
 
-		// 设置请求相关参数
+		// Set request-related parameters
 		DnslogCNGetDomainRequest, _ = http.NewRequest("GET", "http://dnslog.cn/getdomain.php", nil)
 		DnslogCNGetRecordRequest, _ = http.NewRequest("GET", "http://dnslog.cn/getrecords.php", nil)
 

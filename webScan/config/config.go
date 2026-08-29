@@ -1,14 +1,14 @@
 package Configs
 
-// json 模式的payload
+// payload in json mode
 type ExpJson struct {
 	Name        string `json:"Name"`
 	Description string `json:"Description"`
 	Product     string `json:"Product"`
 	Author      string `json:"author"`
 
-	// 请求数据
-	// 可以看出，这种简单的定义，还是不如nuclei，多个请求之间的关系无法分号表达
+	// request data
+	// as can be seen, this simple definition is still inferior to nuclei, the relationships between multiple requests cannot be expressed with semicolons
 	Request []struct {
 		Method           string            `json:"Method"`
 		Header           map[string]string `json:"Header"`
@@ -16,13 +16,13 @@ type ExpJson struct {
 		Port             string            `json:"Port"`
 		Data             string            `json:"Data"`
 		Follow_redirects string            `json:"Follow_redirects"`
-		// 文件上传
+		// file upload
 		Upload struct {
 			Name     string `json:"Name"`
 			FileName string `json:"fileName"`
 			FilePath string `json:"FilePath"`
 		} `json:"Upload"`
-		// 响应
+		// response
 		Response struct {
 			Check_Steps string `json:"Check_Steps"`
 			Checks      []struct {
@@ -43,14 +43,14 @@ type ConfigJson struct {
 }
 
 type UserOption struct {
-	OriAddr   string // 原始地址
-	UriAddr   string // 拼接Uri参数后的变化地址
-	JsonFile  string // 设定的json文档
-	AllJson   bool   //使用全部的json文件，也就是全部漏洞去跑
-	KeyWord   string // 查找的关键字
-	File      string //设定从文件中读取url
-	ThreadNum int    //定义线程数量
-	GetTitle  bool   //获取url标题专用
+	OriAddr   string // original address
+	UriAddr   string // address after concatenating Uri parameters
+	JsonFile  string // configured json document
+	AllJson   bool   // use all json files, i.e. run all vulnerabilities
+	KeyWord   string // search keyword
+	File      string // read urls from file
+	ThreadNum int    // define number of threads
+	GetTitle  bool   // specifically for getting url titles
 
 }
 
@@ -59,7 +59,7 @@ type HttpResult struct {
 	Body string
 }
 
-type FileNameStruct struct { //用来接收文件名等参数
+type FileNameStruct struct { // used to receive parameters such as file name
 	Name     string
 	Filename string
 	FilePath string

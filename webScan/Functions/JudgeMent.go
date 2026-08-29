@@ -12,8 +12,8 @@ import (
 var mux sync.RWMutex
 
 type params struct {
-	Url         string //存放计数用的url
-	Str_replace string //存放正则匹配后的结果
+	Url         string // store the url used for counting
+	Str_replace string // store the result after regex matching
 }
 
 func regex_match(regex string, str string) string {
@@ -36,11 +36,11 @@ func re_replace(str string, str_replace string) string {
 
 func JudgeMent_OneUrl_OneJson(url string, oneExpjson Configs.ExpJson) bool {
 	var paras params
-	// 将Exp中的通配符替换为命令
+	// replace the wildcards in Exp with commands
 	var str_replace string
 	var RespObject Configs.HttpResult
-	//判断是否多个url超时，如果是，则直接返回false，省的浪费时间
-	ext_tmp := false //最外层判断是true还是false
+	// check whether multiple urls time out; if so return false directly to save time
+	ext_tmp := false // outermost determination of true or false
 	var JudgeStatus map[int]bool
 	JudgeStatus = make(map[int]bool)
 	final_true := false
@@ -50,26 +50,26 @@ func JudgeMent_OneUrl_OneJson(url string, oneExpjson Configs.ExpJson) bool {
 	for key, value := range oneExpjson.Request {
 
 		code_ststus := false
-		//--------------正则替换
+		//--------------regex replacement
 		value.Data = re_replace(value.Data, str_replace)
-		//--------------替换结束
+		//--------------replacement ends
 		ReqData = strings.NewReader(value.Data)
-		whole_url := url + value.Uri //完整加路径的url
+		whole_url := url + value.Uri // complete url with path appended
 		filestruct.Name = value.Upload.Name
 		filestruct.Filename = value.Upload.FileName
 		filestruct.FilePath = value.Upload.FilePath
-		//---正则替换
+		//---regex replacement
 		whole_url = re_replace(whole_url, str_replace)
 		filestruct.Name = re_replace(filestruct.Name, str_replace)
 		filestruct.Filename = re_replace(filestruct.Filename, str_replace)
 		filestruct.FilePath = re_replace(filestruct.FilePath, str_replace)
-		//---正则替换结束
+		//---regex replacement ends
 
 		paras.Url = url
 		var head http.Header
 		var status_code int
 		if value.Upload.FilePath == "" {
-			RespObject.Resp, status_code, head = Client(value.Method, whole_url, ReqData, value.Header, 5, value.Follow_redirects, paras) //最后一个url为原生url，用来统计是否不继续对该url发包
+			RespObject.Resp, status_code, head = Client(value.Method, whole_url, ReqData, value.Header, 5, value.Follow_redirects, paras) // last url is the original url, used to track whether to stop sending packets to that url
 		} else {
 			RespObject.Resp, status_code, head = UClient(value.Method, whole_url, filestruct, ReqData, value.Header, 5, value.Follow_redirects, paras)
 		}
