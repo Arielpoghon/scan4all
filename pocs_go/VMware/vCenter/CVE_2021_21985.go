@@ -32,7 +32,8 @@ func Check_CVE_2021_21985(szUrl string) bool {
 				}
 			})
 		}
-		// 延时几秒 检测 rmi 回显示，如果目标不能出网，可以尝试打 SSRF
+		// Delay a few seconds to check the RMI callback; if the target cannot
+		// reach the internet, try SSRF instead
 
 	}
 	return false

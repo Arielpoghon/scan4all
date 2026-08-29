@@ -37,7 +37,7 @@ import (
 	"strings"
 )
 
-// 需优化：相同都目标，相同都检测只做一次
+// TODO: only run the same detection once for the same target
 func POCcheck(wappalyzertechnologies []string, URL string, finalURL string, checklog4j bool) []string {
 	if !strings.HasPrefix(finalURL, "http") {
 		finalURL = "http://" + finalURL
@@ -293,7 +293,7 @@ func POCcheck(wappalyzertechnologies []string, URL string, finalURL string, chec
 			}
 		case "禅道":
 			if zentao.CNVD_2022_42853(URL) {
-				technologies = append(technologies, "GoPOC_禅道|CNVD_2022_42853")
+				technologies = append(technologies, "GoPOC_Zentao|CNVD_2022_42853")
 			}
 		case "spark-jobs":
 			if spark.CVE_2022_33891(URL) {
@@ -325,7 +325,7 @@ func POCcheck(wappalyzertechnologies []string, URL string, finalURL string, chec
 			}
 		}
 	}
-	// 发送结果
+	// Send results
 	if 0 < len(technologies) {
 		util.SendEngineLog4Url(finalURL, Const.ScanType_GoPoc, &map[string]interface{}{"Urls": []string{URL, finalURL}, "technologies": technologies}, util.Scan4all)
 	}
@@ -334,7 +334,7 @@ func POCcheck(wappalyzertechnologies []string, URL string, finalURL string, chec
 
 func init() {
 	util.RegInitFunc(func() {
-		// 基于工厂方法构建
+		// Build based on factory method
 		util.EngineFuncFactory(Const.ScanType_GoPoc, func(evt *models.EventData, args ...interface{}) {
 			_, fileFuzzTechnologies := brute.FileFuzz(evt.Task.ScanWeb, 200, 100, "")
 			resp1, reqbody, _, err := util.GetResponse("", "", evt.Task.ScanWeb, "GET", "", false, nil)
@@ -345,7 +345,8 @@ func init() {
 				}
 			}
 			util.SendEvent(evt, Const.ScanType_Nmap, Const.ScanType_Masscan)
-			// 一旦开启nmap等，其他的结果，将在其他流程中反馈，并做防止重复的处理
+			// Once nmap and similar are enabled, other results will be reported by other
+			// pipelines, where duplicate handling is applied.
 			pocs := POCcheck(fileFuzzTechnologies, evt.Task.ScanWeb, evt.Task.ScanWeb, true)
 			util.SendEngineLog(evt, Const.ScanType_GoPoc, pocs)
 		})

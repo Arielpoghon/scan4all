@@ -71,8 +71,8 @@ func CVE_2016_4437(u string) (key string) {
 		Content, _ := base64.StdEncoding.DecodeString(checkContentx)
 		for _, key := range keys {
 			decodekey, _ := base64.StdEncoding.DecodeString(key)
-			RememberMe1 := aES_CBC_Encrypt(decodekey, Content) //AES CBC加密
-			RememberMe2 := aES_GCM_Encrypt(decodekey, Content) //AES GCM加密
+			RememberMe1 := aES_CBC_Encrypt(decodekey, Content) //AES CBC encryption
+			RememberMe2 := aES_GCM_Encrypt(decodekey, Content) //AES GCM encryption
 			if CBClen, err := getkeylen(u, indexlen, RememberMe1); err == nil {
 				if CBClen != indexlen {
 					util.SendLog(u, "CVE-2016-4437", "Found vuln Shiro CBC-KEY", key)
@@ -93,10 +93,10 @@ func CVE_2016_4437(u string) (key string) {
 func init() {
 	util.RegInitFunc(func() {
 		// CheckShiroCookie
-		// 检查 cookie
+		// Check cookie
 		// Shiro CVE_2016_4437 cookie
-		// 其他POC cookie同一检查入口
-		// 第一个参数header，第二个为 url
+		// Same check entry point for other POCs' cookies
+		// First param is the header, second is the url
 		util.RegHeaderCheckFunc(func(r *util.CheckerTools, args ...interface{}) {
 			a := r.GetHead(args[0], "Set-Cookie")
 			if nil != a && 0 < len(a) {

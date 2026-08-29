@@ -31,20 +31,20 @@ var (
 	}
 )
 
-/* 报错检测 */
+/* Error-based detection */
 var FS_ERR_DETECT = `{"@type": "java.lang.AutoCloseable"`
 
-/* 出网检测 */
+/* Network exfiltration detection */
 var TAR_NET_DETECT = `{"name":{"@type":"java.net.Inet4Address","val":"{{.Variables.DNS}}"}}`
 
-/* 延迟检测 */
+/* Delay-based detection */
 var TIME_DETECT = `{"regex":{"$ref":"$[blue rlike '^[a-zA-Z]+(([a-zA-Z ])?[a-zA-Z]*)*$']"},"blue":"aaaaaaaaaaaa{{.Variables.Value}}!"}`
 
-/* AutoType检测 */
+/* AutoType detection */
 var AUTOTYPE_CHECK = `[{"@type":"java.net.CookiePolicy"},{"@type":"java.net.Inet4Address","val":"{{.Variables.DNS}}"}]`
 
 /************************************************
-***                  DNS检测                   ***
+***              DNS Detection                ***
 *************************************************/
 // fastjson < 1.2.48
 var DNS_DETECT_48 = `
@@ -87,8 +87,8 @@ var DNS_DETECT_80 = `
 ]
 `
 
-// 依赖库检测
-//   报错探测
+// Dependency library detection
+//   Error-based probe
 var DEPENDENCY_DETECT_BY_ERR = `
 {
 	"@type":"java.lang.Character"{

@@ -11,8 +11,8 @@ import (
 //test123456.jsp?pwd=asasd3344&cmd=cmd+/c+whoami
 //qwer960452.jsp?pwd=el38A9485&cmd=cmd+/c+whoami
 //a234.jspx pass:rebeyond
-//test10086.jsp 蚁剑密码: testnmanp
-//peiqi10086.jsp 蚁剑密码: peiqi
+//test10086.jsp AntSword password: testnmanp
+//peiqi10086.jsp AntSword password: peiqi
 
 func BackdoorScan(u string) bool {
 	backurls := []string{"/seeyon/test233.jsp", "/seeyon/SeeyonUpdate.jspx", "/seeyon/SeeyonUpdate1.jspx", "/seeyon/test123456.jsp", "/seeyon/test1234567.jsp", "/seeyon/qwerasdf.jsp", "/seeyon/qwer960452.jsp", "/seeyon/ping123456.jsp", "/seeyon/common/designer/pageLayout/test233.jsp", "/seeyon/common/designer/pageLayout/test10086.jsp", "/seeyon/common/designer/pageLayout/a234.jspx", "/seeyon/common/designer/pageLayout/peiqi10086.jsp"}

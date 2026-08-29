@@ -4,7 +4,7 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-//author:penson 硬编码添加用户
+//author:penson hardcoded adds user
 
 func CVE_2022_26138(u string) bool {
 	headers := make(map[string]string, 0)
