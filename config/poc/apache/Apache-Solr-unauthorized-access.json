@@ -1,6 +1,6 @@
 {
-    "Name": "Apache-Solr未授权访问",
-    "Description": "Apache-Solr未授权访问",
+    "Name": "Apache-Solr unauthorized access",
+    "Description": "Apache-Solr unauthorized access",
     "Product": "apache",
     "author": "chumeng",
     "Request":[

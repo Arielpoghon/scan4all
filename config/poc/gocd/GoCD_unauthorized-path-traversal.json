@@ -1,7 +1,7 @@
 {
-    "Name": "GoCD_未授权路径穿越漏洞",
-    "Description": "GoCD_未授权路径穿越漏洞",
-    "Product": "帆软",
+    "Name": "GoCD unauthorized path traversal vulnerability",
+    "Description": "GoCD unauthorized path traversal vulnerability",
+    "Product": "FanRuan",
     "author": "chumeng",
     "Request":[
         {

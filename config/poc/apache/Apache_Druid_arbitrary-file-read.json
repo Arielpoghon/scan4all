@@ -1,6 +1,6 @@
 {
-    "Name": "Apache Druid 任意文件读取",
-    "Description": "由于用户指定 HTTP InputSource 没有做出限制，可以通过将文件 URL 传递给 HTTP InputSource 来绕过应用程序级别的限制。由于 Apache Druid 默认情况下是缺乏授权认证，攻击者可利用该漏洞在未授权情况下，构造恶意请求执行文件读取，最终造成服务器敏感性信息泄露",
+    "Name": "Apache Druid Arbitrary File Read",
+    "Description": "Since there are no restrictions on the user-specified HTTP InputSource, application-level restrictions can be bypassed by passing a file URL to the HTTP InputSource. Because Apache Druid lacks authorization by default, an attacker can exploit this vulnerability to construct a malicious request to perform file reads without authorization, ultimately leading to the disclosure of sensitive server information.",
     "Product": "Grafana",
     "author": "chumeng",
     "Request":[

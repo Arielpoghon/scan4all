@@ -1,7 +1,7 @@
 {
     "Name": "amtt-hiboss-server-ping-rce",
-    "Description": "安美数字-酒店宽带运营系统-远程命令执行漏洞",
-    "Product": "安美数字",
+    "Description": "AnMei Digital - Hotel Broadband Operation System - Remote Command Execution vulnerability",
+    "Product": "AnMei Digital",
     "author": "chumeng",
     "Request":[
                 {

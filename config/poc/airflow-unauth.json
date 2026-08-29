@@ -1,6 +1,6 @@
 {
     "Name": "airflow-unauth",
-    "Description": "airflow未授权访问",
+    "Description": "airflow unauthorized access",
     "Product": "airflow",
     "author": "chumeng",
     "Request":[

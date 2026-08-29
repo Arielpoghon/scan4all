@@ -1,6 +1,6 @@
 {
-    "Name": "apache-kylin-命令注入漏洞",
-    "Description": " Apache Kylin DiagnosisController.java 命令注入漏洞 CVE-2020-13925",
+    "Name": "apache-kylin-command-injection",
+    "Description": " Apache Kylin DiagnosisController.java command injection vulnerability CVE-2020-13925",
     "Product": "apache",
     "author": "chumeng",
     "Request":[

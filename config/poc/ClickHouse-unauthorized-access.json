@@ -1,6 +1,6 @@
 {
-    "Name": "ClickHouse未授权访问",
-    "Description": "ClickHouse数据库未授权访问查询",
+    "Name": "ClickHouse unauthorized access",
+    "Description": "ClickHouse database unauthorized access query",
     "Product": "ClickHouse",
     "author": "chumeng",
     "Request":[

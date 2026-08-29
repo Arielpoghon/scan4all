@@ -1,6 +1,6 @@
 {
-    "Name": "Apache Cocoon XML注入 CVE-2020-11991",
-    "Description": " Apache Cocoon XML注入 CVE-2020-11991",
+    "Name": "Apache Cocoon XML Injection CVE-2020-11991",
+    "Description": " Apache Cocoon XML Injection CVE-2020-11991",
     "Product": "apache",
     "author": "chumeng",
     "Request":[
