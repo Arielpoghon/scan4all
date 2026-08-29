@@ -19,15 +19,15 @@ type RateStr string
 type ExcludeStr string
 type SystemPathStr string
 
-// masscan 参数
+// masscan parameters
 type Masscan struct {
-	SystemPath SystemPathStr `inject` // 系统目录
-	Args       []string      `inject` // 参数
-	Ports      PortsStr      `inject` // 端口
-	Target     TargetStr     `inject` // 目标
-	Ranges     RangesStr     `inject` // 范围
-	Rate       RateStr       `inject` // 速率
-	Exclude    ExcludeStr    `inject` // 排除，执行过的，加入排除列表
+	SystemPath SystemPathStr `inject` // system directory
+	Args       []string      `inject` // parameters
+	Ports      PortsStr      `inject` // ports
+	Target     TargetStr     `inject` // target
+	Ranges     RangesStr     `inject` // range
+	Rate       RateStr       `inject` // rate
+	Exclude    ExcludeStr    `inject` // exclude; already executed ones are added to the exclude list
 	Evt        *models.EventData
 }
 
@@ -63,7 +63,7 @@ func (m *Masscan) Run(fnCbk func(*models.Host)) error {
 		m.Args = append(m.Args, "--range")
 		m.Args = append(m.Args, string(m.Ranges))
 	}
-	// 输出到 控制台 xml格式
+	// Output to console in xml format
 	m.Args = append(m.Args, "-oX")
 	m.Args = append(m.Args, "-")
 	if m.Target != "" {

@@ -19,12 +19,12 @@ type Logger interface {
 	Printf(string, ...interface{})
 }
 
-// 创建worker，每一个worker抽象成一个可以执行任务的函数
+// Create a worker; each worker is abstracted as a function that can execute tasks
 type Worker struct {
 	f func(interface{}) (interface{}, error)
 }
 
-// 通过NewTask来创建一个worker
+// Create a worker through NewWorker
 func NewWorker(f func(interface{}) interface{}) *Worker {
 	return &Worker{
 		f: func(in interface{}) (out interface{}, err error) {
@@ -48,34 +48,34 @@ func init() {
 	})
 }
 
-// 执行worker
+// Execute worker
 func (t *Worker) Run(in interface{}) (interface{}, error) {
 	return t.f(in)
 }
 
-// 池
+// Pool
 type Pool struct {
-	//母版函数
+	//Template function
 	Function func(interface{}) interface{}
-	//Pool输入队列
+	//Pool input queue
 	In chan interface{}
-	//Pool输出队列s
+	//Pool output queues
 	Out chan interface{}
-	//size用来表明池的大小，不能超发。
+	//size is used to indicate the pool size; it cannot exceed this limit.
 	threads int
-	//启动协程等待时间
+	//Coroutine startup wait time
 	Interval time.Duration
-	//正在执行的任务清单
+	//The list of tasks being executed
 	JobsList *smap.SMap
-	//jobs表示执行任务的通道用于作为队列，我们将任务从切片当中取出来，然后存放到通道当中，再从通道当中取出任务并执行。
+	//jobs represents the channel for executing tasks, used as a queue. We take tasks out of the slice, store them in the channel, then take tasks out of the channel and execute them.
 	Jobs chan *Worker
-	//用于阻塞
+	//Used for blocking
 	wg *sync.WaitGroup
-	//提前结束标识符
+	//Early termination flag
 	Done bool
 }
 
-// 实例化工作池使用
+// Instantiate the worker pool
 func NewPool(threads int) *Pool {
 	return &Pool{
 		threads:  threads,
@@ -89,9 +89,9 @@ func NewPool(threads int) *Pool {
 	}
 }
 
-// 从jobs当中取出任务并执行。
+// Take a task out of jobs and execute it.
 func (p *Pool) work() {
-	//减少waitGroup计数器的值
+	//Decrease the value of the waitGroup counter
 	defer func() {
 		p.wg.Done()
 	}()
@@ -99,20 +99,20 @@ func (p *Pool) work() {
 		if p.Done {
 			return
 		}
-		//获取任务唯一票据
+		//Get the unique ticket of the task
 		Tick := p.NewTick()
-		//压入工作任务到工作清单
+		//Push the work task into the work list
 		p.JobsList.Set(Tick, param)
-		//设置工作内容
+		//Set the work content
 		f := NewWorker(p.Function)
-		//开始工作，输出工作结果
+		//Start working, output the work result
 		//if enableDevDebug {
 		fmt.Printf(" hydra: %v\r", param)
 		//}
 		out, err := f.Run(param)
-		//输出工作结果
+		//Output the work result
 		p.Out <- out
-		//工作结束，删除工作清单
+		//Work is done, delete it from the work list
 		p.JobsList.Delete(Tick)
 		if err != nil {
 			logger.Println(err)
@@ -120,9 +120,9 @@ func (p *Pool) work() {
 	}
 }
 
-// 执行工作池当中的任务
+// Execute the tasks in the worker pool
 func (p *Pool) Run() {
-	//只启动有限大小的协程，协程的数量不可以超过工作池设定的数量，防止计算资源崩溃
+	//Only start a limited number of coroutines; the number must not exceed the pool-set limit to prevent resource exhaustion
 	for i := 0; i < p.threads; i++ {
 		p.wg.Add(1)
 		time.Sleep(p.Interval)
@@ -132,7 +132,7 @@ func (p *Pool) Run() {
 }
 
 func (p *Pool) RunBack() {
-	//只启动有限大小的协程，协程的数量不可以超过工作池设定的数量，防止计算资源崩溃
+	//Only start a limited number of coroutines; the number must not exceed the pool-set limit to prevent resource exhaustion
 	for i := 0; i < p.threads; i++ {
 		p.wg.Add(1)
 		time.Sleep(p.Interval)
@@ -142,31 +142,31 @@ func (p *Pool) RunBack() {
 
 func (p *Pool) Wait() {
 	p.wg.Wait()
-	//关闭输出信道
+	//Close the output channel
 	p.OutDone()
 }
 
-// 结束输入信道
+// End the input channel
 func (p *Pool) InDone() {
 	close(p.In)
 }
 
-// 结束输出信道
+// End the output channel
 func (p *Pool) OutDone() {
 	close(p.Out)
 }
 
-// 向各工作协程发送提前结束指令
+// Send an early termination command to each work coroutine
 func (p *Pool) Stop() {
 	p.Done = true
 }
 
-// 生成工作票据
+// Generate a work ticket
 func (p *Pool) NewTick() string {
 	return misc.RandomString()
 }
 
-// 获取线程数
+// Get the thread count
 func (p *Pool) Threads() int {
 	return p.threads
 }

@@ -152,7 +152,7 @@ func init() {
 			Paswd:     util.GetVal4File("snmp_pswd", snmp_pswd),
 			DefaultUp: util.GetVal4Filedefault("snmp_default", snmp_default),
 		}
-		// 再增加字典
+		// Add more dictionaries
 		md["wap-wsp"] = &PPDict{
 			Username:  util.GetVal4File("es_user", es_user),
 			Paswd:     util.GetVal4File("es_pswd", es_pswd),

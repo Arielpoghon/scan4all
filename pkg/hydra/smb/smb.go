@@ -20,7 +20,7 @@ func Check(Host, Username, Domain, Password string, Port int) (bool, error) {
 		Domain:      Domain,
 		Workstation: "",
 	}
-	//开始进行SMB连接
+	//Start SMB connection
 	go func() {
 		session, err := smb.NewSession(options, false)
 		if err != nil {

@@ -111,7 +111,7 @@ func (r *Runner) MergeToFile() (string, error) {
 }
 
 func (r *Runner) DoSsl(target string) []string {
-	// 处理ssl 数字证书中包含的域名信息，深度挖掘漏洞
+	// Process the domain info contained in the ssl digital certificate, digging deeper for vulnerabilities
 	if "true" == util.GetVal("ParseSSl") {
 		aH, err := pkg.DoDns(target)
 		if nil == err {
@@ -124,7 +124,7 @@ func (r *Runner) DoSsl(target string) []string {
 func (r *Runner) DoDns001(x string, aR []string) []string {
 	aR = append(aR, r.DoDns2Ips(x)...)
 	a1 := r.DoSsl(x)
-	if 1 < len(a1) { // 如果只有1个是没有意义的，说明和x一样
+	if 1 < len(a1) { // If there is only 1 it is meaningless, indicating it is the same as x
 		for _, j := range a1 {
 			if j == x {
 				continue
@@ -133,7 +133,7 @@ func (r *Runner) DoDns001(x string, aR []string) []string {
 		}
 		aR = append(aR, a1...)
 	}
-	if 1 == len(aR) { // 只有一个就直接用域名了，这样nmap的结果才能用
+	if 1 == len(aR) { // If there is only one, just use the domain name directly, so that the nmap result can be used
 		aR = []string{x}
 	} else {
 		aR = append(aR, x)
@@ -141,7 +141,7 @@ func (r *Runner) DoDns001(x string, aR []string) []string {
 	return aR
 }
 
-// target域名转多个ip处理
+// target domain name converted into multiple ip processing
 func (r *Runner) DoTargets() (bool, error) {
 	data, err := ioutil.ReadFile(r.targetsFile)
 	if err != nil {
@@ -150,7 +150,7 @@ func (r *Runner) DoTargets() (bool, error) {
 	aR := []string{}
 	a := strings.Split(string(data), "\n")
 	for _, x := range a {
-		// fix 无效的空行
+		// fix invalid empty lines
 		if 3 > len(x) {
 			continue
 		}
@@ -181,7 +181,7 @@ func (r *Runner) DoTargets() (bool, error) {
 			log.Println("ioutil.WriteFile(r.targetsFile err: ", err)
 		}
 	}
-	// 有nmap那么就直接调用nmap了
+	// If there is nmap, then directly call nmap
 	bRw := false
 	if util.CheckHvNmap() {
 		bRw = true
@@ -223,7 +223,7 @@ func (r *Runner) DoTargets() (bool, error) {
 					//	log.Println("tempInput1.Stat: ", err)
 					//}
 				} else {
-					log.Println("nmap 结果文件不存在")
+					log.Println("nmap result file does not exist")
 				}
 			} else {
 				log.Println("DoCmd: ", err)
@@ -285,11 +285,11 @@ func Add2Naabubuffer_1(target string) {
 	//fmt.Println("Add2Naabubuffer：", target)
 	k1 := target + "_Add2Naabubuffer"
 	if b1, err := util.Cache1.Get(k1); nil == err && string(b1) == target {
-		fmt.Println("重复：", target)
+		fmt.Println("duplicate:", target)
 		return
 	}
 	util.PutAny[string](k1, target)
-	// 缓存一下域名和ip的关系
+	// Cache the relationship between domain name and ip
 	if oU, err := url.Parse(target); nil == err && oU.Hostname() != "" {
 		dnsxx.DoGetDnsInfos(oU.Hostname())
 	}
@@ -313,7 +313,7 @@ func (r *Runner) AddTarget(target string) error {
 	//log.Println("target: ", target)
 	k1 := target + "_AddTarget"
 	if b1, err := util.Cache1.Get(k1); nil == err && string(b1) == target {
-		log.Println("重复：", target)
+		log.Println("duplicate:", target)
 		return nil
 	}
 	util.PutAny[string](k1, target)
@@ -337,12 +337,12 @@ func (r *Runner) AddTarget(target string) error {
 				s1 := fmt.Sprintf("%s://%s", u.Scheme, u.Host)
 				Add2Naabubuffer(fmt.Sprintf("%s\n", s1))
 				//Add2Naabubuffer(u.Hostname())
-				// target 长度 大于 s1才处理
-				////UrlPrecise     bool // 精准url扫描，不去除url清单上下文 2022-06-08
+				// Process only when the target length is greater than s1
+				////UrlPrecise     bool // precise url scanning, does not remove the url list context 2022-06-08
 				UrlPrecise := util.GetVal(util.UrlPrecise)
 				if "true" == UrlPrecise && len(target) > len(s1) {
 					s2 := r1.ReplaceAllString(target[len(s1):], "")
-					// 包含1个以上/表示有上下文
+					// Contains more than 1 / indicates there is context
 					if 1 < len(s2) {
 						if r.options.Verbose {
 							log.Println("Precise scan: ", target)

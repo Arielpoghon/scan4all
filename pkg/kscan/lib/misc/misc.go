@@ -152,11 +152,11 @@ func Xrange(args ...int) []int {
 }
 
 func FilterPrintStr(s string) string {
-	// 将字符串转换为rune数组
+	// Convert the string to a rune array
 	srcRunes := []rune(s)
-	// 创建一个新的rune数组，用来存放过滤后的数据
+	// Create a new rune array to store the filtered data
 	dstRunes := make([]rune, 0, len(srcRunes))
-	// 过滤不可见字符，根据上面的表的0-32和127都是不可见的字符
+	// Filter invisible characters; according to the table above, 0-32 and 127 are invisible characters
 	for _, c := range srcRunes {
 		if c >= 0 && c <= 31 {
 			continue
@@ -221,7 +221,7 @@ func RemoveDuplicateElement(languages []string) []string {
 	result := make([]string, 0, len(languages))
 	temp := map[string]struct{}{}
 	for _, item := range languages {
-		if _, ok := temp[item]; !ok { //如果字典中找不到元素，ok=false，!ok为true，就往切片中append元素。
+		if _, ok := temp[item]; !ok { //If the element is not found in the dictionary, ok=false, !ok is true, so append the element to the slice.
 			temp[item] = struct{}{}
 			result = append(result, item)
 		}
@@ -230,7 +230,7 @@ func RemoveDuplicateElement(languages []string) []string {
 }
 
 func RemoveDuplicateElementForMultiple(mainArr, otherArr []string) []string {
-	//合并所有辅切片为一个切片
+	//Merge all secondary slices into one slice
 	result := []string{}
 	temp := map[string]struct{}{}
 	for _, item := range otherArr {
@@ -250,13 +250,13 @@ func WriteLine(fileName string, byte []byte) error {
 	if err != nil {
 		return err
 	}
-	//创建成功挂起关闭文件流,在函数结束前执行
+	//On successful creation, suspend and close the file stream; execute before the function ends
 	defer file.Close()
-	//NewWriter创建一个以目标文件具有默认大小缓冲、写入w的*Writer。
+	//NewWriter creates a *Writer that writes to w with a buffer of default size for the target file.
 	writer := bufio.NewWriter(file)
-	//写入器将内容写入缓冲。返回写入的字节数。
+	//The writer writes the content to the buffer. Returns the number of bytes written.
 	_, err = writer.Write(byte)
-	//Flush方法将缓冲中的数据写入下层的io.Writer接口。缺少，数据将保留在缓冲区，并未写入io.Writer接口
+	//The Flush method flushes the buffered data to the underlying io.Writer interface. If missing, the data remains in the buffer and is not written to the io.Writer interface
 	_ = writer.Flush()
 	if err != nil {
 		if err == io.EOF {

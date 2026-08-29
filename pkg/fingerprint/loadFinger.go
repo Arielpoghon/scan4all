@@ -13,9 +13,9 @@ type Fingerprint struct {
 	Method        string
 	Location      string
 	Keyword       []string
-	KeywordMathOr bool   // Keyword是否为or关系
-	Id            int    // 扩展id属性，通过id关联到组件
-	UrlPath       string // 扩展，有的指纹必须是和特定path关联，例如状态码
+	KeywordMathOr bool   // Whether Keyword is an OR relation
+	Id            int    // Extended id attribute, associate to component through id
+	UrlPath       string // Extended, some fingerprints must be associated with a specific path, e.g. status code
 }
 
 var (

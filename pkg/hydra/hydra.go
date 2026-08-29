@@ -59,9 +59,9 @@ func NewCracker(info *AuthInfo, isAuthUpdate bool, threads int) *Cracker {
 func (c *Cracker) Run() {
 	ip := c.authInfo.IPAddr
 	port := c.authInfo.Port
-	//开启输出监测
+	//Start output monitoring
 	go c.OutWatchDog()
-	//选择暴力破解函数
+	//Select brute force function
 	switch c.authInfo.Protocol {
 	case "rdp":
 		c.Pool.Function = rdpCracker(ip, port)
@@ -79,7 +79,7 @@ func (c *Cracker) Run() {
 			return
 		}
 		c.Pool.Function = oracleCracker(ip, port)
-		//若SID未知，则不进行后续暴力破解
+		//If the SID is unknown, do not proceed with subsequent brute force
 	case "postgresql":
 		c.Pool.Function = postgresqlCracker
 	case "socks5":
@@ -123,23 +123,23 @@ func (c *Cracker) Run() {
 		c.Pool.OutDone()
 		return
 	}
-	//go 任务下发器
+	//go task dispatcher
 	go func() {
 		x1 := c.authList.Dict(c.onlyPassword)
-		//fmt.Println("破解任务下发器：", len(x1))
+		//fmt.Println("crack task dispatcher:", len(x1))
 		for _, a := range x1 {
 			if c.Pool.Done {
 				c.Pool.InDone()
-				//fmt.Println("hydra 1：线程结束")
+				//fmt.Println("hydra 1: thread end")
 				return
 			}
 			c.authInfo.Auth = a
 			c.Pool.In <- *c.authInfo
 		}
-		//关闭信道
+		//Close channel
 		c.Pool.InDone()
 	}()
-	//开始暴力破解
+	//Start brute force
 	c.Pool.Run()
 }
 
@@ -189,7 +189,7 @@ func (c *Cracker) OutWatchDog() {
 		info = out
 	}
 	if count > 5 {
-		//slog.Printf(slog.DEBUG, "%s://%s:%d,协议不支持", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
+		//slog.Printf(slog.DEBUG, "%s://%s:%d, protocol not supported", info.(AuthInfo).Protocol, info.(AuthInfo).IPAddr, info.(AuthInfo).Port)
 	}
 	if count > 0 && count <= 5 {
 		c.Out <- info.(AuthInfo)

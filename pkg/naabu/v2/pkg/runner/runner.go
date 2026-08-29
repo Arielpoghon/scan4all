@@ -66,7 +66,7 @@ func (r *Runner) Httpxrun(buf *bytes.Buffer, options *runner3.Options) error {
 		Cookie = "Cookie: " + Cookie + ";rememberMe=123" // add
 	}
 	//log.Printf("%+v", httpxrunner.Naabubuffer.String())
-	// 集成nuclei
+	// Integrate nuclei
 	//log.Println("httpxrunner.Naabubuffer = ", httpxrunner.Naabubuffer.String())
 	//Naabubuffer1 := bytes.Buffer{}
 	//Naabubuffer1.Write(httpxrunner.Naabubuffer.Bytes())
@@ -94,7 +94,7 @@ func (r *Runner) Httpxrun(buf *bytes.Buffer, options *runner3.Options) error {
 		}
 		nuclei_Yaml.RunNuclei(&httpxrunner.Naabubuffer)
 	})
-	// 指纹去重复 请求路径
+	// Fingerprint deduplication request path
 	if "" != fingerprint.FgDictFile {
 		httpxoptions.RequestURIs = fingerprint.FgDictFile
 		//fmt.Println("httpxoptions.RequestURIs: ", httpxoptions.RequestURIs)
@@ -140,7 +140,7 @@ func (r *Runner) Httpxrun(buf *bytes.Buffer, options *runner3.Options) error {
 	//	go jndi.JndiServer()
 	//}
 
-	// json 控制参数
+	// json control parameters
 	httpxoptions = util.ParseOption[httpxrunner.Options]("httpx", httpxoptions)
 	rx, err := httpxrunner.New(httpxoptions)
 	if err != nil {
@@ -254,13 +254,13 @@ func (r *Runner) RunEnumeration() error {
 		r.scanner.State = scan.Scan
 		for cidr := range r.streamChannel {
 			s01 := cidr.String()
-			//if govalidator.IsDNSName(s01) { // 转ip
+			//if govalidator.IsDNSName(s01) { // convert to ip
 			//
 			//}
 			if err := r.scanner.IPRanger.Add(s01); err != nil {
 				gologger.Warning().Msgf("Couldn't track %s in scan results: %s\n", cidr, err)
 			}
-			// 可以优化基于nmap
+			// Can be optimized based on nmap
 			ipStream, _ := mapcidr.IPAddressesAsStream(s01)
 			for ip := range ipStream {
 				for _, port := range r.scanner.Ports {
@@ -383,7 +383,7 @@ func (r *Runner) RunEnumeration() error {
 			r.options.ResumeCfg.Retry = currentRetry
 			r.options.ResumeCfg.Seed = currentSeed
 			r.options.ResumeCfg.Unlock()
-			// 可以优化基于nmap
+			// Can be optimized based on nmap
 			b := blackrock.New(int64(Range), currentSeed)
 			for index := int64(0); index < int64(Range); index++ {
 				xxx := b.Shuffle(index)
@@ -461,7 +461,7 @@ func (r *Runner) Close() {
 	r.scanner.IPRanger.Hosts.Close()
 	r.scanner.State = scan.Done
 	r.scanner.Close()
-	// 下面 n 行会导致异常
+	// The following n lines will cause exceptions
 	//close(r.streamChannel)
 	//r.scanner.CleanupHandlers()
 	//r.scanner.Close()

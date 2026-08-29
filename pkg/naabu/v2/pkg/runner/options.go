@@ -68,7 +68,7 @@ type Options struct {
 	CeyeApi    string
 	CeyeDomain string
 	NoPOC      bool
-	// 更新
+	// Update
 	Update bool
 }
 
@@ -109,7 +109,7 @@ func ParseOptions() *Options {
 	)
 	var szNmap = ""
 	if util.CheckHvNmap() {
-		// 读取结果
+		// Read the result
 		szNmap = util.GetVal("nmap")
 		if "" != szNmap {
 			if runtime.GOOS == "windows" {
@@ -121,7 +121,7 @@ func ParseOptions() *Options {
 			}
 			//defer tempInput.Close()
 		}
-		//log.Println("nmap配置: ", szNmap)
+		//log.Println("nmap config: ", szNmap)
 	}
 
 	flagSet.CreateGroup("config", "Configuration",

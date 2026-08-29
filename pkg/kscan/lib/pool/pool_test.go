@@ -5,14 +5,14 @@ import (
 )
 
 func TestName(t *testing.T) {
-	//NewTask是放到工作池当中运行的函数。使用的时候需要先实例化他
+	//NewTask is the function run in the worker pool. It needs to be instantiated before use.
 	//w := NewWorker()
-	//实例化工作池
+	//Instantiate the worker pool
 
-	////这里启用另外一个goroutine向worker当中写入，不然会出现all goroutines are asleep，需要从管道中获得一个数据，而这个数据必须是其他goroutine线放入管道的
+	////Here enable another goroutine to write into the worker, otherwise it will appear "all goroutines are asleep"; you need to obtain a data from the pipeline, and this data must be put into the pipeline by another goroutine
 	//go func() {
 	//	for i := 1; i < 100; i++ {
-	//		p.Jobs <- w //把需要运行的函数依次放入工作池。
+	//		p.Jobs <- w //Put the functions that need to run into the worker pool sequentially.
 	//	}
 	//	close(p.Jobs)
 	//}()

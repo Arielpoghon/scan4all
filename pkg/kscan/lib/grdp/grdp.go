@@ -189,7 +189,7 @@ func (g *Client) loginForRDP(domain, user, pwd string) error {
 func Login(target, domain, username, password string) error {
 	var err error
 	g := NewClient(target, glog.NONE)
-	//SSL协议登录测试
+	//SSL protocol login test
 	err = g.loginForSSL(domain, username, password)
 	if err == nil {
 		return nil
@@ -197,7 +197,7 @@ func Login(target, domain, username, password string) error {
 	if err.Error() != PROTOCOL_RDP {
 		return err
 	}
-	//RDP协议登录测试
+	//RDP protocol login test
 	err = g.loginForRDP(domain, username, password)
 	if err == nil {
 		return nil
@@ -209,7 +209,7 @@ func Login(target, domain, username, password string) error {
 func LoginForSSL(target, domain, username, password string) error {
 	var err error
 	g := NewClient(target, glog.NONE)
-	//SSL协议登录测试
+	//SSL protocol login test
 	err = g.loginForSSL(domain, username, password)
 	if err == nil {
 		return nil
@@ -220,7 +220,7 @@ func LoginForSSL(target, domain, username, password string) error {
 func LoginForRDP(target, domain, username, password string) error {
 	var err error
 	g := NewClient(target, glog.NONE)
-	//SSL协议登录测试
+	//SSL protocol login test
 	err = g.loginForRDP(domain, username, password)
 	if err == nil {
 		return nil

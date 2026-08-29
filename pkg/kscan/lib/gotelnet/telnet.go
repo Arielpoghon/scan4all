@@ -137,7 +137,7 @@ func (c *Client) Connect() error {
 		return err
 	}
 	c.conn = conn
-	//开启输入监听
+	//Start input listening
 	go func() {
 		for {
 			buf, err := c.read()
@@ -161,7 +161,7 @@ func (c *Client) Connect() error {
 			}
 		}
 	}()
-	//等待初始化
+	//Wait for initialization
 	time.Sleep(time.Second * 3)
 	return nil
 }
@@ -171,7 +171,7 @@ func (c *Client) WriteContext(s string) {
 }
 
 func (c *Client) ReadContext() string {
-	defer func() { c.Clear() }() //结束时，清空输出内容
+	defer func() { c.Clear() }() //When it ends, clear the output content
 	if c.LastResponse == "" {
 		time.Sleep(time.Second)
 	}
@@ -200,33 +200,33 @@ func (c *Client) SerializationResponse(responseBuf []byte) (displayBuf []byte, c
 			displayBuf = append(displayBuf, responseBuf...)
 			break
 		}
-		//获取选项字符
+		//Get option character
 		ch := responseBuf[index+1]
 		if ch == IAC {
-			//将以IAC 开头之前的字符，赋值给最终显示文字
+			//Assign the characters before the IAC to the final displayed text
 			displayBuf = append(displayBuf, responseBuf[:index]...)
-			//将处理过的字符串删去
+			//Remove the processed string
 			responseBuf = responseBuf[index+1:]
 			continue
 		}
 		if ch == DO || ch == DONT || ch == WILL || ch == WONT {
 			IACBuf := responseBuf[index : index+3]
-			//将以IAC 开头3个字符组成的整个命令存储起来
+			//Store the entire command composed of 3 characters starting with IAC
 			commandList = append(commandList, IACBuf)
-			//将以IAC 开头之前的字符，赋值给最终显示文字
+			//Assign the characters before the IAC to the final displayed text
 			displayBuf = append(displayBuf, responseBuf[:index]...)
-			//将处理过的字符串删去
+			//Remove the processed string
 			responseBuf = responseBuf[index+3:]
 			continue
 		}
 		if ch == SB {
-			//将以IAC 开头之前的字符，赋值给最终显示文字
+			//Assign the characters before the IAC to the final displayed text
 			displayBuf = append(displayBuf, responseBuf[:index]...)
-			//获取SE 结束字符位置
+			//Get the position of the SE end character
 			seIndex := bytes.IndexByte(responseBuf, SE)
-			//将以IAC 开头SB至SE的子协商存储起来
+			//Store the sub-negotiation from SB to SE starting with IAC
 			commandList = append(commandList, responseBuf[index:seIndex])
-			//将处理过的字符串删去
+			//Remove the processed string
 			responseBuf = responseBuf[seIndex+1:]
 			continue
 		}
@@ -250,7 +250,7 @@ func (c *Client) MakeReply(command []byte) []byte {
 	verb := command[1]
 	option := command[2]
 
-	//如果选项码为 回显(1) 或者是抑制继续进行(3)
+	//If the option code is echo (1) or suppress continue (3)
 	if option == ECHO {
 		if verb == DO {
 			return []byte{IAC, WILL, option}
@@ -266,10 +266,10 @@ func (c *Client) MakeReply(command []byte) []byte {
 		}
 		if verb == SB {
 			/*
-			 * 因为启动了子标志位,命令长度扩展到了4字节,
-			 * 取最后一个标志字节为选项码
-			 * 如果这个选项码字节为1(send)
-			 * 则回发为 250(SB子选项开始) + 获取的第二个字节 + 0(is) + 255(标志位IAC) + 240(SE子选项结束)
+			 * Because the sub flag is enabled, the command length extends to 4 bytes,
+			 * take the last flag byte as the option code
+			 * If this option code byte is 1 (send)
+			 * then reply as 250 (SB sub-option start) + acquired second byte + 0 (is) + 255 (flag IAC) + 240 (SE sub-option end)
 			 */
 			modifier := command[3]
 			if modifier == ECHO {
@@ -291,10 +291,10 @@ func (c *Client) MakeReply(command []byte) []byte {
 		}
 		if verb == SB {
 			/*
-			 * 因为启动了子标志位,命令长度扩展到了4字节,
-			 * 取最后一个标志字节为选项码
-			 * 如果这个选项码字节为1(send)
-			 * 则回发为 250(SB子选项开始) + 获取的第二个字节 + 0(is) + 255(标志位IAC) + 240(SE子选项结束)
+			 * Because the sub flag is enabled, the command length extends to 4 bytes,
+			 * take the last flag byte as the option code
+			 * If this option code byte is 1 (send)
+			 * then reply as 250 (SB sub-option start) + acquired second byte + 0 (is) + 255 (flag IAC) + 240 (SE sub-option end)
 			 */
 			modifier := command[3]
 			if modifier == ECHO {
@@ -387,7 +387,7 @@ func (c *Client) MakeServerType() int {
 
 func (c *Client) loginForOnlyPassword() error {
 	c.Clear()
-	//清空一次输出
+	//Clear the output once
 	c.WriteContext(c.Password)
 	time.Sleep(time.Second * 3)
 
@@ -408,7 +408,7 @@ func (c *Client) loginForOnlyPassword() error {
 func (c *Client) loginForUsernameAndPassword() error {
 	c.WriteContext(c.UserName)
 	time.Sleep(time.Second * 3)
-	c.Clear() //清空一次输出
+	c.Clear() //Clear the output once
 	c.WriteContext(c.Password)
 	time.Sleep(time.Second * 5)
 

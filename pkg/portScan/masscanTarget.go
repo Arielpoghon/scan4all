@@ -9,14 +9,14 @@ import (
 )
 
 /*
-在Windows上或从虚拟机上，它可以每秒执行30万个数据包。
-在Linux上（没有虚拟化），它将每秒执行160万个数据包。这足以融化大多数网络。
+On Windows or from a virtual machine, it can execute 300,000 packets per second.
+On Linux (without virtualization), it will execute 1.6 million packets per second. This is enough to melt most networks.
 
-默认情况下，masscan首先加载配置文件 /etc/masscan/masscan.conf
-任何后续配置参数都会覆盖此默认配置文件中的内容
+By default, masscan first loads the configuration file /etc/masscan/masscan.conf
+Any subsequent configuration parameters will override the content of this default configuration file
 
-二进制：这是mascan内置格式。它产生的文件要小得多，所以当我扫描互联网时，我的磁盘不会填满。
-不过，它们需要解析。命令行选项--readscan将读取二进制扫描文件。将--readscan与-oX选项一起使用将生成结果文件的XML版本。
+Binary: this is the format built into masscan. It produces much smaller files, so when I scan the internet, my disk won't fill up.
+However, they need to be parsed. The command line option --readscan will read the binary scan file. Using --readscan together with the -oX option will generate an XML version of the result file.
 masscan -c myscan.conf
 
 # My Scan
@@ -30,8 +30,8 @@ excludefile = exclude.txt
 */
 func init() {
 	util.RegInitFunc(func() {
-		// 每个端口大约10小时内扫描整个互联网（减去排除值）（如果扫描所有端口，则扫描655,360小时）
-		// 与nmap兼容的“隐形”选项：-sS -Pn -n --randomize-hosts --send-eth
+		// Scans the entire internet in about 10 hours per port (minus exclusion values) (655,360 hours if all ports are scanned)
+		// nmap compatible "stealth" options: -sS -Pn -n --randomize-hosts --send-eth
 		util.EngineFuncFactory(Const.ScanType_Masscan, func(evt *models.EventData, args ...interface{}) {
 			ip := strings.Join(evt.Target2Ip(), ",")
 			if "" == ip {

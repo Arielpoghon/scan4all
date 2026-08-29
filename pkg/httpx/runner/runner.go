@@ -651,10 +651,10 @@ func (r *Runner) RunEnumeration() {
 		if util.TestRepeat("httpx", k) {
 			return nil
 		}
-		// 优化：绝对404返回200就跳过当前 port的目标
-		// 绝对404先测试
+		// Optimization: absolute 404 return 200 then skip the current port's target
+		// Test absolute 404 first
 		if _, _, ok := util.TestIs404(k); ok {
-			// 做一次 http
+			// Do one http
 			util.PocCheck_pipe <- &util.PocCheck{
 				Wappalyzertechnologies: &[]string{"httpCheckSmuggling"},
 				URL:                    k,
@@ -1277,10 +1277,10 @@ retry:
 			}
 			return slice
 		}
-		// 登陆页面检测
+		// Login page detection
 		if brute.CheckLoginPage(finalURL, resp) {
-			technologies = append(technologies, "登陆页面")
-			// 做一次 http
+			technologies = append(technologies, "LoginPage")
+			// Do one http
 			util.PocCheck_pipe <- &util.PocCheck{
 				Wappalyzertechnologies: &[]string{"httpCheckSmuggling"},
 				URL:                    finalURL,
@@ -1288,7 +1288,7 @@ retry:
 				Checklog4j:             false,
 			}
 		}
-		// 指纹去重
+		// Fingerprint deduplication
 		technologies = SliceRemoveDuplicates(technologies)
 		if !scanopts.NoPOC {
 			intersect := func(slice1, slice2 []string) []string {
@@ -1323,31 +1323,31 @@ retry:
 				}
 				return nn
 			}
-			//通过wFingerprint获取到的指纹进行检测gopoc check
+			// Use fingerprints obtained from wFingerprint for gopoc detection
 			poctechnologies1 = pocs_go.POCcheck(technologies, ul, finalURL, false)
 			Vullist = append(Vullist, poctechnologies1...)
 			for _, technology := range technologies {
-				pocYmlList1 := pocs_yml.Check(ul, scanopts.CeyeApi, scanopts.CeyeDomain, r.options.HTTPProxy, strings.ToLower(technology)) // 通过wFingerprint获取到的指纹进行ymlpoc check
+				pocYmlList1 := pocs_yml.Check(ul, scanopts.CeyeApi, scanopts.CeyeDomain, r.options.HTTPProxy, strings.ToLower(technology)) // Use fingerprints obtained from wFingerprint for ymlpoc detection
 				Vullist = append(Vullist, pocYmlList1...)
 			}
-			// 敏感文件fuzz扫描
+			// Sensitive file fuzz scan
 			filePaths, filefuzzTechnologies = brute.FileFuzz(ul, resp.StatusCode, resp.ContentLength, resp.Raw)
 			//if 0 < len(filePaths) {
 			//	gologger.Debug().Msgf("%s fuzz\n%+v\n", ul, filePaths)
 			//}
 			filefuzzTechnologies = SliceRemoveDuplicates(filefuzzTechnologies)
-			// 取差集合
+			// Take the difference set
 			filefuzzTechnologies = difference(filefuzzTechnologies, technologies)
 			if 0 < len(filefuzzTechnologies) {
-				poctechnologies2 = pocs_go.POCcheck(filefuzzTechnologies, ul, finalURL, true) //通过敏感文件扫描获取到的指纹进行检测gopoc check
+				poctechnologies2 = pocs_go.POCcheck(filefuzzTechnologies, ul, finalURL, true) // Use fingerprints obtained from sensitive file scanning for gopoc detection
 				Vullist = append(Vullist, poctechnologies2...)
 				for _, technology := range filefuzzTechnologies {
-					pocYmlList2 := pocs_yml.Check(ul, scanopts.CeyeApi, scanopts.CeyeDomain, r.options.HTTPProxy, strings.ToLower(technology)) //通过敏感文件扫描获取到的指纹进行检测ymlpoc check
+					pocYmlList2 := pocs_yml.Check(ul, scanopts.CeyeApi, scanopts.CeyeDomain, r.options.HTTPProxy, strings.ToLower(technology)) // Use fingerprints obtained from sensitive file scanning for ymlpoc detection
 					Vullist = append(Vullist, pocYmlList2...)
 				}
-				// 输出加入敏感文件扫描 获取到的指纹
+				// Output fingerprints obtained from sensitive file scanning to be added
 				technologies = append(technologies, filefuzzTechnologies...)
-				// 指纹去重
+				// Fingerprint deduplication
 				technologies = SliceRemoveDuplicates(technologies)
 			}
 		}

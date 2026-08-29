@@ -13,7 +13,7 @@ import (
 
 func init() {
 	util.RegInitFunc(func() {
-		// 基于工厂方法构建
+		// Build based on the factory method
 		util.EngineFuncFactory(Const.ScanType_Nmap, func(evt *models.EventData, args ...interface{}) {
 			var Targets []string = args[0].([]string)
 			var Ports []string = args[1].([]string)
@@ -74,13 +74,13 @@ func (s *Scanner) Scan(fnCbk func(*Stream)) ([]*Stream, error) {
 	var err error
 	nmapScanner, err = nmap.NewScanner(
 		nmap.WithBinaryPath(util.GetVal("nmapScan")),
-		nmap.WithServiceInfo(),           // -sV, 非常慢，但是指纹信息非常全
+		nmap.WithServiceInfo(),           // -sV, very slow, but the fingerprint info is very complete
 		nmap.WithMinRate(5000),           //--min-rate ${XRate}
 		nmap.WithVersionIntensity(9),     // --version-intensity 9
 		nmap.WithDisabledDNSResolution(), // -n
 		//nmap.WithSkipHostDiscovery(),     // -Pn
-		//nmap.WithUDPScan(),                      // -sU,需要root
-		//nmap.WithSYNScan(),                      // -sS,需要root
+		//nmap.WithUDPScan(),                      // -sU, requires root
+		//nmap.WithSYNScan(),                      // -sS, requires root
 		nmap.WithMinHostgroup(64),               // --min-hostgroup 64
 		nmap.WithMaxRetries(0),                  // --max-retries 0
 		nmap.WithHostTimeout(10),                // --host-timeout 10m

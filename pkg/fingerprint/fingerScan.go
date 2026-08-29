@@ -43,23 +43,23 @@ func headerToString(param map[string][]string) string {
 	return strings.Join(a, "\n")
 }
 
-// 合并所有指纹需要请求的链接，也就是合并所有请求，相同的只请求一次
-// 会多次调用，所以需要cache中间结果
+// Merge all the links that fingerprints need to request, namely merge all requests, the same is requested only once
+// It will be called multiple times, so the intermediate results need to be cached
 func PreprocessingFingerScan(url string) []string {
-	// 有时间再实现
+	// Implement it when there is time
 	return []string{}
 }
 
-// 相同url、cms命中两次就不再匹配
+// Same url, cms hit twice no longer matches
 var Max_Count = 10
 
-// 图标每个目标只识别一次
+// The icon is identified only once for each target
 var Mfavhash *sync.Map = new(sync.Map)
 
-// 一个url到底和多少组件id关联
+// How many component ids a url is associated with
 var MFid *sync.Map = new(sync.Map)
 
-// 清除数据
+// Clear data
 func ClearData() {
 	Mfavhash = nil
 	EholeFinpx = nil
@@ -103,7 +103,7 @@ func CaseMethod(szUrl, method, bodyString, favhash, md5Body, hexBody string, fin
 			SvUrl2Id(szUrl, finp, rMz)
 		}
 		break
-	case "faviconhash": // 相同目标只执行一次
+	case "faviconhash": // Execute only once for the same target
 		if ok, rMz := iskeyword(favhash, finp.Keyword, finp.KeywordMathOr); ok {
 			Mfavhash.Store(u01.Host+favhash, 1)
 			cms = append(cms, finp.Cms)
@@ -116,13 +116,13 @@ func CaseMethod(szUrl, method, bodyString, favhash, md5Body, hexBody string, fin
 			SvUrl2Id(szUrl, finp, rMz)
 		}
 		break
-	case "md5": // 支持md5
+	case "md5": // supports md5
 		if ok, rMz := iskeyword(md5Body, finp.Keyword, finp.KeywordMathOr); ok {
 			cms = append(cms, finp.Cms)
 			SvUrl2Id(szUrl, finp, rMz)
 		}
 		break
-	case "base64": // 支持base64
+	case "base64": // supports base64
 		if ok, rMz := iskeyword(bodyString, finp.Keyword, finp.KeywordMathOr); ok {
 			cms = append(cms, finp.Cms)
 			SvUrl2Id(szUrl, finp, rMz)
@@ -152,10 +152,10 @@ func CheckHoneyport(a []string) (bool, []string) {
 	return bRst, a
 }
 
-// 相同的url、组件（产品），>=2 个指纹命中，那么该组件的其他指纹匹配将跳过
+// Same url, component (product), >= 2 fingerprints matched, then other fingerprint matches of that component will be skipped
 func FingerScan(headers map[string][]string, body []byte, title string, szUrl string, status_code string) ([]string, []string) {
 	if nil == body || 0 == len(body) {
-		//log.Println(szUrl, " 存在异常，body为nil")
+		//log.Println(szUrl, " abnormal, body is nil")
 		return []string{}, nil
 	}
 	//log.Println("FgDictFile = ", FgDictFile)
@@ -182,7 +182,7 @@ func FingerScan(headers map[string][]string, body []byte, title string, szUrl st
 	u01, _ := url.Parse(strings.TrimSpace(szUrl))
 	for _, x1 := range []*Packjson{EholeFinpx, LocalFinpx} {
 		for _, finp := range x1.Fingerprint {
-			// 移到循环体最前，提高效率, finp.Id > 0 兼容自家的指纹,非自家的继续走
+			// Move to the very front of the loop to improve efficiency, finp.Id > 0 is compatible with our own fingerprints, non-own ones continue
 			if finp.Id > 0 && u01.Path != finp.UrlPath {
 				continue
 			}
@@ -193,26 +193,26 @@ func FingerScan(headers map[string][]string, body []byte, title string, szUrl st
 				//}
 				if finp.Location == "all" {
 					cms = append(cms, CaseMethod(szUrl, finp.Method, headersjson+bodyString, favhash, md5Body, hexBody, finp)...)
-				} else if finp.Location == "body" { // 识别区域；body
+				} else if finp.Location == "body" { // identification area; body
 					cms = append(cms, CaseMethod(szUrl, finp.Method, bodyString, favhash, md5Body, hexBody, finp)...)
-				} else if finp.Location == "header" { // 识别区域：header
+				} else if finp.Location == "header" { // identification area: header
 					cms = append(cms, CaseMethod(szUrl, finp.Method, headersjson, favhash, md5Header, hexHeader, finp)...)
-				} else if finp.Location == "title" { // 识别区域： title
+				} else if finp.Location == "title" { // identification area: title
 					cms = append(cms, CaseMethod(szUrl, finp.Method, title, favhash, md5Title, hexTitle, finp)...)
-				} else if finp.Location == "status_code" { // 识别区域：status_code
+				} else if finp.Location == "status_code" { // identification area: status_code
 					if ok, rMz := iskeyword(status_code, finp.Keyword, finp.KeywordMathOr); ok {
 						cms = append(cms, finp.Cms)
 						SvUrl2Id(szUrl, finp, rMz)
 					}
 				}
 			}
-			// 找到指纹
+			// Fingerprint found
 			if len(cms) > n1 {
 				fgIds = append(fgIds, fmt.Sprintf("%v", finp.Id))
 				log.Printf("%d\n", finp.Id)
 				n1 = len(cms)
 			}
-			// 蜜罐检测、放弃（丢弃）结果
+			// Honeypot detection, abandon (discard) results
 			if ok, a := CheckHoneyport(cms); ok {
 				cms = a
 				break

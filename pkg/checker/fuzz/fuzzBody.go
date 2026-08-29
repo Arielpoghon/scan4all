@@ -15,8 +15,8 @@ var (
 
 func init() {
 	util.RegInitFunc(func() {
-		// 注册body中信息泄露的检测
-		// 约定参数：body，url
+		// Register detection of information leakage in the body
+		// Convention parameters: body, url
 		util.RegResponsCheckFunc(func(r *util.CheckerTools, i ...interface{}) {
 			s := r.GetBodyStr(i...)
 			var a []string

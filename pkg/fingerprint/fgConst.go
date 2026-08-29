@@ -15,22 +15,22 @@ import (
 )
 
 const (
-	Reg_idMethod       int = 11515 // 识别方式：正则表达式 == regular
-	Text_idMethod      int = 11516 // 识别方式：文本 == keyword
-	Bin_idMethod       int = 11517 // 识别方式：hex，二进制
-	Base64_idMethod    int = 11518 // 识别方式：hash-base64 // Base64_idMethod    int = 11518 // 识别方式：base64
-	Md5_idMethod       int = 11519 // 识别方式：md5
-	Header_idPart      int = 11520 // 识别区域：header
-	Body_idPart        int = 11521 // 识别区域：body
-	Raw_idPart         int = 11522 // 识别区域：all = header + body
-	Status_code_idPart int = 8998  // 识别区域：status_code
+	Reg_idMethod       int = 11515 // Identification method：regular expression == regular
+	Text_idMethod      int = 11516 // Identification method：text == keyword
+	Bin_idMethod       int = 11517 // Identification method：hex, binary
+	Base64_idMethod    int = 11518 // Identification method：hash-base64 // Base64_idMethod    int = 11518 // Identification method：base64
+	Md5_idMethod       int = 11519 // Identification method：md5
+	Header_idPart      int = 11520 // Identification area：header
+	Body_idPart        int = 11521 // Identification area：body
+	Raw_idPart         int = 11522 // Identification area：all = header + body
+	Status_code_idPart int = 8998  // Identification area：status_code
 )
 
 var FgType map[int]string = map[int]string{
 	Reg_idMethod:       "regular",
 	Text_idMethod:      "keyword",
-	Bin_idMethod:       "hex",    // 二进制模式
-	Base64_idMethod:    "base64", // 这种类型几乎没有必要
+	Bin_idMethod:       "hex",    // binary mode
+	Base64_idMethod:    "base64", // this type is rarely necessary
 	Md5_idMethod:       "md5",
 	Header_idPart:      "header",
 	Body_idPart:        "body",
@@ -41,7 +41,7 @@ var FgType map[int]string = map[int]string{
 //go:embed dicts/fg.json
 var FgData string
 
-// 指纹  {id：指纹数据对象}
+// Fingerprint  {id: fingerprint data object}
 var FGDataMap []map[string]interface{}
 
 func Get4K(m *map[string]interface{}, k string) string {
@@ -51,24 +51,24 @@ func Get4K(m *map[string]interface{}, k string) string {
 	return ""
 }
 
-// 在httpx请求的时候，需要拼接所有的url
+// When making httpx requests, all urls need to be concatenated
 var FgUrls = []string{}
 
-// 1、合并相同的请求路径
-// 2、合并数据到
+// 1、Merge identical request paths
+// 2、Merge data into
 func MergeReqUrl() {
 	LoadWebfingerprintEhole()
 	x1 := GetWebfingerprintEhole()
-	// 测试的时候下面代码才打开
+	// Only open the following code when testing
 	if true || "true" == util.GetValByDefault("MyDebug", "false") {
 		x1.Fingerprint = []*Fingerprint{}
 		localFinger = "{}"
 		log.Println("MyDebug")
 	}
 
-	// 不重复的URL
+	// Non-duplicate URLs
 	var urls = []string{}
-	// 去重使用
+	// Used for deduplication
 	var oUrl = make(map[string]struct{})
 	var oFingerprint = make(map[string]*Fingerprint)
 
@@ -82,10 +82,10 @@ func MergeReqUrl() {
 			log.Println("id, err2 := strconv.Atoi(sid) ", err2)
 			continue
 		}
-		// 需要考虑合并：相同url 相同识别区域 相同识别算法
+		// Need to consider merging: same url same identification area same identification algorithm
 		for _, y1 := range j {
 			y := y1.(map[string]interface{})
-			// url 去重复 start
+			// url deduplication start
 			szUrl := Get4K(&y, "url")
 			if szUrl == "/" || szUrl == "/favicon.ico" {
 				continue
@@ -95,7 +95,7 @@ func MergeReqUrl() {
 				oUrl[szUrl] = struct{}{}
 				urls = append(urls, szUrl)
 			}
-			// url 去重复 end
+			// url deduplication end
 			sidMethod := Get4K(&y, "idMethod")
 			sidPart := Get4K(&y, "idPart")
 
@@ -116,12 +116,12 @@ func MergeReqUrl() {
 				x1.Fingerprint = append(x1.Fingerprint, x2)
 				//log.Println(szKey)
 			}
-			// 这里处理x2的数据项
+			// Handle the data items of x2 here
 			x2.Keyword = append(x2.Keyword, Get4K(&y, "pattern"))
 			oFingerprint[szKey] = x2
 		}
 	}
-	// 放回去，很重要
+	// Put it back, very important
 	data, err := json.Marshal(x1)
 	if nil == err {
 		eHoleFinger = string(data)
@@ -137,7 +137,7 @@ func DelTmpFgFile() {
 	defer os.Remove(tempInput1.Name())
 }
 
-// 这里可以动态加载远程的url指纹数据到 FgData
+// FactoryHere remote url fingerprint data can be dynamically loaded into FgData
 func init() {
 	util.RegInitFunc(func() {
 		FgData = util.GetVal4File("FgData", FgData)

@@ -13,10 +13,10 @@ import (
 	"strings"
 )
 
-// 弱口令检测
+// Weak password detection
 func CheckWeakPassword(ip, service string, port int) {
 	util.DoSyncFunc(func() {
-		// 在弱口令检测范围就开始检测，结果....
+		// Start detection as soon as it is within the weak password detection scope, results....
 		service = strings.ToLower(service)
 		if pkg.Contains(ProtocolList, service) {
 			//log.Println("start CheckWeakPassword ", ip, ":", port, "(", service, ")")
@@ -25,7 +25,7 @@ func CheckWeakPassword(ip, service string, port int) {
 	})
 }
 
-// 开启了es
+// es is enabled
 var enableEsSv, bCheckWeakPassword bool = false, true
 
 func init() {
@@ -77,9 +77,9 @@ func DoParseXml(s string, bf *bytes.Buffer) {
 				service := strings.ToLower(GetAttr(x.SelectElement("service").Attr, "name"))
 				//bf.Write([]byte(fmt.Sprintf("%s:%s\n", ip, szPort)))
 
-				// 存储结果到其他地方
+				// Store results elsewhere
 				//x9 := AuthInfo{IPAddr: ip, Port: port, Protocol: service}
-				// 构造发送es等数据
+				// Construct data sent to es etc
 				if enableEsSv {
 					var xx09 = [][]string{}
 					if a1, ok := m1[ip]; ok {
@@ -87,7 +87,7 @@ func DoParseXml(s string, bf *bytes.Buffer) {
 					}
 					m1[ip] = append(xx09, []string{szPort, service})
 				}
-				// 这里应当还原域名，否则无法正常访问
+				// The domain name should be restored here, otherwise normal access is impossible
 				for _, dnsJ := range aDns {
 					aszUlr := []string{fmt.Sprintf("https://%s:%s", dnsJ, szPort), fmt.Sprintf("http://%s:%s", dnsJ, szPort)}
 					for _, szUlr := range aszUlr {
@@ -118,8 +118,8 @@ func DoParseXml(s string, bf *bytes.Buffer) {
 						}
 					}
 				}
-				// 若密码、破解
-				if bCheckWeakPassword {
+			// If password, crack
+			if bCheckWeakPassword {
 					if "8728" == szPort && service == "unknown" {
 						CheckWeakPassword(ip, "router", port)
 					} else if ("5985" == szPort || "5986" == szPort) && -1 < strings.Index(service, "microsoft ") {
@@ -144,8 +144,8 @@ func DoParseXml(s string, bf *bytes.Buffer) {
 	}
 }
 
-// 处理使用者自己扫描的结果
-// 不能用异步，否则后续流程无法读取 buff
+// Handle the scan results produced by the user himself
+// Cannot be asynchronous, otherwise the subsequent process cannot read the buff
 func DoNmapWithFile(s string, bf *bytes.Buffer) bool {
 	if strings.HasSuffix(strings.ToLower(s), ".xml") {
 		b, err := os.ReadFile(s)
@@ -160,7 +160,7 @@ func DoNmapWithFile(s string, bf *bytes.Buffer) bool {
 	return false
 }
 
-// 处理 naabu 端口扫描环节的结果文件
+// Handle the result file of the naabu port scanning phase
 func DoNmapRst(bf *bytes.Buffer) {
 	if x1, ok := util.TmpFile[string(util.Naabu)]; ok {
 		for _, x := range x1 {

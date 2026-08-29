@@ -39,8 +39,8 @@ var (
 	}
 )
 
-//mod = 0 则为不输出颜色;
-//mod = 1 则依据ANSI转义序列输出颜色体系;
+//mod = 0 means no color output;
+//mod = 1 outputs the color system according to ANSI escape sequences;
 func init() {
 	mod = 0
 }

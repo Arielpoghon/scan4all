@@ -5,7 +5,7 @@ import (
 	"github.com/GhostTroops/scan4all/lib/util"
 )
 
-// jndi日志检查
+// jndi log check
 func Jndilogchek(randomstr string) bool {
 	if JndiLog == nil {
 		return false

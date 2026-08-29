@@ -4,7 +4,7 @@ import (
 	"github.com/go-routeros/routeros"
 )
 
-// router os 密码破解
+// router os password cracking
 func RouterOSAuth(ip string, port string, user string, pass string) (result bool, err error) {
 	result = false
 	c, err1 := routeros.Dial(ip+":"+port, user, pass)

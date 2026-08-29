@@ -23,12 +23,12 @@ func init() {
 		if "" != HydraPass {
 			a2 = strings.Split(HydraPass, "\n")
 		}
-		//加载自定义字典
+		//Load custom dictionary
 		InitCustomAuthMap(a1, a2)
 	})
 }
 
-// 密码破解
+// Password cracking
 func Start(IPAddr string, Port int, Protocol string) {
 	authInfo := NewAuthInfo(IPAddr, Port, Protocol)
 	nT, err := strconv.Atoi(util.GetVal4File("hydrathread", "64"))
@@ -36,18 +36,18 @@ func Start(IPAddr string, Port int, Protocol string) {
 		nT = 64
 	}
 	crack := NewCracker(authInfo, true, nT)
-	fmt.Printf("\n[hydra]->开始对%v:%v [ %v ] 进行暴力破解，字典长度为：%d\n", IPAddr, Port, Protocol, crack.Length())
+	fmt.Printf("\n[hydra]->Start brute force on %v:%v [ %v ], dictionary length: %d\n", IPAddr, Port, Protocol, crack.Length())
 	go crack.Run()
-	//爆破结果获取
+	//Crack result acquisition
 	var out AuthInfo
 	for info := range crack.Out {
 		out = info
 		if nil != &out && "" != out.Protocol && out.IPAddr != "" && "" != out.Auth.Username {
 			util.SendAData[AuthInfo](fmt.Sprintf("%s:%d", out.IPAddr, out.Port), []AuthInfo{out}, util.Hydra)
 			data, _ := json.Marshal(out)
-			fmt.Println("Successful password cracking：", aurora.BrightRed(string(data)))
+			fmt.Println("Successful password cracking:", aurora.BrightRed(string(data)))
 		}
 	}
-	log.Printf("\n[hydra]-> %v:%v [ %v ] 暴力破解 Finish\n", IPAddr, Port, Protocol)
+	log.Printf("\n[hydra]-> %v:%v [ %v ] Brute force Finish\n", IPAddr, Port, Protocol)
 	//crack.Pool.Wait()
 }

@@ -10,8 +10,8 @@ import (
 	"strings"
 )
 
-// 判断s是否在数组a中
-// 支持任何类型，支持泛型
+// Determines whether s is in array a
+// Supports any type, supports generics
 func Contains[T any](a []T, s T) bool {
 	for _, x := range a {
 		if reflect.DeepEqual(s, x) {
@@ -85,7 +85,7 @@ func doSub(s string) (aRst []string, err1 error) {
 	return aRst, nil
 }
 
-// 获取DNS 的所有子域名信息，start from here
+// Get all subdomain info of DNS, start from here
 func DoDns(s string) (aRst []string, err1 error) {
 	if -1 < strings.Index(s, "://") {
 		s = strings.Split(s, "://")[1]
