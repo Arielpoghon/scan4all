@@ -1,11 +1,11 @@
 id: Easy_File_Sharing_Web_Server_7_2_cookie_SEH
 
 info:
-  name: Easy File Sharing Web Server 7.2 cookie (SEH)远程溢出
+  name: Easy File Sharing Web Server 7.2 cookie (SEH) Remote Overflow
   author: 51pwn
   severity: low
   description: |
-    Easy File Sharing Web Server_7.2_cookie_(SEH)远程溢出
+    Easy File Sharing Web Server_7.2_cookie_(SEH) Remote Overflow
     use exploit/multi/handler
     set payload windows/meterpreter_reverse_tcp  
   reference:

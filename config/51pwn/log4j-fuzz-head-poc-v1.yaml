@@ -1,7 +1,7 @@
 id: log4j-fuzz-head-poc
 
 info:
-  name: log4j-rce漏洞
+  name: log4j-rce-vulnerability
   author: xxx
   severity: critical
   tags: apache,rce

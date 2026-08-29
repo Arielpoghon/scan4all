@@ -27,7 +27,7 @@ requests:
         Host: {{Hostname}}
         
         {"51pwn":"51pwn"}
-      # 验证 put 文件 真实存在
+# verify the put file really exists
       - |+
         GET /{{randstr}}.txt HTTP/1.1
         Host: {{Hostname}}
@@ -50,7 +50,7 @@ requests:
       #   Host: {{Hostname}}
         
       #   {"51pwn":"51pwn"}
-      # # 验证 put 文件 真实存在
+      # # verify the put file really exists
       # - |+
       #   @Host: {{myHost}}
       #   GET /{{randstr}}.json HTTP/1.1
@@ -65,7 +65,7 @@ requests:
       - type: dsl
         dsl:
           # Server: AliyunOSS tencent-cos 
-          # 判断是否是OSS（目前有阿里云OSS、腾讯云COS、亚马逊S3、华为云、京东云）
+          # determine whether it is OSS (currently Alibaba Cloud OSS, Tencent Cloud COS, Amazon S3, Huawei Cloud, JD Cloud)
           - "contains(body_1, 'HostId') || contains(all_headers_1,'AliyunOSS') || contains(all_headers_1,'tencent-cos') || contains(all_headers_1,'AmazonS3') || contains(all_headers_1,'JDCloudOSS') || contains(all_headers_1,'OBS') "
           - 'contains(body_3, "51pwn") && status_code_3 == 200 && (status_code_2 == 200||status_code_2 == 201)'
         condition: and

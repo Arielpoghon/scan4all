@@ -1,7 +1,7 @@
 id: tongda_bypass_login
 
 info:
-  name: 通达oa在线用户登录漏洞
+  name: Tongda OA Online User Login Vulnerability
   author: str1am
   severity: critical
   tags: tongda,bypass
