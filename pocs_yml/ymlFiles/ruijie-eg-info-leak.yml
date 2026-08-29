@@ -30,4 +30,4 @@ detail:
     author: Search?=Null
     links:
         - https://mp.weixin.qq.com/s/jgNyTHSqWA5twyk5tfSQUQ
-    description: Ruijie EG网关信息泄漏
+    description: Ruijie EG gateway information leakage
