@@ -1,114 +1,114 @@
-# 使用方法介绍
+# Usage Introduction
 
-## 输入
+## Input
 
 ```shell    
 scan4all -host 127.0.0.1
 ```
-会对 127.0.0.1 进行http常用端口扫描，扫描完端口后对端口地址进行检测
+Will scan common http ports on 127.0.0.1, and after the port scan detects the port addresses
 
 ```shell    
 scan4all -host http://127.0.0.1:7001
 ```
-不会对 127.0.0.1 进行端口扫描，而是直接对 http://127.0.0.1:7001 地址进行检测
+Will not perform a port scan on 127.0.0.1, but directly detect the http://127.0.0.1:7001 address
 
 ```shell    
 scan4all -host 192.168.1.1/24
 ```
-对 192.168.1.1/24 C段进行端口扫描，扫描完端口后对端口地址进行检测
+Will perform a port scan on the C class segment 192.168.1.1/24, and after the port scan detects the port addresses
 
 ```shell    
 scan4all -l ips.txt
 ```
-对 ips.txt 内的 ip/域名/c段/url地址 进行逐行检测(如果有url地址，则不会进行端口扫描)
+Will detect the ip/domain/C segment/url addresses in ips.txt line by line (if there are url addresses, port scanning will not be performed)
 
 
 ```shell    
 echo 127.0.0.1|scan4all
 ```
-可以使用管道进行输入并扫描
+You can use a pipeline for input and scanning
 
-## 选择扫描方式
+## Choosing the scan method
 
 ```shell    
 scan4all -host 127.0.0.1 -s SYN
 ```
-SYN扫描速度更快，但需要root权限 (不使用此参数，默认进行SYN扫描)
+SYN scanning is faster but requires root privileges (without this parameter, SYN scanning is performed by default)
 
 
-## 端口选择
+## Port selection
 
 ```shell    
 scan4all -host 127.0.0.1 -p 7001,7002
 ```
-对 127.0.0.1 的7001,7002端口进行检测
+Will detect the 7001 and 7002 ports on 127.0.0.1
 
 ```shell    
 scan4all -host 127.0.0.1 -top-Ports 1000
 scan4all -host 127.0.0.1 -top-Ports http
 ```
-对 127.0.0.1 进行 NmapTop1000 端口进行检测 (不使用此参数，默认进行http常用端口扫描)
+Will perform a NmapTop1000 port scan on 127.0.0.1 (without this parameter, common http port scanning is performed by default)
 
 
 
 
-## 使用DNSLOG功能
+## Using the DNSLOG feature
 
 ```shell    
 scan4all -host 127.0.0.1 -ceyeapi xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -ceyedomain xxxxxx.ceye.io
 ```
-使用DNSLOG功能可以更好的进行POC检测，有些POC的检测要用到DNSLOG功能
+Using the DNSLOG feature allows better POC detection; some POCs require the DNSLOG feature for detection
 
-## 输出/导出功能
+## Output/Export feature
 
 ```shell    
 scan4all -host 127.0.0.1 -json -o 1.json
 ```
-输出json格式的结果，并且输出到1.json文件中。端口扫描结果保存在port.1.json中
+Outputs results in json format and writes them to the 1.json file. Port scan results are saved in port.1.json
 
 
 ```shell    
 scan4all -host 127.0.0.1 -csv -o 1.csv
 ```
-输出csv格式的结果，并且输出到1.csv文件中。端口扫描结果保存在port.1.csv中
+Outputs results in csv format and writes them to the 1.csv file. Port scan results are saved in port.1.csv
 
 
-## 只做端口扫描和指纹识别，不检测POC
+## Only perform port scanning and fingerprint identification, no POC detection
 
 ```shell
 scan4all -host 127.0.0.1 -np
 ```
 
-## 取消颜色输出
+## Disable color output
 
 ```shell    
 scan4all -host 127.0.0.1 -no-color
 ```
 
-## 设置线程和线程速率
+## Set thread count and thread rate
 
 ```shell    
 scan4all -host 127.0.0.1 -c 25 -rate 1000
 ```
 
-## 代理功能
+## Proxy feature
 
 ```shell    
 scan4all -host 127.0.0.1 -proxy socks5://127.0.0.1:1080
 ```
 
-## 排除CDN
+## Exclude CDN
 
 ```shell    
 scan4all -host www.google.com -ec
 ```
 
-##  直接使用nmap扫描结果，跳过内部端口扫描
+## Directly use nmap scan results, skip internal port scanning
 
 ```shell    
 scan4all -l nmapResult.xml -v
 ```
 
-## 其他
+## Other
 
-见 [Usage](/static/usage.md)
+See [Usage](/static/usage.md)

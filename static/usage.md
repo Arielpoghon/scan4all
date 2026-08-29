@@ -1,10 +1,10 @@
-# 参数
+# Parameters
 
 ```sh
 scan4all -h
 ```
 
-运行 -h 参数即可查看所有参数的描述信息
+Run with the -h parameter to view the description of all parameters
 
 ```yaml
 Usage:

@@ -1,38 +1,38 @@
-# 最佳实践
-本文以mac os系统为例
+# Best Practices
+This document uses mac os as an example
 
-## 结果持久化保存
-* 1、请自行先安装好docker（安装过程略）
+## Persistent result storage
+* 1、Please install docker first (installation steps omitted)
 * 2、mkdir ~/MyWork;cd ~/MyWork
-  * 2.1 config目录及相关配置文件
-  下载release程序运行，首次运行非自动生成config目录及相关配置文件，或者：  
+  * 2.1 config directory and related config files
+  Download the release program and run it. The first run will not automatically generate the config directory and related config files. Alternatively:  
   git clone http://github.com/hktalent/scan4all
   
 * 3、cd ~/MyWork/scan4all
-* 4、运行下面的代码，自动获取docker，并启动docker服务，端口9200
+* 4、Run the code below, which automatically pulls the docker image and starts the docker service on port 9200
 ```bash
 docker run --restart=always --ulimit nofile=65536:65536 -p 9200:9200 -p 9300:9300 -d --name es -v $PWD/logs:/usr/share/elasticsearch/logs -v $PWD/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml -v $PWD/config/jvm.options:/usr/share/elasticsearch/config/jvm.options  -v $PWD/data:/usr/share/elasticsearch/data  hktalent/elasticsearch:7.16.2
 ```
-* 5、运行 初始化索引库
+* 5、Run the initialization index command
 ```
 ~/MyWork/scan4all/config/initEs.sh
 ```
-## 启动结果存储到ES
-修改 config/config.json 中为true开启存储结果
+## Enable storing results to ES
+Modify config/config.json, set to true to enable storing results
 ```
 "enableEsSv": true,
 ```
-如果你的ES设置了密码，请修改
+If your ES has a password set, please modify
 config/nuclei_esConfig.yaml
-中的密码，否则里面的密码设置都无意义
+password; otherwise the password settings inside are meaningless
 
-### 配置说明
-完整版本，查看:config/config.json
+### Configuration description
+Full version, see:config/config.json
 ```json
 {
-  "CacheName": ".DbCache", // 提速、优化、避免重复，缓存目录
-  "autoRmCache": "true",   // 程序自动删除缓存，如果你希望保留下次相同目标提速，可以保留
-  //////////各种不需要我说对可自定义字典，你可以配置相同文件 start///////////////
+  "CacheName": ".DbCache", // speed up, optimize, avoid duplicates, cache directory
+  "autoRmCache": "true",   // program automatically deletes the cache; if you want to keep it to speed up the next scan of the same target, you can keep it
+  //////////various customizable dictionaries that need no explanation, you can configure the same file start///////////////
   "ssh_username": "pkg/hydra/dicts/ssh_user.txt",
   "ssh_pswd": "pkg/hydra/dicts/ssh_pswd.txt",
   "ssh_default": "pkg/hydra/dicts/ssh_default.txt",
@@ -85,32 +85,31 @@ config/nuclei_esConfig.yaml
   "snmp_user": "pkg/hydra/dicts/snmp_user.txt",
   "snmp_pswd": "pkg/hydra/dicts/snmp_pswd.txt",
   "snmp_default": "pkg/hydra/dicts/snmp_default.txt",
-  //////////各种不需要我说对可自定义字典，你可以配置相同文件 end///////////////
-  // naabu 扫描到到端口后自动调用nmap跑指纹，然后自动调用弱口令检测，windows自动加.exe你不需要关注
+  //////////various customizable dictionaries that need no explanation, you can configure the same file end///////////////
+  // after naabu scans the ports, it automatically calls nmap to run fingerprint detection, then automatically calls weak password detection; on windows it automatically adds .exe, you don't need to worry
   "nmap": "nmap -n --unique --resolve-all -Pn --min-hostgroup 64 --max-retries 0 --host-timeout 10m --script-timeout 3m -oX {filename} --version-intensity 9 --min-rate 10000 -T4 ",
-  "UrlPrecise": true, // -l 传入文件清单如果是http[s]带上下文，默认启动精准扫描
-  "ParseSSl": false,  // HW打点默认关闭，互联网赏金目标建议设置true
-  "EnableSubfinder": false, // 默认关闭ssl中证书子域名爆破,互联网赏金目标建议设置true
-  "naabu_dns": {},  // naabu工具对dns配置
-  "naabu": {"TopPorts": "1000","ScanAllIPS": true}, // naabu配置
-  "nuclei": {}, // nuclei配置，例如线程等
-  "httpx": {}   // httpx 配置,
-  "enableEsSv": true,        // 开启结果send 到es
-  "esthread": 8 // 结果写入Elasticsearch的线程数,
+  "UrlPrecise": true, // if the file list passed with -l contains http[s] context, precise scanning is enabled by default
+  "ParseSSl": false,  // off by default for HW marking; recommended to set true for internet bug bounty targets
+  "EnableSubfinder": false, // certificate subdomain enumeration in ssl is off by default; recommended to set true for internet bug bounty targets
+  "naabu_dns": {},  // naabu tool dns configuration
+  "naabu": {"TopPorts": "1000","ScanAllIPS": true}, // naabu configuration
+  "nuclei": {}, // nuclei configuration, e.g. threads etc
+  "httpx": {}   // httpx configuration,
+  "enableEsSv": true,        // enable sending results to es
+  "esthread": 8 // number of threads writing results to Elasticsearch
   "esUrl": "http://127.0.0.1:9200/%s_index/_doc/%s" // Elasticsearch szUrl
 }
 ```
 
-## 运行扫描任务
-一般不批量的时候，除非想看中间结果，不建议开启 -v -debug
+## Running scan tasks
+Generally when not batch scanning, unless you want to see intermediate results, it is not recommended to enable -v -debug
 ```bash
 enableEsSv=true ./scan4all -l list.txt
 enableEsSv=true ./scan4all -host target.com
 ```
 
-## 查看结果
-更多索引类型见
-config/initEs.sh
+## Viewing results
+See config/initEs.sh for more index types
 ```
 http://127.0.0.1:9200/nmap_index/_doc/156.238.15.99
 http://127.0.0.1:9200/nuclei_index/_doc/_search?q=host:%20in%20%221.2.215.18:1432%22

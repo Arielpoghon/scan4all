@@ -1,4 +1,4 @@
-# 编译
+# Compilation
 
 ```sh
 sudo apt install -y libpcap-dev golang git
@@ -7,9 +7,9 @@ cd scan4all
 go build
 ```
 
-# 安装/运行
+# Installation/Run
 
-1.在运行scan4all之前，你必须先安装libpcap库
+1. Before running scan4all, you must install the libpcap library
 
 ```sh
 # ubuntu、linux
@@ -24,19 +24,19 @@ brew install libpcap
 
 ```
 
-2.前往
+2. Go to
 [https://github.com/hktalent/scan4all/releases/](https://github.com/hktalent/scan4all/releases/)
-下载scan4all最新版运行:
+Download the latest scan4all release and run it:
 
-## 运行时动态库版本问题
+## Runtime dynamic library version issues
 
-如果你运行的时候出现了`libpcap.so.0.8: cannot open shared object file: No such file or directory`的错误
+If you encounter the error `libpcap.so.0.8: cannot open shared object file: No such file or directory` when running
 
-请先检查libpcap库是否已经正常安装。
+Please first check whether the libpcap library is installed correctly.
 ```sh
 ls -all /lib64/libpcap*
 ```
-如果有安装其他版本的libpcap库，可建立一个软连接到/lib64/libpcap.so.0.8即可正常运行程序
+If another version of the libpcap library is installed, you can create a symbolic link to /lib64/libpcap.so.0.8 for the program to run normally.
 
 ```sh
 ln -s /lib64/libpcap.so.1.9.1 /lib64/libpcap.so.0.8
@@ -52,7 +52,7 @@ yum install -yy glibc-devel.x86_64
 ```
 ### linux
 too many open files
-查看当前打开的文件数
+Check the current number of open files
 ```
 awk '{print $1}' /proc/sys/fs/file-nr
 ulimit -a

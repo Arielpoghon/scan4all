@@ -1,14 +1,14 @@
-# 自定义扫描器
+# Custom Scanner
 
-## go文件添加POC：
+## Adding POC via golang files:
 
-1.在 ./pkg/fingerprint/localFingerData.go 内检查或添加指纹
+1. Check or add fingerprint in ./pkg/fingerprint/localFingerData.go
 
-2.写一个go文件POC，放到pocs_go文件夹下，指定一个入口函数，指定输入输出，并在./pocs_go/go_poc_check.go 添加检测项（poc的编写过程可以使用./pkg/util.go内的函数pkg.HttpRequset）
+2. Write a golang POC file, place it in the pocs_go folder, specify an entry function with defined input/output, and add the detection item in ./pocs_go/go_poc_check.go (during POC writing you can use the function pkg.HttpRequset from ./pkg/util.go)
 
-例如：
+For example:
 
-CVE_2017_12615 POC：
+CVE_2017_12615 POC:
 ```
 func CVE_2017_12615(szUrl string) bool {
 	if req, err := pkg.HttpRequset(szUrl+"/vtset.txt", "PUT", "test", false, nil); err == nil {
@@ -21,38 +21,38 @@ func CVE_2017_12615(szUrl string) bool {
 }
 ```
 
-CVE_2017_12615 POC ./pocs_go/go_poc_check.go 添加检测项：
+CVE_2017_12615 POC Add detection item in ./pocs_go/go_poc_check.go:
 ```
 case "Apache Tomcat":
    if tomcat.CVE_2017_12615(URL) {
 		technologies = append(technologies, "exp-Tomcat|CVE_2017_12615")
     }
 ```
-## yml文件添加POC：
-1.在 ./pkg/fingerprint/localFingerData.go 内检查或添加指纹
+## Adding POC via yml files:
+1. Check or add fingerprint in ./pkg/fingerprint/localFingerData.go
 
-2.参考 xrayV2 yml 的编写方式编写放至 ./pocs_yml/ymlFiles/ 下，文件名需以指纹名开头加- (如thinkphp-cvexxxxxxxxx-aaa.yml)
+2. Refer to the writing style of xrayV2 yml, write it and place it in ./pocs_yml/ymlFiles/. The filename must start with the fingerprint name followed by a dash (e.g. thinkphp-cvexxxxxxxxx-aaa.yml)
 
-## 后台弱口令扫描，中间件弱口令扫描 字典
+## Background weak password scanning, middleware weak password scanning dictionaries
 
-后台弱口令检测内置了两个账号 admin/test，密码为top100，如果成功识别首页有登录会标记为 LoginPage，如果识别可能是后台登录页会标记为 AdminLoginPage ，都会尝试构建登录包会自动检测弱口令
+The background weak password detection has two built-in accounts admin/test, with the top100 password list. If the homepage login is successfully identified, it will be marked as LoginPage; if it is recognized as potentially a background login page, it will be marked as AdminLoginPage. Both will attempt to construct a login request and automatically detect weak passwords.
 
-如：
+For example:
 
 `http://127.0.0.1:8080 [302,200] [登录 - 后台] [exp-shiro|key:Z3VucwAAAAAAAAAAAAAAAA==,Java,LoginPage,brute-admin|admin:123456] [http://127.0.0.1:8080/login]`
 
-包含弱口令检测板块
-1. 没有使用验证码，没有使用vue等前端框架的后台智能弱口令检测
-2. basic弱口令检测
-3. tomcat弱口令检测
-4. weblogic弱口令检测
-5. jboss弱口令检测
+Includes weak password detection modules
+1. Smart weak password detection for backgrounds that do not use captchas or frontend frameworks such as vue
+2. basic weak password detection
+3. tomcat weak password detection
+4. weblogic weak password detection
+5. jboss weak password detection
 
-字典在 ./brute/dicts/ 内置，可自行修改
+The dictionaries are built in ./brute/dicts/ and can be modified as needed
 
 
-##  敏感文件扫描 字典
+## Sensitive file scanning dictionary
 
-扫描 备份、swagger-ui、spring actuator、上传接口、测试文件等敏感文件
+Scans sensitive files such as backups, swagger-ui, spring actuator, upload interfaces, test files, etc.
 
-字典在 ./brute/dicts/ 内置，可自行修改
+The dictionaries are built in ./brute/dicts/ and can be modified as needed

@@ -1,28 +1,28 @@
 
-# 场景
+# Scenarios
 
 
-## 外网场景
+## External network scenario
 
-您需要自己收集目标的外网资产信息，包括资产的域名、C段、相关IP等，将资产汇总后去重保存于本地，然后使用scan4all进行快速的漏洞扫描。
+You need to collect the target's external network asset information yourself, including the asset's domains, C segments, related IPs, etc. Aggregate the assets, deduplicate, and save them locally, then use scan4all for rapid vulnerability scanning.
 
 ```shell
 scan4all -l input.txt -ceyeapi xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -ceyedomain xxxxxx.ceye.io -csv -o output.csv
 ```
-input.txt 内可以是多种格式，可以是URL、域名、C段、IP(URL地址不会进行端口扫描)
+input.txt can contain multiple formats: URL, domain, C segment, IP (URL addresses will not undergo port scanning)
 
-## 内网场景
+## Internal network scenario
 
-直接使用 scan4all 对于B段的扫描速度非常慢（大量的端口扫描），建议使用 [fscan](https://github.com/shadow1ng/fscan) 先对内网进行B段IP存活探测，再将存活的IP列表导入 scan4all 进行扫描
+Directly using scan4all to scan B segments is very slow (large amount of port scanning). It is recommended to first use [fscan](https://github.com/shadow1ng/fscan) to probe for live IPs on the internal B segment, then import the list of live IPs into scan4all for scanning
 
 ```shell
 scan4all -l ips.txt -ceyeapi xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -ceyedomain xxxxxx.ceye.io -csv -o output.csv
 ```
 
-## WAF场景
+## WAF scenario
 
-如遇到WAF封禁IP的情况，建议先对资产进行指纹识别，再对url地址进行POC检测。
-这样至少能得到资产的指纹列表，不至于完全没有结果
+If you encounter a WAF blocking your IP, it is recommended to first perform fingerprint identification on the assets, then perform POC detection on the url addresses.
+This way you can at least obtain the asset's fingerprint list, rather than having no results at all
 
 1.
 ```shell

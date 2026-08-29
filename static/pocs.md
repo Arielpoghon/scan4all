@@ -1,10 +1,10 @@
-# POC列表
+# POC List
 
 ```
 pocs_go:
 
  +-------------------+------------------+-------------------------------------------------------------+
- | 系统               | 编号             | 描述                                                         |
+ | System            | ID               | Description                                                 |
  +-------------------+------------------+-------------------------------------------------------------+
  | Springboot        | CVE-2022-22965   | Spring Framework RCE via Data Binding on JDK 9+             |
  | Springboot        | CVE-2022-22947   | spring cloud gateway 3.1.1+ and 3.0.7+ remote code execution|
