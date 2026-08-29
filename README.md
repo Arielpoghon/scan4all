@@ -17,11 +17,11 @@
 </h1>
 
 - <a href=https://github.com/hktalent/51Pwn-Platform/blob/main/README.md>Free one id Multi-target web netcat for reverse shell</a>
-- What is scan4all: integrated vscan, nuclei, ksubdomain, subfinder, etc., fully automated and intelligent。red team tools
+- What is scan4all: integrated vscan, nuclei, ksubdomain, subfinder, etc., fully automated and intelligent. Red team tool.
   Code-level optimization, parameter optimization, and individual modules, such as vscan filefuzz, have been rewritten for these integrated projects.
-  In principle, do not repeat the wheel, unless there are bugs, problems
-- Cross-platform: based on golang implementation, lightweight, highly customizable, open source, supports Linux, windows, mac os, etc.
-- Support [23] password blasting, support custom dictionary, open by "priorityNmap": true
+  In principle, do not repeat the wheel, unless there are bugs or problems.
+- Cross-platform: based on golang implementation, lightweight, highly customizable, open source, supports Linux, Windows, Mac OS, etc.
+- Supports [23] password brute-forcing methods, supports custom dictionaries, enabled via "priorityNmap": true
   * RDP
   * VNC
   * SSH
