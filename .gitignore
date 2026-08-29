@@ -30,3 +30,5 @@ config/rockyou.txt
 # Dependency directories (remove the comment below to include it)
 
 dist/
+
+__pycache__/
