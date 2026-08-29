@@ -16,21 +16,21 @@ type Dns2IpMap struct {
 	Ip  string `json:"ip"  gorm:"unique_index:dns_ip;type:varchar(60);"`
 }
 
-// 通过ip查找域名信息
+// Look up domain information by IP
 func GetDns2IpMap4Ip(ip string) *[]Dns2IpMap {
 	x1 := util.Query4Lists[Dns2IpMap]("ip=?", ip)
 	return x1
 }
 
-// 获取域名和ip的对照信息
+// Get the mapping information between domain and IP
 func DoGetDnsInfos(t string) *[]Dns2IpMap {
 	if iputil.IsIP(t) {
 		return nil
 	}
-	// , "-json" 输出格式不太友好
+	// , "-json" output format is not very friendly
 	var szW string = util.SzPwd + "/config/databases/subdomain.txt"
 	if !strings.HasPrefix(t, "*.") {
-		// 历史结果匹配
+		// Match historical results
 		x1 := util.Query4Lists[Dns2IpMap]("dns=?", t)
 		if nil != x1 && 0 < len(*x1) {
 			return x1
@@ -69,7 +69,7 @@ func DoGetDnsInfos(t string) *[]Dns2IpMap {
 	return nil
 }
 
-// 简单的模式，避免递归
+// Simple mode to avoid recursion
 func GetSimple(s string) *[]string {
 	if ips, err := net.LookupIP(s); nil == err {
 		var a []string
@@ -84,12 +84,12 @@ func GetSimple(s string) *[]string {
 	return nil
 }
 
-// 这里有可能导致递归、重复
+// This may cause recursion and duplicates
 func ParseLine(s string) *[]Dns2IpMap {
 	a := strings.Split(s, " [")
 	ip1 := a[1][0 : len(a[1])-1]
 	if iputil.IsIP(ip1) {
-		// 私有ip就不处理了
+		// Do not process private IPs
 		if net.ParseIP(ip1).IsPrivate() {
 			return &[]Dns2IpMap{}
 		}

@@ -22,52 +22,52 @@ import (
 )
 
 type PocWebAppData struct {
-	Title          string `json:"title"`           //网站标题
-	Link           string `json:"link"`            //网站链接
-	StatusCode     string `json:"status_code"`     //状态代码
-	Ip             string `json:"ip"`              //ip
-	Port           string `json:"port"`            //端口
-	Keywords       string `json:"keywords"`        //关键字
-	Description    string `json:"description"`     //网站描述
-	Classification string `json:"classification"`  //内容分类
-	SensitiveWords string `json:"sensitive_words"` //敏感词
-	Framework      string `json:"framework"`       //网站框架
-	Header         string `json:"header"`          //头部信息
-	SecondaryLinks string `json:"secondary_links"` //二级链接
-	LargeImage     string `json:"large_image"`     //网站截图（大图）
-	SmallImage     string `json:"small_image"`     //网站截图（封面）
-	Tls            string `json:"tls"`             //tls证书
+	Title          string `json:"title"`           //Website title
+	Link           string `json:"link"`            //Website link
+	StatusCode     string `json:"status_code"`     //Status code
+	Ip             string `json:"ip"`              //IP
+	Port           string `json:"port"`            //Port
+	Keywords       string `json:"keywords"`        //Keywords
+	Description    string `json:"description"`     //Website description
+	Classification string `json:"classification"`  //Content classification
+	SensitiveWords string `json:"sensitive_words"` //Sensitive words
+	Framework      string `json:"framework"`       //Website framework
+	Header         string `json:"header"`          //Header information
+	SecondaryLinks string `json:"secondary_links"` //Secondary links
+	LargeImage     string `json:"large_image"`     //Website screenshot (large)
+	SmallImage     string `json:"small_image"`     //Website screenshot (cover)
+	Tls            string `json:"tls"`             //TLS certificate
 }
 
 type Org struct {
-	Country            string `json:"country"`             // 国家或地区
-	Province           string `json:"province"`            // 省/市/自治区
-	Locality           string `json:"locality"`            // 所在地
-	OrganizationalUnit string `json:"organizational_unit"` // 组织单位
-	Organization       string `json:"organization"`        // 组织
-	CommonName         string `json:"common_name"`         // 常用名称
-	StreetAddress      string `json:"street_address"`      // 街道地址
-	PostalCode         string `json:"postal_code"`         // 邮政编码
+	Country            string `json:"country"`             // Country or region
+	Province           string `json:"province"`            // Province/City/Autonomous region
+	Locality           string `json:"locality"`            // Locality
+	OrganizationalUnit string `json:"organizational_unit"` // Organizational unit
+	Organization       string `json:"organization"`        // Organization
+	CommonName         string `json:"common_name"`         // Common name
+	StreetAddress      string `json:"street_address"`      // Street address
+	PostalCode         string `json:"postal_code"`         // Postal code
 }
 
 type TLS struct {
-	Proto                 string      `json:"proto"`                   // 协议
-	Subject               Org         `json:"subject"`                 // 主题名称
-	Issuer                Org         `json:"issuer"`                  // 签发者名称
-	DNSNames              []string    `json:"dns_names"`               // DNS服务器名称
-	CRLDistributionPoints string      `json:"crl_distribution_points"` // CRL分发点 URI
-	OCSPServer            string      `json:"ocsp_server"`             // 在线证书状态协议 URI
-	IssuingCertificateURL string      `json:"issuing_certificate_url"` // CA签发者 URI
-	SubjectKeyId          []uint8     `json:"subject_key_id"`          // 主题密钥标志符
-	AuthorityKeyId        []uint8     `json:"authority_key_id"`        // 授权密钥标志符
-	SignatureAlgorithm    string      `json:"signature_algorithm"`     // 签名算法
-	PublicKeyAlgorithm    string      `json:"public_key_algorithm"`    // 公钥算法
-	Signature             []uint8     `json:"signature"`               // 签名
-	PublicKey             interface{} `json:"public_key"`              // 公共密钥
-	NotBefore             time.Time   `json:"not_before"`              // 有效期开始
-	NotAfter              time.Time   `json:"not_after"`               // 有效期结束
-	SerialNumber          *big.Int    `json:"serial_number"`           // 序列号
-	Version               int         `json:"version"`                 // 版本
+	Proto                 string      `json:"proto"`                   // Protocol
+	Subject               Org         `json:"subject"`                 // Subject name
+	Issuer                Org         `json:"issuer"`                  // Issuer name
+	DNSNames              []string    `json:"dns_names"`               // DNS server names
+	CRLDistributionPoints string      `json:"crl_distribution_points"` // CRL distribution point URI
+	OCSPServer            string      `json:"ocsp_server"`             // Online Certificate Status Protocol URI
+	IssuingCertificateURL string      `json:"issuing_certificate_url"` // CA issuer URI
+	SubjectKeyId          []uint8     `json:"subject_key_id"`          // Subject key identifier
+	AuthorityKeyId        []uint8     `json:"authority_key_id"`        // Authority key identifier
+	SignatureAlgorithm    string      `json:"signature_algorithm"`     // Signature algorithm
+	PublicKeyAlgorithm    string      `json:"public_key_algorithm"`    // Public key algorithm
+	Signature             []uint8     `json:"signature"`               // Signature
+	PublicKey             interface{} `json:"public_key"`              // Public key
+	NotBefore             time.Time   `json:"not_before"`              // Validity start
+	NotAfter              time.Time   `json:"not_after"`               // Validity end
+	SerialNumber          *big.Int    `json:"serial_number"`           // Serial number
+	Version               int         `json:"version"`                 // Version
 }
 
 const (
@@ -75,17 +75,17 @@ const (
 	MinHeight = 1080
 )
 
-/*生成UUID*/
+/*Generate UUID*/
 func GenerateUUID() string {
 	return uuid.NewV4().String()
 }
 
 /*
-执行截图
+Execute screenshot
 --remote-debugging-port=9222
-参考：https://github.com/chromedp/chromedp/issues/1131
+Reference: https://github.com/chromedp/chromedp/issues/1131
 
-chromedp.Evaluate(js, &height), 返回最后一行js语句的结果
+chromedp.Evaluate(js, &height), returns the result of the last JS statement
 */
 func DoFullScreenshot(url, path string) bool {
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
@@ -93,14 +93,14 @@ func DoFullScreenshot(url, path string) bool {
 		chromedp.Flag("headless", false),
 		chromedp.Flag("ignore-certificate-errors", true),
 		chromedp.Flag("disable-web-security", true),
-		chromedp.Flag("disable-extensions", true), //开启插件支持
+		chromedp.Flag("disable-extensions", true), //Enable plugin support
 		chromedp.Flag("disable-default-apps", true),
-		chromedp.Flag("disable-gpu", true), //开启 gpu 渲染
+		chromedp.Flag("disable-gpu", true), //Enable GPU rendering
 		chromedp.Flag("hide-scrollbars", true),
 		chromedp.Flag("mute-audio", true),
 		chromedp.Flag("no-sandbox", true),
 		chromedp.Flag("no-default-browser-check", true),
-		chromedp.NoFirstRun, //设置网站不是首次运行
+		chromedp.NoFirstRun, //Set the website as not first run
 		chromedp.WindowSize(MaxWidth, MinHeight),
 		chromedp.Flag("blink-settings", "imagesEnabled=true"),
 		chromedp.Flag("enable-automation", false),
@@ -109,26 +109,26 @@ func DoFullScreenshot(url, path string) bool {
 	allocCtx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
 	defer cancel()
 
-	// 创建chrome实例
+	// Create a Chrome instance
 	ctx, cancel := chromedp.NewContext(
 		allocCtx,
 		chromedp.WithLogf(log.Printf),
 	)
 	defer cancel()
 
-	// 创建超时时间
+	// Create a timeout
 	ctx, cancel = context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
-	// 缓存对象
+	// Cache object
 	var buf []byte
 
-	// 运行截屏
+	// Run the screenshot
 	if err := chromedp.Run(ctx, fullScreenshot(url, 100, &buf)); err != nil {
 		return false
 	}
 
-	// 保存文件
+	// Save the file
 	if "" != path {
 		if err := ioutil.WriteFile(path, buf, 0644); err != nil {
 			return false
@@ -138,7 +138,7 @@ func DoFullScreenshot(url, path string) bool {
 	return true
 }
 
-/*全屏截图*/
+/*Full-screen screenshot*/
 func fullScreenshot(url string, quality int64, res *[]byte) chromedp.Tasks {
 	return chromedp.Tasks{
 		chromedp.Navigate(url),
@@ -162,7 +162,7 @@ func (a TLS) IsEmpty() bool {
 	return reflect.DeepEqual(a, TLS{})
 }
 
-// 转化字符集
+// Convert charset
 func ConvertCharset(dataByte []byte) string {
 	sourceCode := string(dataByte)
 	if !utf8.Valid(dataByte) {
@@ -174,13 +174,13 @@ func ConvertCharset(dataByte []byte) string {
 
 func CatchHTTP(url, ip string, port int, timeOut time.Duration) (site PocWebAppData) {
 
-	// 构造GET请求
+	// Construct a GET request
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return site
 	}
 	request.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
-	// 跳过https验证
+	// Skip HTTPS verification
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}

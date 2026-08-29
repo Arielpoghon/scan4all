@@ -18,7 +18,7 @@ func main9() {
 	//fmt.Println(fmt.Sprintf("%v", 333))
 	//var nucleiDone = make(chan bool)
 	//Naabubuffer.Write([]byte("192.168.10.31\n"))
-	//// 集成nuclei
+	//// Integrate nuclei
 	////log.Println("httpxrunner.Naabubuffer = ", httpxrunner.Naabubuffer.String())
 	//nuclei_Yaml.RunNuclei(Naabubuffer, nucleiDone)
 	//<-nucleiDone

@@ -46,7 +46,7 @@ import (
 //		Timeout:   timeout,
 //		Transport: tr,
 //		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-//			return http.ErrUseLastResponse /* 不进入重定向 */
+//			return http.ErrUseLastResponse /* do not follow the redirect */
 //		},
 //	}
 //	resp, err := client.Get(host)
@@ -81,7 +81,7 @@ func favicohashMd5(host string) string {
 		Timeout:   timeout,
 		Transport: tr,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse /* 不进入重定向 */
+			return http.ErrUseLastResponse /* do not follow the redirect */
 		},
 	}
 	resp, err := client.Get(host)
@@ -115,16 +115,16 @@ func main() {
 	//url := os.Args[1]
 	//resp, err := http.Get(url)
 	//if err != nil {
-	//	fmt.Println(fmt.Sprintf("url访问出错：%s", err))
+	//	fmt.Println(fmt.Sprintf("url access error: %s", err))
 	//	os.Exit(1)
 	//}
 	//body, err := ioutil.ReadAll(resp.Body)
 	//if err != nil {
-	//	fmt.Println(fmt.Sprintf("读取body数据出错：%s", err))
+	//	fmt.Println(fmt.Sprintf("error reading body data: %s", err))
 	//	os.Exit(1)
 	//}
-	//// 进行md5加密，因为Sum函数接受的是字节数组，因此需要注意类型转换
+	//// Perform md5 encryption, because the Sum function accepts a byte array, so be careful with type conversion
 	//srcCode := md5.Sum(body)
-	//// md5.Sum函数加密后返回的是字节数组，转换成16进制形式，并全小写
+	//// The md5.Sum function returns a byte array after encryption; convert it to hexadecimal form and lowercase it
 	//fmt.Println(strings.ToLower(fmt.Sprintf("%x", srcCode)))
 }

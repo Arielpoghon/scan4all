@@ -64,7 +64,7 @@ https://www.scrapehero.com/how-to-increase-web-scraping-speed-using-puppeteer/
 func main() {
 	var szUrl = "https://www.butian.net/Reward/plan/2"
 
-	// 参数设置
+	// Parameter settings
 	options := []chromedp.ExecAllocatorOption{
 		chromedp.Flag("headless", false),
 		chromedp.Flag("blink-settings", "imagesEnabled=false"),

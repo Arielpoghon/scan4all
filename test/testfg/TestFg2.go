@@ -27,7 +27,7 @@ func doUrl(host string) (headers map[string][]string, body []byte, title string,
 		Timeout:   timeout,
 		Transport: tr,
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse /* 不进入重定向 */
+			return http.ErrUseLastResponse /* do not follow the redirect */
 		},
 	}
 	resp, err := client.Get(host)
@@ -91,7 +91,7 @@ https://47.104.237.208`, "\n")
 			//			defer wg.Done()
 			//			xx1 := fingerprint.FingerScan(doUrl(url))
 			//			if 0 < len(xx1) {
-			//				log.Printf("%s 指纹 %+v", url, xx1)
+			//				log.Printf("%s fingerprint %+v", url, xx1)
 			//			}
 			//		}(x + y)
 			//	}
@@ -105,7 +105,7 @@ https://47.104.237.208`, "\n")
 				}
 				xx1, _ := fingerprint.FingerScan(headers, body, title, url2, status_code)
 				if 0 < len(xx1) {
-					log.Printf("%s 指纹 %+v  %s", url1, xx1, status_code)
+					log.Printf("%s fingerprint %+v  %s", url1, xx1, status_code)
 				}
 			}(x + y)
 
@@ -116,7 +116,7 @@ https://47.104.237.208`, "\n")
 			//}
 			//xx1 := fingerprint.FingerScan(headers, body, title, url, status_code)
 			//if 0 < len(xx1) {
-			//	log.Printf("%s 指纹 %+v", x+y, xx1)
+			//	log.Printf("%s fingerprint %+v", x+y, xx1)
 			//}
 		}
 	}
