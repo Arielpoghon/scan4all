@@ -1,6 +1,6 @@
 {
-    "Name": "H3C_IMC_远程命令执行",
-    "Description": "H3C_IMC_远程命令执行",
+    "Name": "H3C IMC Remote Command Execution",
+    "Description": "H3C IMC remote command execution",
     "Product": "H3C",
     "author": "chumeng",
     "Request":[

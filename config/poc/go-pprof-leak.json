@@ -1,6 +1,6 @@
 {
     "Name": "go-pprof-leak",
-    "Description": "go-pprof是go语言的调试工具（还存在另一个路径/debug/pprof/goroutine?debug=1）",
+    "Description": "go-pprof is a debugging tool for the Go language (there is also another path /debug/pprof/goroutine?debug=1)",
     "Product": "glassfish",
     "author": "chumeng",
     "Request":[

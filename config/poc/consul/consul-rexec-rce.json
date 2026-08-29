@@ -1,13 +1,13 @@
 {
-    "Name": "h2数据库未授权访问",
-    "Description": "h2数据库未授权访问",
-    "Product": "h2",
+    "Name": "consul-rexec-rce",
+    "Description": "Consul rexec remote command execution",
+    "Product": "consul",
     "author": "chumeng",
     "Request":[
-                {
+        {
         "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/h2-console",
+        "Uri":"/v1/agent/self",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -18,7 +18,12 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "Welcome to H2"
+                "Value": "json"
+                }, 
+                {
+                    "Operation": "contains", 
+                    "Key":"",
+                    "Value": "\"DisableRemoteExec\": false"
                 },
                  {
                 "Operation": "code", 

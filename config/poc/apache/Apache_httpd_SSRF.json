@@ -1,6 +1,6 @@
 {
     "Name": "Apache httpd_SSRF",
-    "Description": "Apache HTTP Server是Apache基金会开源的一款流行的HTTP服务器。在其2.4.48及以前的版本中，mod_proxy模块存在一处逻辑错误导致攻击者可以控制反向代理服务器的地址，进而导致SSRF漏洞",
+    "Description": "Apache HTTP Server is a popular HTTP server open-sourced by the Apache Foundation. In versions 2.4.48 and earlier, a logic error in the mod_proxy module allows attackers to control the address of the reverse proxy server, leading to an SSRF vulnerability.",
     "Product": "Apache",
     "author": "chumeng",
     "Request":[

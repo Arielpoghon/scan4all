@@ -1,6 +1,6 @@
 {
-    "Name": "flink-jobmanager任意文件读取",
-    "Description": "flink-jobmanager任意文件读取",
+    "Name": "flink-jobmanager arbitrary file read",
+    "Description": "flink-jobmanager arbitrary file read",
     "Product": "flink",
     "author": "chumeng",
     "Request":[

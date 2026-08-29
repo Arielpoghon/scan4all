@@ -1,6 +1,6 @@
 {
-    "Name": "C-Lodop云平台云打印任意文件读取",
-    "Description": "C-Lodop云平台任意文件读取漏洞",
+    "Name": "C-Lodop Cloud Platform Cloud Printing Arbitrary File Read",
+    "Description": "C-Lodop cloud platform arbitrary file read vulnerability.",
     "Product": "C-Lodop",
     "author": "chumeng",
     "Request":[
