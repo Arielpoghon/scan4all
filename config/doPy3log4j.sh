@@ -1,5 +1,5 @@
 #!/bin/bash
-# 请先安装好 python3、tmux
+# Please install python3 and tmux first
 # brew install tmux
 # brew install python3
 

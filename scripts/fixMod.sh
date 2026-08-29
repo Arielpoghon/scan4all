@@ -24,7 +24,7 @@ ln -s $HOME/MyWork/goSqlite_gorm $PWD/vendor/github.com/hktalent/51pwnPlatform
 go mod tidy;go mod vendor;
 go mod vendor;go vet
 
-# login 优先
+# prioritize login
 cat brute/dicts/filedic.txt|grep "\/[lL]ogin">x1.txt
 cat brute/dicts/filedic.txt|grep -v "\/[lL]ogin">x2.txt
 sort x1.txt >x11.txt

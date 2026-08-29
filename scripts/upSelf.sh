@@ -14,7 +14,7 @@ git submodule add --force  https://github.com/hktalent/nuclei-templates.git conf
 git submodule add --force  https://github.com/hktalent/jaeles-signatures.git config/jaeles-signatures
 git submodule update --init --recursive
 
-# 查找大文件
+# Find large files
 find . -type f -size +20M
 
 git submodule update --init --recursive --remote
