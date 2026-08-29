@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-// 当前位置 Wi-fi 列表
+// Current location Wi-fi list
 //  SSID BSSID             RSSI CHANNEL HT CC SECURITY (auth/unicast/group)
 type WifiInfo struct {
 	gorm.Model
-	SSID     string `json:"ssid" jsonschema:"title=AP唯一的ID码,description=是你给自己的无线网络所取的名字"`
-	BSSID    string `json:"bssid" gorm:"column:bssid;unique_index:bssid" jsonschema:"Basic Service Set 基本服务装置,description=6byte长度为48位bit的二进制标识符"`
-	RSSI     string `json:"rssi" jsonschema:"Received Signal Strength Indicator是接收信号的强度指示"`
+	SSID     string `json:"ssid" jsonschema:"title=The unique ID of the AP,description=The name you gave to your wireless network"`
+	BSSID    string `json:"bssid" gorm:"column:bssid;unique_index:bssid" jsonschema:"Basic Service Set,description=A binary identifier with a length of 6 bytes (48 bits)"`
+	RSSI     string `json:"rssi" jsonschema:"Received Signal Strength Indicator, indicates the received signal strength"`
 	CHANNEL  string `json:"channel"`
 	HT       string `json:"ht"`
 	CC       string `json:"cc"`

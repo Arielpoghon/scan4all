@@ -6,8 +6,8 @@ import (
 
 var ORDER = 0
 
-// 参考 pocassist/blob/master/poc/rule/rule.go
-// 单个规则
+// Reference: pocassist/blob/master/poc/rule/rule.go
+// Single rule
 type Rule struct {
 	Request    RuleRequest   `yaml:"request"`
 	Expression string        `yaml:"expression"`
@@ -21,13 +21,13 @@ type ruleAlias struct {
 	Output     yaml.MapSlice `yaml:"output"`
 }
 
-// 用于帮助yaml解析，保证Rule有序
+// Used to help yaml parsing, ensuring rules are kept in order
 type RuleMapItem struct {
 	Key   string
 	Value Rule
 }
 
-// 用于帮助yaml解析，保证Rule有序
+// Used to help yaml parsing, ensuring rules are kept in order
 type RuleMapSlice []RuleMapItem
 
 type RuleRequest struct {

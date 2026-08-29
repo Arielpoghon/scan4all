@@ -134,7 +134,7 @@ func DoRequest(req *http.Request, redirect bool) (*http.Response, int64, error) 
 	)
 	if req.Body == nil || req.Body == http.NoBody {
 	} else {
-		// 设置自定义头，包括cookie
+		// Set custom headers, including cookies
 		util.SetHeader(&req.Header)
 		req.Header.Set("Content-Length", strconv.Itoa(int(req.ContentLength)))
 		if req.Header.Get("Content-Type") == "" {
@@ -212,10 +212,10 @@ func ParseHttpResponse(oResp *http.Response, milliseconds int64) (*structs.Respo
 	}
 	resp.Headers = headers
 	resp.ContentType = oResp.Header.Get("Content-Type")
-	// 原始请求头
+	// Raw request headers
 	resp.RawHeader = []byte(strings.Trim(rawHeaderBuilder.String(), "\n"))
 
-	// 原始http响应
+	// Raw http response
 	resp.Raw, err = httputil.DumpResponse(oResp, true)
 	body, err := GetRespBody(oResp)
 	if err != nil {
@@ -225,10 +225,10 @@ func ParseHttpResponse(oResp *http.Response, milliseconds int64) (*structs.Respo
 	if err != nil {
 		resp.Raw = body
 	}
-	// http响应体
+	// Http response body
 	resp.Body = body
 
-	// 响应时间
+	// Response time
 	resp.Latency = milliseconds
 
 	return resp, nil

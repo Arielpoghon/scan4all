@@ -51,7 +51,7 @@ func getfavicon(httpbody string, turl string) (hash string, md5 string) {
 	return favicohash(faviconpath)
 }
 
-// 计算hash，md5
+// Compute hash, md5
 func GetHahsMd5(body []byte) (hash string, md5R string) {
 	faviconMMH3 := fmt.Sprintf("%d", stringz.FaviconHash(body))
 	srcCode := md5.Sum(body)
@@ -59,7 +59,7 @@ func GetHahsMd5(body []byte) (hash string, md5R string) {
 	return faviconMMH3, faviconmd5
 }
 
-// 求url host hash和md5
+// Compute the hash and md5 of the url host
 //
 //	key: cache key
 func Favicohash4key(host, key string) (hash string, md5R string) {
@@ -87,7 +87,7 @@ func Favicohash4key(host, key string) (hash string, md5R string) {
 			Timeout:   timeout,
 			Transport: tr,
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
-				return http.ErrUseLastResponse /* 不进入重定向 */
+				return http.ErrUseLastResponse /* Do not enter redirects */
 			},
 		}
 		resp, err := client.Get(host)
@@ -109,7 +109,7 @@ func Favicohash4key(host, key string) (hash string, md5R string) {
 	return GetHahsMd5(body)
 }
 
-// 基于缓存，提高效率
+// Based on the cache, improve efficiency
 func favicohash(host string) (hash string, md5R string) {
 	return Favicohash4key(host, "favicohash")
 }

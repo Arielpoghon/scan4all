@@ -20,7 +20,7 @@ const (
 	AsciiLettersAndDigits   = AsciiLetters + AsciiDigits
 )
 
-// 获取随机字符串
+// Get a random string
 func RandomStr(letterBytes string, n int) string {
 	randSource := rand.New(rand.NewSource(time.Now().Unix()))
 	const (
@@ -44,7 +44,7 @@ func RandomStr(letterBytes string, n int) string {
 	return string(randBytes)
 }
 
-// 获取字符串md5
+// Get the md5 of a string
 func MD5(str string) string {
 	c := md5.New()
 	c.Write([]byte(str))
@@ -52,7 +52,7 @@ func MD5(str string) string {
 	return hex.EncodeToString(bytes)
 }
 
-//反向string
+// Reverse string
 
 func ReverseString(s string) string {
 	runes := []rune(s)
@@ -64,7 +64,7 @@ func ReverseString(s string) string {
 
 // Reference: https://github.com/Becivells/iconhash
 
-// Mmh3Hash32 计算 mmh3 hash
+// Mmh3Hash32 computes the mmh3 hash
 func Mmh3Hash32(raw []byte) int32 {
 	var h32 = murmur3.New32()
 	h32.Write(raw)

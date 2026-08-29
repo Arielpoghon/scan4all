@@ -12,7 +12,7 @@ var JndiAddress string
 
 var JndiLog []string
 
-// 初始化变量
+// Initialize variables
 func init() {
 	util.RegInitFunc(func() {
 		JndiAddress = util.GetVal("JndiAddress")

@@ -127,8 +127,8 @@ func (r *KvDbOp) Put(key string, data []byte) {
 	}
 }
 
-// 调整初始化顺序
-// 初始化 kvDb
+// Adjust the initialization order
+// Initialize kvDb
 func init3() {
 	NewKvDbOp()
 }

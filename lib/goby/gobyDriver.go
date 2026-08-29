@@ -8,7 +8,7 @@ import (
 //go:embed goby_pocs
 var GobyPocs embed.FS
 
-// 驱动 Goby PoCs
+// Drive Goby PoCs
 func DoGobyGocks(szUrl string) {
 	for poc := range LoadPocs(GobyPocs) {
 		szPoc := fmt.Sprintf("%v", poc)

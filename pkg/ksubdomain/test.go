@@ -8,7 +8,7 @@ import (
 
 var testCommand = &cli.Command{
 	Name:  runner.TestType,
-	Usage: "测试本地网卡的最大发送速度",
+	Usage: "Test the maximum sending speed of the local network card",
 	Action: func(c *cli.Context) error {
 		ether := options.GetDeviceConfig()
 		runner.TestSpeed(ether)

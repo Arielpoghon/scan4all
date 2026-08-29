@@ -148,9 +148,9 @@ func debugModifier(s string) string {
 }
 
 func debugFilter(s string) bool {
-	//Debug 过滤器
-	if util.StrContains(s, "too many open") { //发现存在线程过高错误
-		fmt.Println("当前线程过高，请降低线程!或者请执行\"ulimit -n 50000\"命令放开操作系统限制")
+	//Debug filter
+	if util.StrContains(s, "too many open") { // A thread count too high error was detected
+		fmt.Println("Too many threads, please reduce the thread count! Or run the command \"ulimit -n 50000\" to lift the operating system limit")
 		os.Exit(0)
 	}
 	//if strings.Contains(s, "STEP1:CONNECT") {

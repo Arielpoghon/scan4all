@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// 位置坐标
+// Location coordinates
 type WhereAmI struct {
 	Latitude  string    `json:"latitude"  gorm:"type:varchar(50);"`
 	Longitude string    `json:"longitude"  gorm:"type:varchar(50);"`
@@ -23,22 +23,22 @@ type Localnet struct {
 	Name     string `json:"name" gorm:"type:varchar(50);"`
 }
 
-// 图片更新
+// Image update
 type RmtSvImg struct {
 	gorm.Model
 	ImgData  string `json:"imgData" gorm:"type:longtext;"`
 	WhereAmI `json:",inline"`
 }
 
-// 返回界面列表
+// Return interface list
 type RmtSvIpName struct {
 	gorm.Model
 	Title   string `json:"title" gorm:"type:varchar(200);"`
 	ImgData string `json:"imgData" gorm:"type:longtext;"`
-	Tags    string `gorm:"index;type:varchar(200);" yaml:"tags,omitempty" json:"tags,omitempty" jsonschema:"title=tags hackerone butian,description=tags hackerone butian"` // 比较时hackerone，还是其他
+	Tags    string `gorm:"index;type:varchar(200);" yaml:"tags,omitempty" json:"tags,omitempty" jsonschema:"title=tags hackerone butian,description=tags hackerone butian"` // When comparing, whether it is hackerone or others
 }
 
-// 远程链接信息
+// Remote connection info
 type RemouteServerce struct {
 	gorm.Model
 	WhereAmI `json:",inline"`
@@ -55,11 +55,11 @@ type RemouteServerce struct {
              filenames"`
 	KeyP5wd string `yaml:"keyP5wd,omitempty" gorm:"type:varchar(2000);" json:"keyP5wd,omitempty" jsonschema:"title=key paswd,description=key paswd"`
 	Type    string `yaml:"type,omitempty" gorm:"type:varchar(20);" json:"type,omitempty" jsonschema:"title=type:vnc ssh rdp,description=type:vnc ssh rdp"`
-	Tags    string `gorm:"index;type:varchar(200);" yaml:"tags,omitempty" json:"tags,omitempty" jsonschema:"title=tags hackerone butian,description=tags hackerone butian"` // 比较时hackerone，还是其他
+	Tags    string `gorm:"index;type:varchar(200);" yaml:"tags,omitempty" json:"tags,omitempty" jsonschema:"title=tags hackerone butian,description=tags hackerone butian"` // When comparing, whether it is hackerone or others
 	ImgData string `json:"img_data" gorm:"type:longtext;"`
 }
 
-// 初始化数据库模型
+// Initialize database models
 func init() {
 	util.RegInitFunc(func() {
 		util.GetDb()

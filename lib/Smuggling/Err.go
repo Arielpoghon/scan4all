@@ -61,7 +61,7 @@ func (r *Err) CheckResponse(body string, payload string) bool {
 	//log.Println(body)
 	if payload == ErrPayload[1] {
 		return -1 < strings.Index(body, "400 Bad Request") && -1 < strings.Index(body, "200 OK")
-	} else if payload == ErrPayload[2] || payload == ErrPayload[3] { // 要不成功访问到目标，要不得到404
+	} else if payload == ErrPayload[2] || payload == ErrPayload[3] { // Either successfully access the target, or get a 404
 		return -1 < strings.Index(body, "<defaultValue>") || (-1 < strings.Index(body, "400 Bad Request") && -1 < strings.Index(body, "HTTP/1.1 404 Not Found"))
 	} else if "" != body && (-1 < strings.Index("Unrecognized method GPOST", body)) {
 		log.Println("Unrecognized method GPOST")

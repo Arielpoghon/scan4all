@@ -14,23 +14,23 @@ import (
 	"time"
 )
 
-// 引擎对象，全局单实例
+// Engine object, global singleton
 type Engine struct {
-	Context      *context.Context       // 上下文
+	Context      *context.Context       // Context
 	Wg           *sync.WaitGroup        // Wg
-	Pool         int                    // 线程池
-	PoolFunc     *ants.PoolWithFunc     // 线程调用
-	EventData    chan *models.EventData // 数据队列
+	Pool         int                    // Thread pool
+	PoolFunc     *ants.PoolWithFunc     // Thread invocation
+	EventData    chan *models.EventData // Data queue
 	caseScanFunc sync.Map
 }
 
 var G_Engine *Engine
 
-// 创建引擎
+// Create engine
 //
-//	默认每个 goroutine 占用 8KB 内存
-//	一台 8GB 内存的机器满打满算也只能创建 8GB/8KB = 1000000 个 goroutine
-//	更何况系统还需要保留一部分内存运行日常管理任务，go 运行时需要内存运行 gc、处理 goroutine 切换等
+//	By default, each goroutine occupies 8KB of memory
+//	A machine with 8GB of memory can only create 8GB/8KB = 1000000 goroutines at best
+//	Moreover, the system needs to reserve some memory for daily management tasks, and the go runtime needs memory for gc and goroutine switching, etc.
 func NewEngine(c *context.Context, pool int) *Engine {
 	if nil != util.G_Engine {
 		return util.G_Engine.(*Engine)
@@ -64,14 +64,14 @@ func (r *Engine) GetCaseScanFunc() *sync.Map {
 	return &r.caseScanFunc
 }
 
-// 释放资源
+// Release resources
 func (e *Engine) Close() {
 	defer ants.Release()
 	e.PoolFunc.Release()
 	e.Wg.Wait()
 }
 
-// case 扫描使用的函数
+// Function used by case scanning
 func (e *Engine) DoCase(ed *models.EventData) util.EngineFuncType {
 	if i, ok := e.caseScanFunc.Load(ed.EventType); ok {
 		return i.(util.EngineFuncType)
@@ -79,7 +79,7 @@ func (e *Engine) DoCase(ed *models.EventData) util.EngineFuncType {
 	return nil
 }
 
-// 关联发送若干个事件
+// Send a set of related events
 func (e *Engine) SendEvent(evt *models.EventData, argsTypes ...int64) {
 	for _, i := range argsTypes {
 		var n1 = models.EventData{}
@@ -89,11 +89,11 @@ func (e *Engine) SendEvent(evt *models.EventData, argsTypes ...int64) {
 	}
 }
 
-// 执行事件代码 内部用
+// Execute event code, for internal use
 //
-//	每个事件自己做防重处理
-//	每个事件异步执行
-//	每种事件类型可以独立控制并发数
+//	Each event handles deduplication on its own
+//	Each event executes asynchronously
+//	Each event type can independently control the concurrency count
 func (e *Engine) DoEvent(ed *models.EventData) {
 	if nil != ed && nil != ed.EventData && 0 < len(ed.EventData) {
 		fnCall := e.DoCase(ed)
@@ -106,7 +106,7 @@ func (e *Engine) DoEvent(ed *models.EventData) {
 }
 
 func (x1 *Engine) Running() {
-	// 异步启动一个线程处理检测，避免
+	// Asynchronously start a thread to handle the detection, to avoid
 	go func() {
 		defer func() {
 			x1.Close()
@@ -115,7 +115,7 @@ func (x1 *Engine) Running() {
 		signal.Notify(c, os.Interrupt)
 		tK := time.NewTicker(2 * time.Second)
 		defer tK.Stop()
-		//nMax := 120 // 等xxx秒都没有消息进入就退出
+		//nMax := 120 // exit if no messages come in for xxx seconds
 		//nCnt := 0
 		for {
 			select {
@@ -125,14 +125,14 @@ func (x1 *Engine) Running() {
 			case <-c:
 				util.DoCbk("exit")
 				os.Exit(1)
-			case x2 := <-x1.EventData: // 各种扫描的控制
+			case x2 := <-x1.EventData: // Control of various scans
 				if nil != x2 && nil != x2.EventData {
 					x1.Wg.Add(1)
 					x1.PoolFunc.Invoke(x2)
 				}
 			case x1, ok := <-util.PocCheck_pipe:
 				if util.GetValAsBool("NoPOC") || nil == x1 || !ok {
-					//close(util.PocCheck_pipe) // 这行会在 NoPOC该标志开启时，其他进程无法传递过来而出错
+					//close(util.PocCheck_pipe) // This line will error when the NoPOC flag is enabled, since other processes cannot pass through
 					log.Println("go_poc_checkout is over")
 					continue
 				}
@@ -152,12 +152,12 @@ func (x1 *Engine) Running() {
 	}()
 }
 
-// 引擎总入口
+// Main entry point of the engine
 func init() {
 	//log.Println("engineImp.go run")
 	lib.GConfigServer.OnClient = true
 	util.RegInitFunc4Hd(func() {
-		// 下面的变量 不能移动到DoSyncFunc，否则全局变量将影响后续的init，导致无效的内存
+		// The following variables cannot be moved into DoSyncFunc, otherwise the global variables will affect the subsequent init, resulting in invalid memory
 		NewEngine(&util.Ctx_global, util.GetValAsInt("ScanPoolSize", 5000))
 
 		util.DoSyncFunc(func() {

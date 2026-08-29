@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// 常用安全术语库
+// Common security terminology library
 type SafetyTerm struct {
 	ID        uint   `json:"id" gorm:"primarykey"`
 	ShortSame string `json:"short_same" gorm:"index;type:varchar(50);`
@@ -19,7 +19,7 @@ type DomainInfo struct {
 	Ips  []IpInfo `json:"ips" gorm:"foreignKey:ip;references:name"`
 }
 
-// 连接信息
+// Connection info
 type ConnectInfo struct {
 	gorm.Model
 	Pid    string `json:"pid" gorm:"type:varchar(10);"`

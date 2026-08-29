@@ -20,7 +20,7 @@ type MyChromedp struct {
 	allocCtx context.Context
 }
 
-// 获取实例
+// Get instance
 func GetChromedpInstace(ctx *context.Context) *MyChromedp {
 	x1 := &MyChromedp{Ctx: ctx}
 	x1.fnInit()
@@ -50,9 +50,9 @@ func (r *MyChromedp) DisableImageLoad(ctx context.Context) func(event interface{
 	}
 }
 
-// 获取值
-//  输入框最后追加值
-//  发送键盘
+// Get value
+//  Append value at the end of the input field
+//  Send keyboard input
 //  download: https://github.com/chromedp/examples/blob/2f7adc7ded326214db81cc6c13d48ecd31af8d31/download_file/main.go
 func (r *MyChromedp) sendkeys(host string, val1, val2, val3, val4 *string) chromedp.Tasks {
 	return chromedp.Tasks{
@@ -70,7 +70,7 @@ func (r *MyChromedp) sendkeys(host string, val1, val2, val3, val4 *string) chrom
 	}
 }
 
-// 初始化，内部运行
+// Initialize, for internal execution
 func (r *MyChromedp) fnInit() {
 	dir, err := ioutil.TempDir("", "PowerBy-51pwn")
 	if err != nil {
@@ -115,7 +115,7 @@ func (r *MyChromedp) DoUrl(szUrl string, head *map[string]interface{}, timeout *
 	return err
 }
 
-// 启动一个tab运行url
+// Start a tab to run the url
 func (r *MyChromedp) DoUrlWithFlg(szUrl string, head *map[string]interface{}, timeout *time.Duration, bAutoClose bool, fnSend func() *chromedp.Tasks) (err error, cancel context.CancelFunc) {
 	if nil == timeout {
 		n9 := 15 * time.Second

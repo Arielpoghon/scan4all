@@ -11,7 +11,7 @@ func TestGetIp(t *testing.T) {
 	os.Setenv("CacheName", "TmpXx1")
 	os.Setenv("HTTPS_PROXY", "socks5://127.0.0.1:7890")
 	util.DoInit(nil)
-	//t.Run("获取当前用户的ip", func(t *testing.T) {
+	//t.Run("Get the current user's ip", func(t *testing.T) {
 	//	if got := util.GetIp(); !reflect.DeepEqual(got, "") {
 	//		t.Errorf("GetIp() = %v, want %v", got, "")
 	//	}

@@ -9,7 +9,7 @@ type CSVReader interface {
 	ReadLine(line []string)
 }
 
-// 下一步计划：加载osvdb 并驱动执行
+// Next step: load osvdb and drive the execution
 func ReadCsv(filename string, data CSVReader) error {
 	// Open CSV file
 	f, err := os.Open(filename)

@@ -2,9 +2,9 @@ package models
 
 import "gorm.io/gorm"
 
-// 域名
+// Domain
 type DomainSite struct {
 	gorm.Model
 	Title string `json:"title"`
-	Url   string `json:"url"` // 第一个页面，也是根页面，可能时跳转后的路径
+	Url   string `json:"url"` // First page, also the root page, possibly the path after redirection
 }

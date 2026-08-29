@@ -29,7 +29,7 @@ func DoCbk(k string) {
 	CbkCc.Delete(k)
 }
 
-// 注册统一的回调
+// Register a unified callback
 func RegCbk(k string, cbk func()) {
 	var c1 *CbkManagerImp
 	var v any

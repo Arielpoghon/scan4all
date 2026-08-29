@@ -22,7 +22,7 @@ var (
 	}
 )
 
-// 自定义Lib库，包含变量和函数
+// Custom Lib library, containing variables and functions
 
 type Env = cel.Env
 type CustomLib struct {
@@ -30,7 +30,7 @@ type CustomLib struct {
 	programOptions []cel.ProgramOption
 }
 
-// 执行表达式
+// Execute the expression
 func Evaluate(env *cel.Env, expression string, params map[string]interface{}) (ref.Val, error) {
 	ast, iss := env.Compile(expression)
 	err := iss.Err()
@@ -102,7 +102,7 @@ func PutCustomLib(c CustomLib) {
 	CustomLibPool.Put(c)
 }
 
-// 声明环境中的变量类型和函数
+// Declare the variable types and functions in the environment
 func (c *CustomLib) CompileOptions() []cel.EnvOption {
 	return c.envOptions
 }

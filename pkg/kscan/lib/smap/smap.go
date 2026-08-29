@@ -60,5 +60,5 @@ func (s *SMap) Range(f func(key interface{}, value interface{}) bool) {
 //	return true
 //}
 
-//遍历，传入一个函数，遍历的时候函数返回false则停止遍历
+// Traverse, pass in a function; if the function returns false during traversal, stop the traversal
 //s.value.Range(handler)

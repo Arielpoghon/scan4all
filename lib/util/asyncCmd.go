@@ -54,7 +54,7 @@ func (cmd *Cmd) Exit() error {
 	return err
 }
 
-// 基于回调获取输入
+// Get input based on a callback
 func (r *Cmd) WriteInput4Cbk(fnCbk func() *string) {
 	for x := fnCbk(); ; {
 		if x != nil {
@@ -123,7 +123,7 @@ func (r *Cmd) AsynCmd(fnCbk func(line string), szCmd string, args ...string) err
 	return err
 }
 
-// 异步执行命令
+// Execute the command asynchronously
 func AsynCmd(fnCbk func(line string), szCmd string, args ...string) error {
 	c1 := new(Cmd)
 	err := c1.AsynCmd(fnCbk, szCmd, args...)

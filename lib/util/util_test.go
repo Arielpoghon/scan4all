@@ -8,7 +8,7 @@ import (
 
 func TestHttpRequset(t *testing.T) {
 	var Wg = sync.WaitGroup{}
-	// 单独测试没有问题
+	// Standalone testing works fine
 	for i := 33; i < 8082; i++ {
 		Wg.Add(1)
 		go func(n int) {

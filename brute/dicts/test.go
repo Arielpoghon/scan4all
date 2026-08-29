@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// 追加到文件中
+// Append to file
 func AppendFile(szOut string) {
 	szFile := "xx.txt"
 	f, err := os.OpenFile(szFile,
@@ -22,7 +22,7 @@ func AppendFile(szOut string) {
 	}
 }
 
-// 测试 fuzz 字典 的有效性
+// Test the validity of the fuzz dictionary
 func main() {
 	if data, err := ioutil.ReadFile("brute/dicts/filedic.txt"); nil == err {
 		a := strings.Split(string(data), "\n")

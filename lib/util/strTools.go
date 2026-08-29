@@ -25,7 +25,7 @@ func GetUrlHost(szUrl string) string {
 	return szUrl
 }
 
-// 生成随机id
+// Generate a random id
 func GeneratorId(add_time int64) string {
 	var list_str = []string{}
 	size := 6

@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-// 加载PoCs
+// Load PoCs
 func LoadPocs(Pocs embed.FS) chan<- string {
 	var rst = make(chan string, 10000)
 	var szPath string = "goby_pocs"

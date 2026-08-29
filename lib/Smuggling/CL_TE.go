@@ -6,7 +6,7 @@ import (
 
 /*
 Exploit
-跳过权限控制，或者防火墙拦截，走私访问admin
+Bypassing permission control, or firewall interception, to smuggle access to admin
 POST /home HTTP/1.1
 Host: vulnerable-website.com
 Content-Type: application/x-www-form-urlencoded
@@ -105,7 +105,7 @@ func NewCLTE() *ClTe {
 	return x
 }
 
-// 第三个payload 返回404表示ok
+// The third payload returning 404 indicates ok
 func (r *ClTe) CheckResponse(body string, payload string) bool {
 	if payload == ClTePayload[2] {
 		a := strings.Split(body, "HTTP/1.1 404")

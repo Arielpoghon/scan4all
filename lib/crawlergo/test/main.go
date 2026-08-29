@@ -27,7 +27,7 @@ func main() {
 		}
 		// next:hk_994
 		// main > div.sign-layout-main-content > form > button
-		// 跳过手机号码
+		// Skip the phone number
 		// /html/body/div[1]/div[3]/div/div/main/div[2]/form/button[2]
 	}); err != nil {
 		log.Println(err)
@@ -63,7 +63,7 @@ func RegGithub() {
 		}
 		// next:hk_994
 		// main > div.sign-layout-main-content > form > button
-		// 跳过手机号码
+		// Skip the phone number
 		// /html/body/div[1]/div[3]/div/div/main/div[2]/form/button[2]
 	}); err != nil {
 		log.Println(err)
