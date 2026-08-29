@@ -4,11 +4,11 @@ import (
 	"gorm.io/gorm"
 )
 
-// 存储到ES
+// Stored to ES
 type SubDomain struct {
 	Domain     string   `json:"domain"`
 	Subdomains []string `json:"subdomains"`
-	Tags       string   `json:"tags,omitempty"` // 标识属于那个tag，例如hackerone
+	Tags       string   `json:"tags,omitempty"` // marks which tag it belongs to, e.g. hackerone
 }
 
 //http://127.0.0.1:9200/domain_index/_search?q=domain:%20in%20*qianxin*
@@ -18,16 +18,17 @@ type Domain struct {
 }
 
 /*
-局部性更新文档，下面的代码借助go json的omitempty，在将更新数据对象序列化成json，
-可以只序列化非零值字段，实现局部更新。 实际项目采用这种方式时，
-需要注意某个字段的零值具有业务意义时，可以采用对应的指针类型实现
+Partial document update: the following code uses go json's omitempty so that when serializing
+the update data object to json, only non-zero fields are serialized, implementing partial
+updates. When using this approach in real projects, note that if the zero value of a field
+has business meaning, a corresponding pointer type can be used instead.
 */
 type SubDomainItem struct {
 	gorm.Model
 	Domain    string `json:"domain" gorm:"type:varchar(100);"`
 	SubDomain string `json:"subDomain" gorm:"type:varchar(100);"`
-	ToolName  uint64 `json:"toolName,omitempty" gorm:"type:varchar(100);"` // 支持多个工具
-	Tags      string `json:"tags,omitempty" gorm:"type:varchar(200);"`     // 标识属于那个tag，例如hackerone
+	ToolName  uint64 `json:"toolName,omitempty" gorm:"type:varchar(100);"` // supports multiple tools
+	Tags      string `json:"tags,omitempty" gorm:"type:varchar(200);"`     // marks which tag it belongs to, e.g. hackerone
 }
 
 // domain to ips
@@ -36,22 +37,22 @@ type Domain2Ips struct {
 	gorm.Model
 	Domain   string `json:"domain" gorm:"type:varchar(100);"`
 	Ip       string `json:"ip" gorm:"type:varchar(50);"`
-	ToolName uint64 `json:"toolName,omitempty" gorm:"type:varchar(200);"` // 支持多个工具
+	ToolName uint64 `json:"toolName,omitempty" gorm:"type:varchar(200);"` // supports multiple tools
 }
 
-// 端口扫描，及端口漏洞扫描
+// Port scan and port vulnerability scan
 type Ip2Ports struct {
 	gorm.Model
-	MyId          string `json:"myId,omitempty" gorm:"type:varchar(100);"` // 对应ES domain id，可以为空
+	MyId          string `json:"myId,omitempty" gorm:"type:varchar(100);"` // corresponds to the ES domain id, may be empty
 	Ip            string `json:"ip" gorm:"type:varchar(50);"`
 	Port          int    `json:"port"`
 	Des           string `json:"des,omitempty" gorm:"type:varchar(500);"`
-	ToolName      uint64 `json:"toolName,omitempty" gorm:"type:varchar(200);"` // 支持多个工具
-	VulsCheckFlag uint64 `json:"vulsCheckFlag,omitempty"`                      // 每一位表示一个工具，所以，可以支持64种工具、插件对该port进行扫描
+	ToolName      uint64 `json:"toolName,omitempty" gorm:"type:varchar(200);"` // supports multiple tools
+	VulsCheckFlag uint64 `json:"vulsCheckFlag,omitempty"`                      // each bit represents a tool, so up to 64 tools/plugins can scan this port
 	VulsCheckRst  string `json:"vulsCheckRst,omitempty" gorm:"type:varchar(1000);"`
 }
 
-// ip 经纬度 info
+// ip geolocation info
 // curl -H 'User-Agent:curl/1.0' http://ip-api.com/json/107.182.191.202|jq
 type IpInfo struct {
 	gorm.Model
@@ -79,11 +80,11 @@ type IpInfo struct {
 	Ip            string  `json:"query" gorm:"type:varchar(50);unique_index"` // IP
 }
 
-//// 执行任务
+//// Execute the task
 //type Task struct {
 //	gorm.Model
 //	Target   string `json:"target" gorm:"type:varchar(1000);"`
 //	TaskType uint64 `json:"taskType"`
 //	PluginId string `json:"pluginId" gorm:"type:varchar(100);"`
-//	Status   uint64 `json:"status"` // 状态:待执行，执行中，已完成
+//	Status   uint64 `json:"status"` // status: pending, running, completed
 //}

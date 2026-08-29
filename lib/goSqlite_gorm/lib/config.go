@@ -6,21 +6,21 @@ import (
 	"log"
 )
 
-// 服务配置
+// Server configuration
 type ConfigServer struct {
 	UseMysql      bool   `json:"usemysql"`
 	DbUrl         string `json:"dburl"`
 	DebugDbUrl    string `json:"debugdburl"`
 	Debug         bool   `json:"debug"`
 	MaxOpenConns  int    `json:"maxopenconns"`
-	AutoRmOldData bool   `json:"autormolddata"` // 自动删除10小时前数据
-	OnClient      bool   `json:"onclient"`      // api server 运行控制标志
+	AutoRmOldData bool   `json:"autormolddata"` // Automatically delete data older than 10 hours
+	OnClient      bool   `json:"onclient"`      // api server runtime control flag
 }
 
-// server 端全局配置
+// global configuration on the server side
 var GConfigServer = ConfigServer{MaxOpenConns: 200, UseMysql: true}
 
-// 初始化配置文件信息，这个必须先执行
+// Initialize the config file info; this must run first
 func init() {
 	util.RegInitFunc(func() {
 		x := util.GetAllConfigData()
@@ -41,12 +41,12 @@ func init() {
 	////config.AddConfigPath("/etc/")
 	//config.SetConfigType("json")
 	//config.SetConfigFile(ConfigName)
-	//err := config.ReadInConfig() // 查找并读取配置文件
-	//if err != nil {              // 处理读取配置文件的错误
+	//err := config.ReadInConfig() // find and read the config file
+	//if err != nil {              // handle errors while reading the config file
 	//	log.Println("config.ReadInConfig ", err)
 	//	return
 	//}
-	//// 将读取的配置信息保存至全局变量Conf
+	//// Save the read configuration info to the global variable Conf
 	//if err := config.Unmarshal(&GConfigServer); err != nil {
 	//	log.Println("config.Unmarshal ", err)
 	//	return

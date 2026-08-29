@@ -24,7 +24,7 @@ import (
 	"time"
 )
 
-// 字符串包含关系，且大小写不敏感
+// case-insensitive string containment
 func StrContains(s1, s2 string) bool {
 	return strings.Contains(strings.ToLower(s1), strings.ToLower(s2))
 }
@@ -39,7 +39,7 @@ type Config4scanAllModel struct {
 
 var Config4scanAll = Config4scanAllModel{}
 
-// 配置缓存
+// config cache
 var mData = map[string]interface{}{}
 var (
 	UrlPrecise      = "UrlPrecise"
@@ -47,7 +47,7 @@ var (
 	EnableSubfinder = "EnableSubfinder"
 )
 
-// 判断对象是否为struct
+// determine whether the object is a struct
 func IsStruct(i interface{}) bool {
 	return reflect.ValueOf(i).Type().Kind() == reflect.Struct
 }
@@ -64,7 +64,7 @@ func IsPointed(i interface{}) bool {
 	return reflect.Indirect(reflect.ValueOf(i)).Kind() == reflect.Ptr
 }
 
-// 优先使用配置文件中的配置，否则从环境变量中读取
+// prefer config from the config file, otherwise read from environment variables
 func GetVal(key string) string {
 	key1 := os.Getenv(key)
 	if "" != key1 {
@@ -77,7 +77,7 @@ func GetVal(key string) string {
 	return ""
 }
 
-// 获取interface
+// get interface
 func GetAsAny(key string) interface{} {
 	key1 := strings.ToLower(key)
 	if s, ok := mData[key1]; ok {
@@ -93,12 +93,12 @@ func GetValByDefault(key, dftvl string) string {
 	return s
 }
 
-// 获取配置为bool
+// get a config value as bool
 func GetValAsBool(key string) bool {
 	return "true" == GetVal(key)
 }
 
-// 获取配置为int
+// get a config value as int
 func GetValAsInt(key string, nDefault int) int {
 	s := GetValByDefault(key, fmt.Sprintf("%d", nDefault))
 	n, err := strconv.Atoi(s)
@@ -110,7 +110,7 @@ func GetValAsInt(key string, nDefault int) int {
 
 var TmpFile = map[string][]*os.File{}
 
-// 临时结果文件，例如 nmap
+// temporary result file, e.g. nmap
 func GetTempFile(t string) *os.File {
 	tempInput, err := ioutil.TempFile("", "scan4all-out*")
 	if err != nil {
@@ -126,7 +126,7 @@ func GetTempFile(t string) *os.File {
 	return tempInput
 }
 
-// 从配置json中读取naabu、httpx、nuclei等的细化配置
+// read refined configs such as naabu, httpx, nuclei from the config json
 func ParseOption[T any](key string, opt *T) *T {
 	m1 := GetVal4Any[map[string]interface{}](key)
 	bA, err := json.Marshal(m1)
@@ -136,7 +136,7 @@ func ParseOption[T any](key string, opt *T) *T {
 	return opt
 }
 
-// 其他类型
+// other types
 func GetVal4Any[T any](key string) T {
 	var t1 T
 	if s, ok := mData[key]; ok {
@@ -149,7 +149,7 @@ func GetVal4Any[T any](key string) T {
 	return t1
 }
 
-// 判断文件是否存在
+// check whether a file exists
 func FileExists(s string) bool {
 	if _, err := os.Stat(s); err == nil {
 		return true
@@ -157,7 +157,7 @@ func FileExists(s string) bool {
 	return false
 }
 
-// 读区配置中的字典文件
+// read the dictionary file from config
 func GetVal4File(key, szDefault string) string {
 	s := GetVal(key)
 	if "" != s && FileExists(s) {
@@ -171,7 +171,7 @@ func GetVal4File(key, szDefault string) string {
 	return szDefault
 }
 
-// 读区配置中的字典文件
+// read the dictionary file from config
 func GetVal4Filedefault(key, szDefault string) string {
 	s := GetVal4File(key, szDefault)
 	if 2 == len(strings.Split(strings.Split(s, "\n")[0], ":")) {
@@ -194,7 +194,7 @@ func RandStringRunes(n int) string {
 	return string(b)
 }
 
-// 加载配置文件
+// load the config file
 func LoadCoinfig(config *viper.Viper) {
 	if nil == config {
 		config = viper.New()
@@ -211,17 +211,17 @@ func LoadCoinfig(config *viper.Viper) {
 	config.AddConfigPath("$HOME/.config/")
 	config.AddConfigPath("/etc/")
 
-	// 显示调用
+	// explicit invocation
 	config.SetConfigType("json")
 	//if "" != ConfigName {
 	//	config.SetConfigFile(ConfigName)
 	//}
-	err := config.ReadInConfig() // 查找并读取配置文件
-	if err != nil {              // 处理读取配置文件的错误
+	err := config.ReadInConfig() // find and read the config file
+	if err != nil {              // handle errors while reading the config file
 		log.Println("config.ReadInConfig ", err)
 		return
 	}
-	// 将读取的配置信息保存至全局变量Conf
+	// Save the read config info to the global variable Conf
 	if err := config.Unmarshal(&Config4scanAll); err != nil {
 		log.Println("config.Unmarshal ", err)
 		return
@@ -231,11 +231,11 @@ func LoadCoinfig(config *viper.Viper) {
 	//	log.Println("Config file changed, now reLoad it: ", e.Name)
 	//	LoadCoinfig(config)
 	//})
-	// 避免 hold
+	// avoid holding
 	//go config.WatchConfig()
 }
 
-// 初始化配置文件信息，这个必须先执行
+// Initialize the config file info; this must run first
 func Init2() {
 	LoadCoinfig(nil)
 	Fuzzthreads = GetValAsInt("Fuzzthreads", 32)
@@ -286,13 +286,13 @@ func doReadBuff(buf *bytes.Buffer) string {
 	return strings.Join(a, "")
 }
 
-// 最佳的方法是将命令写到临时文件，并通过bash进行执行
+// The best approach is to write the command to a temp file and execute it via bash
 func DoCmd(args ...string) (string, error) {
 	log.Println("start run: " + strings.Join(args, " "))
 	cmd := exec.Command(args[0], args[1:]...)
 	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout // 标准输出
-	cmd.Stderr = &stderr // 标准错误
+	cmd.Stdout = &stdout // stdout
+	cmd.Stderr = &stderr // stderr
 	err := cmd.Run()
 	if nil != err {
 		return "", err
@@ -332,7 +332,7 @@ func doDir(config *embed.FS, s fs.DirEntry, szPath string) {
 
 var UserHomeDir string = "./"
 
-// 初始化到开头
+// initialize at the very start
 func Init1(config *embed.FS) {
 	dirname, err := os.UserHomeDir()
 	if nil == err {
@@ -369,7 +369,7 @@ func Mkdirs(s string) {
 	os.MkdirAll(s, os.ModePerm)
 }
 
-// 获取 Sha1
+// get Sha1
 func GetSha1(a ...interface{}) string {
 	h := sha1.New()
 	for _, x := range a {
@@ -410,7 +410,7 @@ func TestRepeat4Save(key string, a ...interface{}) (interface{}, bool) {
 	return x1.Value(), true
 }
 
-// 关闭cache
+// close cache
 func CloseCache() {
 	if nil != NoRpt {
 		NoRpt.Clear()
@@ -443,8 +443,8 @@ func TestIs404(szUrl string) (r01 *Response, err error, ok bool) {
 	return r01, err, ok
 }
 
-// 绝对404检测
-// 相同 url 本实例中只检测一次
+// absolute 404 detection
+// the same url is detected only once in this instance
 func TestIsWeb01(szUrl string) (r01 *Response, err error, ok bool) {
 	if "" == szUrl {
 		return nil, nil, false
@@ -524,7 +524,7 @@ func TestIs404Page(szUrl string) (page *Page, r01 *Response, err error, ok bool)
 var fnInit []func()
 var fnInitHd []func()
 
-// 注册解决初始化控制顺序问题
+// Register to solve initialization ordering issues
 func RegInitFunc(cbk func()) {
 	fnInit = append(fnInit, cbk)
 }
@@ -579,7 +579,7 @@ func upAllTools() {
 	wg.Wait()
 }
 
-// 所有初始化的总入口
+// The main entry point for all initialization
 func DoInit(config *embed.FS) {
 	Init1(config)
 	rand.Seed(time.Now().UnixNano())

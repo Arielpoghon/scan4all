@@ -12,12 +12,12 @@ import (
 
 var EnableHoneyportDetection = true
 
-// 内存缓存，避免相同目标多次执行
+// in-memory cache to avoid running multiple times for the same target
 var hdCache sync.Map
 
 var ipCIDS = regexp.MustCompile("^(\\d+\\.){3}\\d+\\/\\d+$")
 
-//  检查 蜜罐 Server信息，check Honeypor server info
+// check the honeypot Server info
 func CheckHoneyportDetection4HeaderServer(server, szUrl string) bool {
 	if 50 < len(server) || 3 < len(strings.Split(server, ",")) {
 		hdCache.Store(szUrl, true)
@@ -27,8 +27,8 @@ func CheckHoneyportDetection4HeaderServer(server, szUrl string) bool {
 	return false
 }
 
-// 添加蜜罐检测，并自动跳过目标，默认false跳过蜜罐检测
-// 考虑内存缓存结果
+// Add honeypot detection and automatically skip targets; default false skips honeypot detection
+// consider the in-memory cached result
 func HoneyportDetection(host string) bool {
 	host = strings.TrimSpace(host)
 	if !EnableHoneyportDetection || 5 > len(host) || ipCIDS.MatchString(host) {
@@ -59,7 +59,7 @@ func HoneyportDetection(host string) bool {
 			Timeout:   timeout,
 			Transport: tr,
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
-				return http.ErrUseLastResponse /* 不进入重定向 */
+				return http.ErrUseLastResponse /* do not follow redirects */
 			},
 		}
 		resp, err := client.Head(szK)

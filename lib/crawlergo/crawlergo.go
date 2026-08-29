@@ -27,8 +27,8 @@ import (
 )
 
 /**
-命令行调用适配器
-用于生成开源的二进制程序
+Command-line invocation adapter
+Used to build open-source binary programs
 */
 
 type Result struct {
@@ -108,7 +108,7 @@ func main() {
 //		return errors.New("url must be set")
 //	}
 //
-//	// 设置日志输出级别
+//	// Set the log output level
 //	level, err := logrus.ParseLevel(logLevel)
 //	if err != nil {
 //		logger.Logger.Fatal(err)
@@ -140,7 +140,7 @@ func main() {
 //		logger.Logger.Fatal("no validate target.")
 //	}
 //
-//	// 检查自定义的表单参数配置
+//	// Check the custom form parameter configuration
 //	taskConfig.CustomFormValues, err = parseCustomFormValues(customFormTypeValues.Value())
 //	if err != nil {
 //		logger.Logger.Fatal(err)
@@ -150,7 +150,7 @@ func main() {
 //		logger.Logger.Fatal(err)
 //	}
 //
-//	// 开始爬虫任务
+//	// Start the crawler task
 //	task, err := pkg.NewCrawlerTask(targets, taskConfig)
 //	if err != nil {
 //		logger.Logger.Error("create crawler task failed.")
@@ -162,11 +162,11 @@ func main() {
 //		logger.Logger.Info("filter mode: ", taskConfig.FilterMode)
 //	}
 //
-//	// 提示自定义表单填充参数
+//	// Prompt for custom form fill parameters
 //	if len(taskConfig.CustomFormValues) > 0 {
 //		logger.Logger.Info("Custom form values, " + tools.MapStringFormat(taskConfig.CustomFormValues))
 //	}
-//	// 提示自定义表单填充参数
+//	// Prompt for custom form fill parameters
 //	if len(taskConfig.CustomFormKeywordValues) > 0 {
 //		logger.Logger.Info("Custom form keyword values, " + tools.MapStringFormat(taskConfig.CustomFormKeywordValues))
 //	}
@@ -183,13 +183,13 @@ func main() {
 //	logger.Logger.Info(fmt.Sprintf("Task finished, %d results, %d requests, %d subdomains, %d domains found.",
 //		len(result.ReqList), len(result.AllReqList), len(result.SubDomainList), len(result.AllDomainList)))
 //
-//	// 内置请求代理
+//	// Built-in request proxy
 //	if pushAddress != "" {
 //		logger.Logger.Info("pushing results to ", pushAddress, ", max pool number:", pushProxyPoolMax)
 //		Push2Proxy(result.ReqList)
 //	}
 //
-//	// 输出结果
+//	// Output the results
 //	outputResult(result)
 //
 //	return nil
@@ -243,7 +243,7 @@ func main() {
 //}
 //
 //func outputResult(result *pkg.Result) {
-//	// 输出结果
+//	// Output the results
 //	if outputMode == "json" {
 //		fmt.Println("--[Mission Complete]--")
 //		resBytes := getJsonSerialize(result)
@@ -260,7 +260,7 @@ func main() {
 //}
 //
 ///**
-//原生被动代理推送支持
+//Native passive proxy push support
 //*/
 //func Push2Proxy(reqList []*model2.Request) {
 //	pool, _ := ants.NewPool(pushProxyPoolMax)
@@ -283,7 +283,7 @@ func main() {
 //}
 //
 ///**
-//协程池请求的任务
+//Task executed by the goroutine pool
 //*/
 //func (p *ProxyTask) doRequest() {
 //	defer pushProxyWG.Done()

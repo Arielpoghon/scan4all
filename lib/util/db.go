@@ -14,7 +14,7 @@ import (
 var dbCC *gorm.DB
 var DbName = "config/scan4all_db"
 
-// 关闭数据库连接
+// close the database connection
 func Close() {
 	if nil != dbCC {
 		if db1, err := dbCC.DB(); nil == err {
@@ -23,7 +23,7 @@ func Close() {
 	}
 }
 
-// 初始化模型
+// initialize models
 func InitModle(x ...interface{}) {
 	if nil == dbCC {
 		InitDb()
@@ -31,9 +31,9 @@ func InitModle(x ...interface{}) {
 	dbCC.AutoMigrate(x...)
 }
 
-// go - 交叉编译go-sqlite3 https://www.modb.pro/db/329524
+// go - cross-compile go-sqlite3 https://www.modb.pro/db/329524
 // ./tools/Check_CVE_2020_26134 -config="/Users/51pwn/MyWork/mybugbounty/allDomains.txt"
-// 获取Gorm db连接、操作对象
+// get the Gorm db connection/operation object
 func InitDb(dst ...interface{}) *gorm.DB {
 	if nil != dbCC {
 		log.Println("dbCC not is nil, DbName = ", DbName)
@@ -77,16 +77,16 @@ func InitDb(dst ...interface{}) *gorm.DB {
 	return dbCC
 }
 
-// 通用
-// 获取T类型mod表名
+// generic
+// get the table name of the T type mod
 func GetTableName[T any](mod T) string {
 	stmt := &gorm.Statement{DB: dbCC}
 	stmt.Parse(GetPointVal(mod))
 	return stmt.Schema.Table
 }
 
-// 通用,update
-// 指定id更新T类型mod数据
+// generic, update
+// update the T type mod data by id
 func Update[T any](mod *T, query string, args ...interface{}) int64 {
 	var t1 *T = mod
 	xxxD := dbCC.Table(GetTableName(mod)).Model(&t1)
@@ -99,9 +99,9 @@ func Update[T any](mod *T, query string, args ...interface{}) int64 {
 	return rst.RowsAffected
 }
 
-// 更新失败再插入新数据，确保只有一条数据
+// Insert new data if the update fails, ensuring only one record exists
 func UpInsert[T any](mod *T, query string, args ...interface{}) int64 {
-	// 在冲突时，更新除主键以外的所有列
+	// On conflict, update all columns except the primary key
 	if 1 > Update[T](mod, query, args...) { // &&
 		if 1 > Create[T](*mod) {
 			xx1 := dbCC.Clauses(clause.OnConflict(clause.OnConflict{
@@ -115,7 +115,7 @@ func UpInsert[T any](mod *T, query string, args ...interface{}) int64 {
 	return 1
 }
 
-// 通用,insert
+// generic, insert
 func Create[T any](mod ...T) int64 {
 	n := int64(0)
 	for _, k := range mod {
@@ -129,9 +129,9 @@ func Create[T any](mod ...T) int64 {
 	return n
 }
 
-// 通用
-// 求T类型count，支持条件
-// 对T表，mod类型表，args 的where求count
+// generic
+// get the count of the T type, supports conditions
+// get the count with the where of args on the T type table (mod)
 func GetCount[T any](mod T, args ...interface{}) int64 {
 	var n int64
 	x1 := dbCC.Model(&mod)
@@ -143,8 +143,8 @@ func GetCount[T any](mod T, args ...interface{}) int64 {
 	return n
 }
 
-// 通用
-// 查询返回T类型、表一条数据
+// generic
+// query and return one record of the T type table
 func GetOne[T any](rst *T, args ...interface{}) *T {
 	if nil == rst {
 		rst = new(T)
@@ -159,10 +159,10 @@ func GetOne[T any](rst *T, args ...interface{}) *T {
 	return rst
 }
 
-// 通用
-// 查询模型T1类型 mode，并关联T1类型对子类型T3 preLd
-// 设置 nPageSize 和便宜Offset
-// 以及其他查询条件conds
+// generic
+// query the T1 type model mode, and preload its child type with preLd
+// set nPageSize and the offset
+// and other query conditions conds
 func GetSubQueryLists[T1, T2 any](mode T1, preLd string, aRst []T2, nPageSize int, Offset int, conds ...interface{}) *[]T2 {
 	if "" != preLd {
 		dbCC.Model(&mode).Preload(preLd).Limit(nPageSize).Offset(Offset*nPageSize).Order("updated_at DESC").Find(&aRst, conds...)
@@ -172,7 +172,7 @@ func GetSubQueryLists[T1, T2 any](mode T1, preLd string, aRst []T2, nPageSize in
 	return &aRst
 }
 
-// 单表查询
+// single-table query
 func Query4Lists[T any](query string, conds ...interface{}) *[]T {
 	var t1 T
 	var t2 []T
@@ -180,10 +180,10 @@ func Query4Lists[T any](query string, conds ...interface{}) *[]T {
 	return &t2
 }
 
-// 通用
-// 查询模型T1类型 mode，并关联T1类型对子类型T3 preLd
-// 设置 nPageSize 和便宜Offset
-// 以及其他查询条件conds
+// generic
+// query the T1 type model mode, and preload its child type with preLd
+// set nPageSize and the offset
+// and other query conditions conds
 func GetSubQueryList[T1, T2, T3 any](mode T1, preLd T3, aRst []T2, nPageSize int, Offset int, conds ...interface{}) *[]T2 {
 	return GetSubQueryLists(mode, GetTableName(preLd), aRst, nPageSize, Offset, conds...)
 }

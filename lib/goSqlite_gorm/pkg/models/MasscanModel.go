@@ -9,28 +9,28 @@ import (
 	"regexp"
 )
 
-// 扫描目标，非存储，chan时用
+// Scan target, not stored, used with channels
 type Target4Chan struct {
-	TaskId     string `json:"task_id"`     // 任务id
-	ScanWeb    string `json:"scan_web"`    // base64解码后
-	ScanType   int64  `json:"scan_type"`   // 扫描类型
-	ScanConfig string `json:"scan_config"` // 本次任务的若干细节配置，json格式的string
+	TaskId     string `json:"task_id"`     // task id
+	ScanWeb    string `json:"scan_web"`    // after base64 decoding
+	ScanType   int64  `json:"scan_type"`   // scan type
+	ScanConfig string `json:"scan_config"` // various detailed configs of this task, in json string format
 }
 
-// 地址
+// Address
 type Address struct {
 	Addr     string `xml:"addr,attr" json:"addr" gorm:"primaryKey;type:varchar(60)"`
 	AddrType string `xml:"addrtype,attr" json:"addr_type" gorm:"type:varchar(20)"`
 }
 
-// 状态
+// State
 type State struct {
 	State     string `xml:"state,attr" json:"state" gorm:"type:varchar(20)"`
 	Reason    string `xml:"reason,attr" json:"reason" gorm:"type:varchar(20)"`
 	ReasonTTL string `xml:"reason_ttl,attr" json:"reason_ttl" gorm:"type:varchar(20)"`
 }
 
-// nmap 模式
+// nmap mode
 type Nmaprun struct {
 	XMLName    xml.Name `xml:"nmaprun"`
 	StartTime  string   `xml:"start,attr"`
@@ -39,7 +39,7 @@ type Nmaprun struct {
 	XmlVersion string   `xml:"xmloutputversion,attr"`
 }
 
-// 主机信息
+// Host info
 //  foreignKey should name the model-local key field that joins to the foreign entity.
 //  references should name the foreign entity's primary or unique key.
 type Host struct {
@@ -59,7 +59,7 @@ type Host struct {
 //	return e.Encode(cm.Member)
 //}
 
-// 端口信息
+// Port info
 type Ports struct {
 	Addr     string  `json:"addr" gorm:"type:varchar(60);unique_index:addr,protocol,port_id"`
 	Protocol string  `xml:"protocol,attr" json:"protocol" gorm:"type:varchar(10);"`
@@ -68,19 +68,19 @@ type Ports struct {
 	Service  Service `json:"service" xml:"service"  gorm:"embedded;"`
 }
 
-// 服务信息
+// Service info
 type Service struct {
 	Name   string `xml:"name,attr" json:"name"  gorm:"type:varchar(20);"`
 	Banner string `xml:"banner,attr" json:"banner"  gorm:"type:varchar(800);"`
 }
 
-// 事件数据
+// Event data
 type EventData struct {
-	EventType int64         // 类型：masscan、nmap
-	EventData []interface{} // func，parms
-	Task      *Target4Chan  // 当前task任务数据
-	//Ips            []string                                         // 当前任务相关的ip
-	//SubDomains2Ips *map[string]map[string]map[int]map[string]string // 所有子域名 -> ip ->port -> port info
+	EventType int64         // type: masscan, nmap
+	EventData []interface{} // func, params
+	Task      *Target4Chan  // the current task data
+	//Ips            []string                                         // ip related to the current task
+	//SubDomains2Ips *map[string]map[string]map[int]map[string]string // all subdomains -> ip -> port -> port info
 }
 
 var (
@@ -98,8 +98,8 @@ func init() {
 	}
 }
 
-// 目标：url、dns（域名）、ip
-//  转换、输出ip
+// target: url, dns (domain), ip
+// resolve and output ip
 func (r *EventData) Target2Ip() []string {
 	var a []string
 	t := r.Task.ScanWeb
@@ -130,6 +130,6 @@ func (r *EventData) Target2Ip() []string {
 	return a
 }
 
-// 获取ip的正则表达式
+// regex for extracting ip
 var GetIpPort = regexp.MustCompile("Discovered open port (\\d+)\\/tcp on ((\\d+\\.){3}\\d+)")
 var GetBanner = regexp.MustCompile("Banner on port (\\d+)/tcp on ((\\d+\\.){3}\\d+): \\[([^\\]]+)\\] ([^\\ ]+)( ([^=]+)=((\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})|[^ ]+))*")

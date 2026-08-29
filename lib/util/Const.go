@@ -10,21 +10,21 @@ import (
 	"sync"
 )
 
-// 全局线程控制
+// global thread control
 var Wg *sync.WaitGroup = &sync.WaitGroup{}
 
 var Version string
 
-// 全局控制
+// global control
 var RootContext = context.Background()
 
-// 全局关闭所有线程
+// globally stop all threads
 var Ctx_global, StopAll = context.WithCancel(RootContext)
 
-// 多次使用，一次性编译效率更高
+// used many times; compiling once is more efficient
 var DeleteMe = regexp.MustCompile("rememberMe=deleteMe")
 
-// 自定义http 头
+// custom http headers
 var CustomHeaders []string
 
 /*
@@ -36,7 +36,7 @@ X-Remote-Addr: 127.0.0.1
 X-Client-IP: 127.0.0.1
 X-Host: 127.0.0.1
 */
-// 获取 自定义头信息等raw模式
+// get custom headers in raw mode
 func GetCustomHeadersRaw() string {
 	if 0 < len(CustomHeaders) {
 		return "\r\n" + strings.Join(CustomHeaders, "\r\n")
@@ -44,7 +44,7 @@ func GetCustomHeadersRaw() string {
 	return ""
 }
 
-// 全局设置header
+// globally set headers
 func SetHeader(m *http.Header) {
 	if 0 < len(CustomHeaders) && nil != m {
 		for _, i := range CustomHeaders {
@@ -54,7 +54,7 @@ func SetHeader(m *http.Header) {
 	}
 }
 
-// 设置map格式的header
+// set headers in map format
 func SetHeader4Map(m *map[string]string) {
 	if 0 < len(CustomHeaders) && nil != m {
 		for _, i := range CustomHeaders {
@@ -64,8 +64,8 @@ func SetHeader4Map(m *map[string]string) {
 	}
 }
 
-// 异步执行方法，只适合无返回值、或使用管道返回值的方法
-// 程序main整体等待
+// Async execution wrapper, only suitable for methods with no return value or returning via channels
+// the program's main waits as a whole
 func DoSyncFunc(cbk func()) {
 	Wg.Add(1)
 	go func() {
@@ -73,7 +73,7 @@ func DoSyncFunc(cbk func()) {
 		for {
 			select {
 			case <-Ctx_global.Done():
-				fmt.Println("接收到全局退出事件")
+				fmt.Println("Received global exit event")
 				return
 
 			default:
@@ -84,9 +84,9 @@ func DoSyncFunc(cbk func()) {
 	}()
 }
 
-// 检查 cookie
+// check cookie
 // Shiro CVE_2016_4437 cookie
-// 其他POC cookie同一检查入口
+// unified check entry for the other POC cookies
 func CheckShiroCookie(header *http.Header) int {
 	var SetCookieAll string
 	if nil != header {
@@ -98,10 +98,10 @@ func CheckShiroCookie(header *http.Header) int {
 	return 0
 }
 
-// 匹配响应中 www-Authenticate 是否有认证要求都信息
+// Match whether the www-Authenticate header in the response indicates an authentication requirement
 var BaseReg = regexp.MustCompile("(?i)Basic\\s*realm\\s*=\\s*")
 
-// 管道通讯使用
+// used for channel communication
 type PocCheck struct {
 	Wappalyzertechnologies *[]string
 	URL                    string
@@ -109,13 +109,13 @@ type PocCheck struct {
 	Checklog4j             bool
 }
 
-// go POC 检测管道，避免循环引用
+// go POC detection channel, avoids circular imports
 var PocCheck_pipe = make(chan *PocCheck, 64)
 
-// 头信息同一检查，并调用合适到go poc进一步爆破、检测
+// unified header check, and invoke the appropriate go poc for further exploitation/detection
 //
-//	1、需要认证
-//	2、shiro
+//  1. requires authentication
+//  2. shiro
 func CheckHeader(header *http.Header, szUrl string) {
 	DoSyncFunc(func() {
 		if nil != header {

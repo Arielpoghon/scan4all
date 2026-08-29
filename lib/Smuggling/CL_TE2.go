@@ -50,7 +50,7 @@ func NewCLTE2() *ClTe2 {
 	return x
 }
 
-// 第2个payload 成功返回表示ok
+// The 2nd payload succeeding means ok
 func (r *ClTe2) CheckResponse(body string, payload string) bool {
 	a := strings.Split(body, "HTTP/1.1 404")
 	if 1 <= len(a) {
@@ -59,9 +59,9 @@ func (r *ClTe2) CheckResponse(body string, payload string) bool {
 	return false
 }
 
-// 条件：第一请求都第一段必须是200
-// 第一次请求，第二段压入队列
-// 第二次请求接在上面第二段后面，所以无论第二次发送什么，都会得到404，那么表示存在漏洞
+// Condition: the first request's first chunk must be 200
+// The first request pushes the second chunk into the queue
+// The second request follows that second chunk, so no matter what is sent second, you get a 404, which means the vulnerability exists
 func (r *ClTe2) GetTimes() int {
 	return 2
 }

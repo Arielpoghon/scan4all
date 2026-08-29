@@ -10,9 +10,9 @@ import (
 
 var log4jsv sync.Map
 
-// 1、检测 $HOME/MyWork/log4j-scan 存在就执行 python3 版本log4j检测
-// 2、相同目标只执行一次，基于内存缓存
-// 3、只支持：https://github.com/hktalent/log4j-scan 版本
+// 1. if $HOME/MyWork/log4j-scan exists, run the python3 version of the log4j detection
+// 2. run only once per target, based on an in-memory cache
+// 3. only supports: https://github.com/hktalent/log4j-scan version
 func DoLog4j(szUrl string) {
 	if 5 > len(szUrl) || !FileExists(UserHomeDir+"/MyWork/log4j-scan") {
 		//fmt.Println("DoLog4j: ", 5 > len(szUrl), !FileExists(UserHomeDir+"/MyWork/log4j-scan"))
@@ -22,13 +22,13 @@ func DoLog4j(szUrl string) {
 		if "" == EsUrl {
 			EsUrl = GetValByDefault("esUrl", "http://127.0.0.1:9200/%s_index/_doc/%s")
 		}
-		// 避免parse错误
+		// avoid parse errors
 		szEsUrl := fmt.Sprintf(EsUrl, "log4j", "xx01")
 		oUrl, err := url.Parse(strings.TrimSpace(szEsUrl))
 		if nil == err {
 			p1, err := os.Getwd()
 			if nil == err {
-				// 报告log4j结果的url
+				// the url where the log4j result is reported
 				szU1 := oUrl.Scheme + "://" + oUrl.Host
 				if _, ok := log4jsv.Load(szU1); !ok {
 					log4jsv.Store(szU1, true)

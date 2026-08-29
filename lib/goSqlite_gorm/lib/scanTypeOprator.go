@@ -1,16 +1,16 @@
 package lib
 
-// 判断 scanType中是否包含了checkType扫描
+// Check whether scanType includes the checkType scan
 func HasScanType(scanType int64, checkType int64) bool {
 	return scanType&checkType == checkType
 }
 
-// 判断 scanType中是否包含了checkType扫描
+// Check whether scanType includes the checkType scan
 func HasScanTypes(scanType int64, checkType ...int64) bool {
 	return HasScanType(scanType, MergeScanType(checkType...))
 }
 
-// 合并所有扫描类型
+// Merge all scan types
 func MergeScanType(args ...int64) int64 {
 	var i int64 = 0
 	for _, j := range args {

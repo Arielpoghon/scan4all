@@ -17,24 +17,24 @@ import (
 type CheckCbkFuc func(data byte) bool
 
 type CheckTarget struct {
-	Target        string         `json:"target"`        // 目标
-	Port          int            `json:"port"`          // 端口
-	ConnState     bool           `json:"connState"`     // 连接状态
-	ConnType      string         `json:"connType"`      // 连接类型：tcp
-	ReadTimeout   int            `json:"readTimeout"`   // 读数据超市
-	CheckCbkLists []*CheckCbkFuc `json:"checkCbkLists"` // 回调接口
-	Conn          net.Conn       `json:"conn"`          // 连接对象
-	//ConnTLS       *tls.Conn      `json:"conn"`          // ssl 连接对象
-	MacReadSize      uint32 `json:"macReadSize"` // 最大允许读取调数据，避免被反制内存攻击，default:200k
+	Target        string         `json:"target"`        // target
+	Port          int            `json:"port"`          // port
+	ConnState     bool           `json:"connState"`     // connection state
+	ConnType      string         `json:"connType"`      // connection type: tcp
+	ReadTimeout   int            `json:"readTimeout"`   // read data timeout
+	CheckCbkLists []*CheckCbkFuc `json:"checkCbkLists"` // callback interface
+	Conn          net.Conn       `json:"conn"`          // connection object
+	//ConnTLS       *tls.Conn      `json:"conn"`          // ssl connection object
+	MacReadSize      uint32 `json:"macReadSize"` // max allowed read data size to avoid memory attacks, default: 200k
 	HostName         string `json:"hostName"`    // http header host
-	UrlPath          string `json:"urlPath"`     // http中url path
+	UrlPath          string `json:"urlPath"`     // url path in http
 	UrlRaw           string `json:"urlRaw"`      // full url
 	IsTLS            bool   `json:"isTLS"`       // https
 	CustomHeadersRaw string `json:"customHeadersRaw"`
 }
 
-// 准备要检测、链接带目标
-// 需要考虑 ssl的情况
+// Prepare the target to be detected/connected
+// the ssl case needs to be considered
 func NewCheckTarget(szUrl, SzType string, readWriteTimeout int) *CheckTarget {
 	u, err := url.Parse(strings.TrimSpace(szUrl))
 
@@ -64,8 +64,8 @@ func NewCheckTarget(szUrl, SzType string, readWriteTimeout int) *CheckTarget {
 	return r11
 }
 
-// 添加检测函数
-// 如果检测函数返回true，就不关闭链接，继续发送后续带数据包
+// add a check function
+// if the check function returns true, don't close the connection and keep sending follow-up data packets
 func (r *CheckTarget) AddCheck(fnCbk CheckCbkFuc, aN ...int) *CheckTarget {
 	r.CheckCbkLists = append(r.CheckCbkLists, &fnCbk)
 	return r
@@ -113,7 +113,7 @@ func (r *CheckTarget) WriteWithFlushByte(s []byte) (nn int, err error) {
 	return
 }
 
-// 获取操作io
+// get the operation io
 func (r *CheckTarget) WriteWithFlush(s string) (nn int, err error) {
 	bw := r.GetBufWriter()
 	if nil == bw {
@@ -125,7 +125,7 @@ func (r *CheckTarget) WriteWithFlush(s string) (nn int, err error) {
 	return
 }
 
-// 获取操作io
+// get the operation io
 func (r *CheckTarget) GetBufReader() *bufio.Reader {
 	return bufio.NewReader(r.Conn)
 }
@@ -150,7 +150,7 @@ func (r *CheckTarget) ReadAll2Bytes() *[]byte {
 	return &a
 }
 
-// 读取所有文本
+// read all text
 func (r *CheckTarget) ReadAll2Str() *string {
 	a := r.ReadAll2Bytes()
 	s1 := string(*a)
@@ -161,7 +161,7 @@ func (r *CheckTarget) GetBufWriter() *bufio.Writer {
 	return bufio.NewWriter(r.Conn)
 }
 
-// 关闭连接
+// close the connection
 func (r *CheckTarget) Close() {
 	if r.ConnState {
 		r.ConnState = false
@@ -178,7 +178,7 @@ func (r *CheckTarget) Log(s string) {
 
 var ipReg = regexp.MustCompile(`^(\d{1,3}\.){3}\d{1,3}$`)
 
-// 连接目标
+// connect to the target
 // sysctl -w net.ipv4.tcp_keepalive_time=300
 // sysctl -w net.ipv4.tcp_keepalive_intvl=30
 // sysctl -w net.ipv4.tcp_keepalive_probes=5
@@ -200,7 +200,7 @@ func (r *CheckTarget) ConnTarget() (*CheckTarget, error) {
 	if err == nil {
 		//defer r.Close()
 		//r.Conn.SetKeepAlive(true)
-		// 设置读取超时
+		// set the read timeout
 		err = r.Conn.SetReadDeadline(time.Now().Add(time.Duration(r.ReadTimeout) * time.Second))
 		if err != nil {
 			r.Log(szErr)

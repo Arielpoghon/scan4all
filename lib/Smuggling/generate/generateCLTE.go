@@ -48,8 +48,8 @@ search=testnmanp`)},
 	return gte
 }
 
-// 1、分析得到 Location
-// 2、针对 Location 的数据进行目录遍历
+// 1. analyze and obtain the Location
+// 2. perform directory traversal on the Location data
 func (r *CLTE) DoFirst(szPath, szLocalHost string) {
 	pay1 := r.Payload
 	s1, s2 := pay1[0], pay1[1]

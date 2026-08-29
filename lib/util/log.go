@@ -15,7 +15,7 @@ const Scan4all = "scan4all"
 // out filename
 var Output = ""
 
-// // 调用方法名作为插件名
+// // Use the calling method name as the plugin name
 func GetPluginName(defaultVal string) string {
 	pc, _, _, ok := runtime.Caller(1)
 	details := runtime.FuncForPC(pc)
@@ -25,7 +25,7 @@ func GetPluginName(defaultVal string) string {
 	return defaultVal
 }
 
-// 1、优化代码，统一结果输出，便于维护
+// 1. optimize the code, unify result output for easier maintenance
 func SendLog(szUrl, szVulType, Msg, Payload string) {
 	v := &SimpleVulResult{
 		Url:     szUrl,
@@ -42,7 +42,7 @@ func GetEsType(s int64) ESaveType {
 	return Scan4all
 }
 
-// 专门发送改造后的引擎函数执行结果
+// dedicated sender for results of the modified engine functions
 func SendEngineLog(evt *models.EventData, nCurType int64, data ...interface{}) {
 	if nil != data && 0 < len(data) {
 		v := &SimpleVulResult{
@@ -61,7 +61,7 @@ func SendEngineLog(evt *models.EventData, nCurType int64, data ...interface{}) {
 	}
 }
 
-// 专门发送改造后的引擎函数执行结果
+// dedicated sender for results of the modified engine functions
 func SendEngineLog4Url(Url string, nCurType int64, data ...interface{}) {
 	if nil != data && 0 < len(data) {
 		v := &SimpleVulResult{

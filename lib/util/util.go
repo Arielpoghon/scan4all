@@ -31,29 +31,29 @@ import (
 )
 
 var (
-	HttpProxy   string // 代理
+	HttpProxy   string // proxy
 	CeyeApi     string // Ceye api
 	CeyeDomain  string // Ceye domain
-	Fuzzthreads = 32   // 2,4,8,16,32,采用2的N次方的数字
+	Fuzzthreads = 32   // 2,4,8,16,32, powers of two
 )
 
 const (
-	// Distributed API Server，服务器
+	// Distributed API Server
 	G_Server = "https://das.51pwn.com"
 )
 
-// http密码爆破
+// http password brute force
 func HttpRequsetBasic(username string, password string, urlstring string, method string, postdata string, isredirect bool, headers map[string]string) (*Response, error) {
 	rsps, _, _, err := GetResponse(username, password, urlstring, method, postdata, isredirect, headers)
 	return rsps, err
 }
 
-// client缓存
+// client cache
 var clientHttpCc *ccache.Cache
 
-// 获取一个内存对象
+// Get an in-memory object
 //
-//	如果c不是nil，就不再创建新的
+//	if c is not nil, do not create a new one
 func GetMemoryCache(nMaxSize int64, c *ccache.Cache) *ccache.Cache {
 	if nil == c {
 		configure := ccache.Configure()
@@ -63,7 +63,7 @@ func GetMemoryCache(nMaxSize int64, c *ccache.Cache) *ccache.Cache {
 	return c
 }
 
-// 初始化client cache
+// initialize the client cache
 func InitCHcc() {
 	clientHttpCc = GetMemoryCache(10000, clientHttpCc)
 }
@@ -152,7 +152,7 @@ func CloseAllHttpClient() {
 	})
 }
 
-// 数组去重
+// deduplicate a slice
 func SliceRemoveDuplicates(slice []string) []string {
 	if nil == slice || 0 == len(slice) {
 		return slice
@@ -172,10 +172,10 @@ func SliceRemoveDuplicates(slice []string) []string {
 	return slice
 }
 
-// 若干参数依赖注入到对象 obj中
+// Inject several parameters into the obj object
 //
 //	util.MergeParms2Obj(&ms, args...)
-//	使用 inject 注入 struct 需要注意的时，每个inject的类型不一样，如果一样的，必须使用类型别名，否则盲注会出问题
+//	When using inject to inject into a struct, note that each inject type must be different; if the same, you must use type aliases, otherwise the wrong target may be injected
 func MergeParms2Obj(obj interface{}, args ...interface{}) interface{} {
 	if nil != args && 0 < len(args) {
 		in := inject.New()
@@ -187,7 +187,7 @@ func MergeParms2Obj(obj interface{}, args ...interface{}) interface{} {
 	return obj
 }
 
-// 返回限流的reader
+// return a size-limited reader
 func GetLimitReader(i *http.Response) io.ReadCloser {
 	CheckResp(i.Request.URL.String(), i)
 	return io.NopCloser(&io.LimitedReader{R: i.Body, N: int64(GetValAsInt("LimitReader", 819200))})
@@ -235,11 +235,11 @@ func GetResponse(username string, password string, urlstring string, method stri
 	return resp1, reqbody, location, err
 }
 
-// 需要考虑缓存
+// Cache needs to be considered
 //
-//	1、缓解网络不好的情况
-//	2、缓存有效期为当天
-//	3、缓存命中需和请求的数据完全匹配
+//  1. mitigate poor network conditions
+//  2. cache is valid for the current day
+//  3. cache hits must exactly match the requested data
 func HttpRequset(urlstring string, method string, postdata string, isredirect bool, headers map[string]string) (*Response, error) {
 	rsps, _, _, err := GetResponse("", "", urlstring, method, postdata, isredirect, headers)
 	if nil == err && nil == rsps {
@@ -263,7 +263,7 @@ func TestIsWeb(a *[]string) (a1 *[]string, b *[]string) {
 func Dnslogchek(randomstr string) bool {
 	urlStr := fmt.Sprintf("http://api.ceye.io/v1/records?token=%s&type=dns&filter=%s", CeyeApi, randomstr)
 	if resp, err := HttpRequset(urlStr, "GET", "", false, nil); err == nil {
-		if !StrContains(resp.Body, `"data": []`) && strings.Contains(resp.Body, `{"code": 200, "message": "OK"}`) { // api返回结果不为空
+		if !StrContains(resp.Body, `"data": []`) && strings.Contains(resp.Body, `{"code": 200, "message": "OK"}`) { // the api result is not empty
 			return true
 		}
 	}
@@ -293,7 +293,7 @@ func RandomStr() string {
 	return string(randBytes)
 }
 
-// 判断 i 是否存在slice中
+// Check whether i exists in the slice
 func SliceInAny[T any](i T, slice []T) bool {
 	for _, j := range slice {
 		if reflect.DeepEqual(i, j) {
@@ -303,7 +303,7 @@ func SliceInAny[T any](i T, slice []T) bool {
 	return false
 }
 
-// 判断 i 是否存在slice中
+// Check whether i exists in the slice
 func IntInSlice(i int, slice []int) bool {
 	if slice == nil {
 		return false
@@ -316,7 +316,7 @@ func IntInSlice(i int, slice []int) bool {
 	return false
 }
 
-// 判断 str 是否存在slice中
+// Check whether str exists in the slice
 func StringInSlice(str string, slice []string) bool {
 	if slice == nil {
 		return false
@@ -334,7 +334,7 @@ func SliceInString(str string, slice []string) bool {
 		return false
 	}
 	for _, v := range slice {
-		// 基于相似度计算
+		// Based on similarity comparison
 		if 0.9 < strsim.Compare(str, v) {
 			return true
 		}
@@ -344,7 +344,7 @@ func SliceInString(str string, slice []string) bool {
 
 var a1 = strings.Split("app,net,org,vip,cc,cn,co,io,com,gov.edu", ",")
 
-// 兼容hacker one 域名表示方式,以下格式支持
+// Compatible with hacker one domain notation; the following formats are supported
 // *.xxx.com
 // *.xxx.xx1.*
 func Convert2Domains(x string) []string {
@@ -373,11 +373,11 @@ func Convert2Domains(x string) []string {
 	return aRst
 }
 
-// 关闭所有资源
+// close all resources
 func CloseAll() {
 	StopAll()
 	// clear
-	// 程序都结束了，没有必要清理内存了
+	// the program is ending; no need to clean up memory anymore
 	// fingerprint.ClearData()
 	log4jsv.Range(func(key, value any) bool {
 		log4jsv.Store(key, nil)
@@ -431,7 +431,7 @@ func ScannerToReader(scanner *bufio.Scanner) io.Reader {
 	return reader
 }
 
-// 纯粹发送数据到目标机器
+// Simply send data to the target machine
 func SendData2Url(szUrl string, data1 interface{}, m1 *map[string]string, fnCbk func(resp *http.Response, err error, szU string)) {
 	data, _ := json.Marshal(data1)
 	c1 := GetClient(szUrl)
@@ -455,16 +455,16 @@ func DeepCopy(src, dist interface{}) (err error) {
 
 type EngineFuncType func(evt *models.EventData, args ...interface{})
 
-// 工厂方法
+// Factory method
 //
-//	便于同一、规范引擎调用的方法、参数约束
+//	provides unified, standard method and parameter constraints for engine calls
 var EngineFuncFactory func(nT int64, fnCbk interface{})
 
-// 全局引擎
+// global engine
 var G_Engine interface{}
 var SendEvent func(evt *models.EventData, argsTypes ...int64)
 
-// 反射调用
+// reflection-based invocation
 func Invoke(iFunc interface{}, args ...interface{}) {
 	if nil != args && 0 < len(args) {
 		in := inject.New()

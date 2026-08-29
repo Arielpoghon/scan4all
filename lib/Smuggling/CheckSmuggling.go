@@ -13,7 +13,7 @@ func E2EC(s string) string {
 	return strings.ReplaceAll(s, "\n", "\r\n")
 }
 
-// 接口定义
+// Interface definition
 type Smuggling interface {
 	CheckResponse(body string, payload string) bool
 	GetPayloads(t *socket.CheckTarget) *[]string
@@ -44,15 +44,15 @@ func checkSmuggling4Poc(ClTePayload *[]string, nTimes int, r1 *Smuggling, r *soc
 
 /*
 	 check HTTP Request Smuggling
-	   可以利用走私尝试访问，被常规手段屏蔽的路径，例如 weblogic 的页面
+	 Smuggling can be used to try to access paths blocked by conventional means, e.g. weblogic pages
 	  https://portswigger.net/web-security/request-smuggling/finding
 	  https://hackerone.com/reports/1630668
 	  https://github.com/nodejs/llhttp/blob/master/src/llhttp/http.ts#L483
-	  1、每个目标的登陆页面只做一次检测，也就是发现你登陆页面的路径可以做一次检测
-	  2、每个目标相同上下文的页面只做一次检测，爬虫发现的不同上下文各做一次检测
-	  szBody 是为了 相同url 相同payload 的情况下，只发一次请求，进行多次判断而设计，Smuggling 的场景通常不存在
+	  1. For each target, the login page is only tested once, i.e. once a login page path is found it is tested once
+	  2. For each target, pages with the same context are tested only once; different contexts discovered by the crawler are each tested once
+	  szBody is designed so that for the same url and same payload, the request is only sent once while being judged multiple times; such scenarios usually do not exist for Smuggling
 
-	 做一次 http
+	 do one http
 		util.PocCheck_pipe <- &util.PocCheck{
 			Wappalyzertechnologies: &[]string{"httpCheckSmuggling"},
 			URL:                    finalURL,
@@ -76,13 +76,13 @@ func DoCheckSmuggling(szUrl string, szBody string) {
 	}
 }
 
-// 构造走私，用来访问被屏蔽的页面
+// Build a smuggling request used to access blocked pages
 //
-//	确认存在走私漏洞后，可以继续基于走私 走以便filefuzz
-//	1、首先 szUrl必须是可访问的 200，否则可能会导致误判
-//	@szUrl 设施走私的目标
-//	@smugglinUrlPath 希望走私能访问到到页面，例如 /console
-//	@secHost 第二段头的host
+//	After confirming the smuggling vulnerability exists, you can continue file fuzzing based on it
+//	1. szUrl must be accessible (return 200), otherwise it may cause false positives
+//	@szUrl the smuggling target
+//	@smugglinUrlPath the page you want smuggling to reach, e.g. /console
+//	@secHost the host of the second request's header
 func GenerateHttpSmugglingPay(szUrl, smugglinUrlPath, secHost string) string {
 	a := []string{`POST %s HTTP/1.1
 Host: %s

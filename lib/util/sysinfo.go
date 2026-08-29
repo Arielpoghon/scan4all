@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// 分区
+// partition
 type Part struct {
 	Path        string  `json:"path"`
 	FsType      string  `json:"fstype"`
@@ -22,7 +22,7 @@ type Part struct {
 	UsedPercent int     `json:"usedPercent"`
 }
 
-// 分区集合
+// partition set
 type Parts []Part
 
 // CPU
@@ -43,7 +43,7 @@ func decimal(v string) float64 {
 	return value
 }
 
-// 1.主机IP
+// 1. host IP
 func GetLocalIP() (ip string) {
 	addresses, err := systemNet.InterfaceAddrs()
 	if err != nil {
@@ -65,13 +65,13 @@ func GetLocalIP() (ip string) {
 	return ""
 }
 
-// 2.主机信息
+// 2. host info
 func GetHostInfo() (result *host.InfoStat, err error) {
 	result, err = host.Info()
 	return result, err
 }
 
-// 3.磁盘信息
+// 3. disk info
 func GetDiskInfo() (result Parts, err error) {
 	parts, err := disk.Partitions(true)
 	if err != nil {
@@ -95,7 +95,7 @@ func GetDiskInfo() (result Parts, err error) {
 	return result, err
 }
 
-// 4.CPU使用率
+// 4. CPU usage
 func GetCpuPercent() (result CpuInfo, err error) {
 	infos, err := cpu.Percent(1*time.Second, true)
 	if err != nil {
@@ -113,7 +113,7 @@ func GetCpuPercent() (result CpuInfo, err error) {
 	return result, err
 }
 
-// 5.内存信息
+// 5. memory info
 func GetMemInfo() (float64, []map[string]interface{}) {
 	info, err := mem.VirtualMemory()
 	if err != nil {
@@ -121,14 +121,14 @@ func GetMemInfo() (float64, []map[string]interface{}) {
 		return 0, nil
 	}
 	return decimal(fmt.Sprintf("%.1f", info.UsedPercent)), []map[string]interface{}{
-		{"key": "使用率[%]", "value": decimal(fmt.Sprintf("%.1f", info.UsedPercent))},
-		{"key": "总量[GB]", "value": int(info.Total / GB)},
-		{"key": "使用量[GB]", "value": int(info.Used / GB)},
-		{"key": "剩余量[GB]", "value": int(info.Free / GB)},
+		{"key": "Usage[%]", "value": decimal(fmt.Sprintf("%.1f", info.UsedPercent))},
+		{"key": "Total[GB]", "value": int(info.Total / GB)},
+		{"key": "Used[GB]", "value": int(info.Used / GB)},
+		{"key": "Free[GB]", "value": int(info.Free / GB)},
 	}
 }
 
-// 6.获取网卡信息
+// 6. get network interface info
 func GetNetInfo() (result []net.IOCountersStat, err error) {
 	info, err := net.IOCounters(true)
 	if err != nil {
@@ -137,7 +137,7 @@ func GetNetInfo() (result []net.IOCountersStat, err error) {
 	return info, err
 }
 
-// 7.计算上下行带宽
+// 7. compute upload/download bandwidth
 func GetNetSpeed() (speed map[string]map[string]uint64, err error) {
 	speed = map[string]map[string]uint64{}
 	info, err := net.IOCounters(true)

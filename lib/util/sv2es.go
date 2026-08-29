@@ -42,7 +42,7 @@ func initEs() {
 
 func init() {
 	RegInitFunc(func() {
-		// 保存数据也采用统一的线程池
+		// Data saving also uses a unified thread pool
 		EngineFuncFactory(Const.ScanType_SaveEs, func(evt *models.EventData, args ...interface{}) {
 			SendReq(args[0].(interface{}), args[1].(string), args[2].(ESaveType))
 		})
@@ -53,18 +53,18 @@ func Log(v ...any) {
 	log.Println(v...)
 }
 
-// 简单结果
+// Simple result
 type SimpleVulResult struct {
 	Url      string        `json:"url"`
-	VulKind  string        `json:"vulKind"`   // 结果分类
-	VulType  string        `json:"vulType"`   // 漏洞类型
-	Payload  string        `json:"payload"`   // 攻击、检测一类的结果时，当前的payload
-	Msg      string        `json:"msg"`       // 其他消息
-	ScanType int64         `json:"scan_type"` // 扫描类型
-	ScanData []interface{} `json:"scan_data"` // 扫描结果，例如 masscan端口扫描、nmap
+	VulKind  string        `json:"vulKind"`   // result category
+	VulType  string        `json:"vulType"`   // vulnerability type
+	Payload  string        `json:"payload"`   // the current payload when it is an attack/detection result
+	Msg      string        `json:"msg"`       // other message
+	ScanType int64         `json:"scan_type"` // scan type
+	ScanData []interface{} `json:"scan_data"` // scan results, e.g. masscan port scan, nmap
 }
 
-// 一定得有全局得线程等待
+// There must be a global thread wait
 func SendAnyData(data interface{}, szType ESaveType) {
 	if enableEsSv {
 		data1, _ := json.Marshal(data)
@@ -88,12 +88,12 @@ func SendAData[T any](k string, data []T, szType ESaveType) {
 	}
 }
 
-// es 需要基于buffer，避免太频繁
-// 发送数据到ES
+// es should be buffer-based to avoid being too frequent
+// send data to ES
 //
-//	data1数据
-//	id 数据计算出来的id
-//	szType 类型，决定 es不通的索引分类
+//	data1 the data
+//	id the id computed from the data
+//	szType the type, determines the different es index categories
 func SendReq(data1 interface{}, id string, szType ESaveType) {
 	if !enableEsSv {
 		return

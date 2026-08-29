@@ -2,31 +2,31 @@ package util
 
 import "net/http"
 
-// fuzz 响应对象封装
+// Encapsulation of the fuzz response object
 type Response struct {
 	Status        string
 	StatusCode    int
 	Body          string
-	Header        *http.Header // 不用负责对象，引用，节约内存开销
+	Header        *http.Header // no need to own the object; use a reference to save memory
 	ContentLength int          `json:"content_length"`
 	RequestUrl    string       `json:"request_url"`
 	Location      string       `json:"location"`
 	Protocol      string       `json:"protocol"`
 }
 
-// fuzz请求返回的结果
-// 尽可能使用指针，节约内存开销
+// The result returned by a fuzz request
+// Use pointers where possible to save memory
 type Page struct {
-	IsBackUpPath bool         // 备份、敏感泄露文件检测请求url
-	IsBackUpPage bool         // 发现备份、敏感泄露文件
-	Title        *string      // 标题
-	LocationUrl  *string      // 跳转页面
-	Is302        bool         // 是302页面
-	Is403        bool         // 403页面
-	Url          *string      // 作为本地永久缓存key，提高执行效率
+	IsBackUpPath bool         // the request url for backup/sensitive file leakage detection
+	IsBackUpPage bool         // found backup/sensitive leaked files
+	Title        *string      // title
+	LocationUrl  *string      // redirect page
+	Is302        bool         // is a 302 page
+	Is403        bool         // 403 page
+	Url          *string      // used as a local persistent cache key to improve efficiency
 	BodyStr      *string      // body = trim() + ToLower
-	BodyLen      int          // body 长度
-	Header       *http.Header // 基于指针，节约内存空间
-	StatusCode   int          // 状态码
-	Resqonse     *Response    // 基于指针，节约内存空间
+	BodyLen      int          // body length
+	Header       *http.Header // pointer-based to save memory
+	StatusCode   int          // status code
+	Resqonse     *Response    // pointer-based to save memory
 }

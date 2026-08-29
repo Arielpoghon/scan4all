@@ -15,7 +15,7 @@ import (
 	"runtime"
 )
 
-// 逐步实现支持 多实例 接口 运行
+// Gradually implement support for running multiple instance interfaces
 func StartScan(oOpts *map[string]interface{}) {
 	util.DoSyncFunc(func() {
 		//buf1 := bytes.Buffer{}
@@ -29,9 +29,9 @@ func StartScan(oOpts *map[string]interface{}) {
 		//if options.Ports != "" {
 		//	os.Setenv("priorityNmap", "false")
 		//}
-		// 压入外部参数
+		// Inject external parameters
 		if nil != oOpts {
-			// 指定覆盖
+			// Specific override
 			data, err := json.Marshal(oOpts)
 			if nil == err && 0 < len(data) {
 				err := json.Unmarshal(data, options)
@@ -46,7 +46,7 @@ func StartScan(oOpts *map[string]interface{}) {
 			log.SetOutput(io.Discard)
 		}
 		util.Output = options.Output
-		// 这里需要解决、优化为非单实例 模式
+		// TODO: resolve/optimize to a non-single-instance mode
 		util.G_Options = map[string]interface{}{
 			"Output":            options.Output,
 			"JSON":              options.JSON,
@@ -54,7 +54,7 @@ func StartScan(oOpts *map[string]interface{}) {
 			"Verbose":           options.Verbose,
 			"Silent":            options.Silent,
 			"Debug":             options.Debug,
-			"EnableProgressBar": options.EnableProgressBar, // 开启进度条
+			"EnableProgressBar": options.EnableProgressBar, // enable progress bar
 		}
 
 		if runtime.GOOS == "windows" {
@@ -67,7 +67,7 @@ func StartScan(oOpts *map[string]interface{}) {
 		}
 		noScan := util.GetValAsBool("noScan")
 
-		// 直接使用 nmap xml结果文件
+		// Directly use the nmap xml result file
 		if hydra.DoNmapWithFile(options.HostsFile, &naaburunner.Naabubuffer) {
 			os.Setenv("noScan", "true")
 			naabuRunner.Close()
