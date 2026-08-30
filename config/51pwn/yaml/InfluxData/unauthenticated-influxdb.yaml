@@ -1,0 +1,32 @@
+id: unauthenticated-influxdb
+info:
+  name: Unauthentication InfluxDB Detection
+  author:
+  - l0ne1y
+  description: |-
+    InfluxData database unauthorized access
+    InfluxDB is a time series database (TSDB) designed to handle high write and query loads, and is part of the TICK stack.
+    When misconfigured, the database can be accessed without authorization.
+  severity: high
+  remediation: |-
+    1. Enable all security mechanisms
+    2. Apply the principle of least privilege; disable or restrict unused services
+    3. Change default account credentials
+    4. Use logging and alerting
+    5. Do not expose any information related to actual errors in responses
+    6. Review and fix security configuration items
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - '"results":'
+    - '"name":"databases"'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/query?db=db&q=SHOW%20DATABASES'
+  method: GET

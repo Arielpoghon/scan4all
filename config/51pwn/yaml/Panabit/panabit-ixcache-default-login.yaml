@@ -1,0 +1,40 @@
+id: panabit-ixcache-default-login
+info:
+  name: Panabit iXCache Default Login
+  author:
+  - ritikchaddha
+  description: |-
+    Panabit iXCache weak password vulnerability
+    iXCache is a network application-layer cache acceleration engine software developed by Beijing Paiwang Software Co., Ltd. based on the PanaOS operating system.
+
+    Beijing Paiwang Software Co., Ltd. iXCache has a weak password vulnerability. An attacker can exploit it to obtain sensitive information.
+  severity: medium
+  remediation: |-
+    Fix:
+    1. System administrators should immediately change discovered weak passwords to strong ones.
+    2. Weak password prevention hinges on management. Enterprises should establish a strong password policy (e.g., passwords must contain at least three of uppercase letters, lowercase letters, digits, and special characters, be at least ten characters long, use an unpredictable keyboard pattern, and have no connection to corporate or personal information).
+    3. Weak passwords can be discovered either by aggregating all employee accounts and checking them against strong password rules, or by personalized dictionary-based brute-force testing.
+    4. Recommended online strong password generator: [https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    5. Recommended online password strength checker: [https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - URL=/cgi-bin/monitor.cgi
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  raw:
+  - |
+    POST /login/userverify.cgi HTTP/1.1
+    Host: {{Hostname}}
+
+    username={{username}}&password={{password}}
+  attack: pitchfork
+  payloads:
+    password:
+    - ixcache
+    username:
+    - admin

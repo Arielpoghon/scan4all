@@ -1,0 +1,27 @@
+id: druid-monitor
+info:
+  name: Druid Monitor Unauthorized Access
+  author:
+  - l0ne1y
+  description: |-
+    Druid Monitor unauthorized access vulnerability
+    Druid is a data source open-sourced by Alibaba, mainly used for Java database connection pooling. By default, the Druid page can be accessed directly without authorization. An attacker can exploit this unauthorized access vulnerability to obtain sensitive information.
+  severity: high
+  remediation: |
+    Official fix:
+    Upgrade to the latest official version: https://github.com/alibaba/druid
+
+    Temporary fix:
+    Add access control measures to Druid; see https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_StatViewServlet%E9%85%8D%E7%BD%AE
+requests:
+- matchers:
+  - type: word
+    words:
+    - Druid Stat Index</title>
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/druid/index.html'
+  method: GET

