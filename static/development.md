@@ -39,7 +39,7 @@ The background weak password detection has two built-in accounts admin/test, wit
 
 For example:
 
-`http://127.0.0.1:8080 [302,200] [登录 - 后台] [exp-shiro|key:Z3VucwAAAAAAAAAAAAAAAA==,Java,LoginPage,brute-admin|admin:123456] [http://127.0.0.1:8080/login]`
+`http://127.0.0.1:8080 [302,200] [Login - Backend] [exp-shiro|key:Z3VucwAAAAAAAAAAAAAAAA==,Java,LoginPage,brute-admin|admin:123456] [http://127.0.0.1:8080/login]`
 
 Includes weak password detection modules
 1. Smart weak password detection for backgrounds that do not use captchas or frontend frameworks such as vue

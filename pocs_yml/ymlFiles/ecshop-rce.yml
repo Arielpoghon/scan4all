@@ -27,6 +27,6 @@ rules:
         expression: response.status == 200 && response.body.bcontains(bytes(string(r1 * r2)))
 expression: v2x0() || v3x0()
 detail:
-    author: 凉风(http://webkiller.cn/)
+    author: LiangFeng (http://webkiller.cn/)
     links:
         - https://github.com/vulhub/vulhub/blob/master/ecshop/xianzhi-2017-02-82239600/README.zh-cn.md

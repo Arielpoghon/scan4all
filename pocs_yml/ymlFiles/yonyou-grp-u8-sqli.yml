@@ -15,6 +15,6 @@ rules:
         expression: response.status == 200 && response.body.bcontains(bytes(string(r1 * r2)))
 expression: r0()
 detail:
-    author: 凉风(http://webkiller.cn/)
+    author: LiangFeng (http://webkiller.cn/)
     links:
         - https://www.hacking8.com/bug-web/%E7%94%A8%E5%8F%8B/%E7%94%A8%E5%8F%8B-GRP-u8%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E.html

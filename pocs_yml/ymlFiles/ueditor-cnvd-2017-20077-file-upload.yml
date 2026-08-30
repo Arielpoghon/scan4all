@@ -13,7 +13,7 @@ rules:
         expression: response.status == 200 && response.body.bcontains(bytes(string("没有指定抓取源")))
 expression: r0()
 detail:
-    author: 清风明月(www.secbook.info)
+    author: QingfengMingyue (www.secbook.info)
     links:
         - https://zhuanlan.zhihu.com/p/85265552
         - https://www.freebuf.com/vuls/181814.html

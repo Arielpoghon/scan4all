@@ -16,7 +16,7 @@ rules:
         expression: response.body.bcontains(bytes(substr(md5(string(r1)), 0, 31)))
 expression: r0()
 detail:
-    author: 南方有梦(https://github.com/hackgov)
+    author: NanfangYoumeng (https://github.com/hackgov)
     links:
         - https://www.exploit-db.com/exploits/46227
     Affected Version: 1.9.11
