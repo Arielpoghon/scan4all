@@ -1,0 +1,36 @@
+id: CNVD-2016-08603
+info:
+  name: Beijing Netentsec NS-ICG Internet Control Gateway Weak Password Vulnerability
+  author:
+  - l0ne1y
+  tags:
+  - natshell
+  - rce
+  description: |-
+    Netentsec NS-ICG Internet Control Gateway Default Password Vulnerability
+    The Beijing Netentsec NS-ICG Internet Control Gateway is an integrated hardware-software Internet control and management product.
+
+    The Beijing Netentsec NS-ICG Internet Control Gateway has a default account ns25000/ns25000, which allows attackers to log in to the system successfully and obtain sensitive information.
+  reference:
+  - https://www.cnvd.org.cn/flaw/show/cnvd-2016-08603
+  severity: critical
+  remediation: |-
+    1. It is recommended that system administrators immediately change any detected weak passwords to strong ones and comprehensively audit all system administrator, user, and device weak passwords to eliminate any undiscovered weak passwords.
+    2. Weak-password prevention depends on management. Enterprises should establish a strong-password policy (e.g., passwords must contain at least three of the following: uppercase letters, lowercase letters, digits, and special characters; be at least ten characters long; avoid sequential keyboard patterns; and be unrelated to corporate or personal information).
+    3. Weak-password auditing can be done in two ways: aggregating all employee accounts and performing self-checks against the strong-password rules, or running dictionary-based brute-force attacks with personalized wordlists.
+    4. Recommended online strong-password generator: [https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    5. Recommended online password-strength checker: [https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: word
+    words:
+    - '"agreed":true'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/user/login/checkPermit'
+  method: POST
+  body: |
+    usrname=ns25000&pass=ns25000

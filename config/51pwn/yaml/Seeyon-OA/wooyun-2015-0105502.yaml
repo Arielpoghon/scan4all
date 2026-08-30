@@ -1,0 +1,37 @@
+id: wooyun-2015-0105502
+info:
+  name: Yonyou Zhiyuan A6 Multiple Unauthorized Access Issues
+  author:
+  - 折跃
+  description: |-
+    Yonyou Zhiyuan A6 Multiple Unauthorized Access Vulnerabilities
+    Yonyou Zhiyuan A6 Collaborative Management System is an efficient web-based collaborative work platform and an excellent collaborative management system.
+
+    Yonyou Zhiyuan A6 has an unauthorized access vulnerability. This vulnerability stems from the network system or product failing to properly restrict resource access from unauthorized roles, resulting in information disclosure.
+  severity: medium
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.seeyon.com/
+
+    Temporary remediation:
+    1. Validate user input on both the frontend and the backend simultaneously as a dual verification mechanism.
+    2. Verify whether a user has permission to invoke a feature before calling it.
+    3. Remove sensitive information exposed on pages or delete the pages that leak information
+    4. Encrypt sensitive information at rest and avoid sending it to the frontend unless necessary
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'insertObject') || contains(body,'new personList') || contains(body,'FTP')
+  path:
+  - '{{BaseURL}}/yyoa/common/SelectPerson/reloadData.jsp'
+  - '{{BaseURL}}//yyoa/assess/js/initDataAssess.jsp'
+  - '{{BaseURL}}/yyoa/ext/trafaxserver/SystemManage/config.jsp'
+  - '{{BaseURL}}/yyoa/common/selectPersonNew/initData.jsp?trueName=1'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true

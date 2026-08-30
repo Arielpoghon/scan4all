@@ -1,0 +1,43 @@
+id: sangfor-edr-auth-bypass
+info:
+  name: Sangfor EDR Authentication Bypass
+  author:
+  - l0ne1y
+  description: |-
+    Sangfor EDR Arbitrary User Login Vulnerability
+    A vulnerability in Sangfor EDR allows remote attackers to access the system with "admin" privileges by directly accessing the login page with a provided username instead of logging in
+  severity: critical
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.sangfor.com.cn/product/
+    Temporary remediation:
+    1. Validate user input on both the frontend and the backend simultaneously as a dual verification mechanism.
+    2. Verify whether a user has permission to invoke a feature before calling it.
+    3. Encrypt resource IDs used in direct object references to prevent attackers from enumerating IDs, and handle sensitive data specially.
+    4. Adopt a mature permission management framework, such as Spring Security.
+    5. Prefer obtaining credentials used for access operations (such as user IDs, product numbers, order serial numbers, etc.) from server-side session association or by storing encrypted values in the session.
+    6. When credentials used for access operations (such as user IDs, product numbers, order serial numbers, etc.) must be submitted via forms or other parameters, use hard-to-guess constructions (e.g., adding letters and random digits) or encrypt them with strong algorithms before submission. Strictly verify the submitted credentials against the session's privileges, e.g., whether the submitted product number belongs to the logged-in user.
+    7. Enforce strict permission verification on administrative function modules; if not strictly necessary, avoid exposing them to the internet or apply network-level access control.
+requests:
+- matchers:
+  - type: word
+    part: body
+    words:
+    - /download/edr_installer_
+  - type: word
+    part: header
+    negative: true
+    words:
+    - Set-Cookie=""
+  - type: word
+    part: header
+    words:
+    - Set-Cookie=
+  - type: status
+    status:
+    - 302
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/ui/login.php?user=admin'
+  method: GET

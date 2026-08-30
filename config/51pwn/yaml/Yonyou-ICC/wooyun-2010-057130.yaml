@@ -1,0 +1,33 @@
+id: wooyun-2010-057130
+info:
+  name: Yonyou ICC Customer Service System Path Disclosure
+  author:
+  - 折跃
+  description: |-
+    Yonyou ICC System Path Disclosure
+    Yonyou ICC is Yonyou's enterprise-level Internet call center and application solution. ICC stands for "Internet Call Center".
+
+    Yonyou ICC has a system path disclosure issue.
+  severity: low
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.yonyou.com/
+
+    Temporary remediation:
+    1. Suppress error-message output.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - regex('#32;(&#47;|/)([^<]+)(\d+)(.*)<br>',body)
+  path:
+  - '{{BaseURL}}/birt/document?__document=1'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'

