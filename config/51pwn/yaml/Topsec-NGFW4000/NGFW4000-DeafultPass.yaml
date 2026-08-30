@@ -1,0 +1,31 @@
+id: NGFW4000-DeafultPass
+info:
+  name: Topsec Firewall NGFW4000(TG-1509) default weak password
+  author:
+  - l0ne1y
+  description: |-
+    Topsec NGFW4000(TG-1509) weak password vulnerability
+    Topsec NGFW4000(TG-1509) is a firewall product of Topsec.
+
+    Topsec NGFW4000(TG-1509) has weak credentials.
+  severity: high
+  remediation: |-
+    Remedy:
+    1. It is recommended that system administrators immediately change found weak passwords to strong ones, conduct a comprehensive sweep of weak passwords across all system administrators, users and devices, and clean up any discovered weak passwords.
+    2. Weak passwords depend on management. Enterprises should formulate a strong password policy (e.g., passwords must include at least three formats among uppercase letters, lowercase letters, numbers and special characters, be no shorter than ten characters, arranged non-sequentially on the keyboard, and unrelated to corporate or personal information.
+    3. Weak passwords can be checked by aggregating all employee accounts and self-checking against strong password rules, or by brute forcing with a personalized dictionary.
+    4. Recommended strong password generator:[https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    5. Recommended password strength checker:[https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: word
+    words:
+    - window.location="maincgi.cgi?Url=Main"
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/cgi/maincgi.cgi?Url=Index'
+  method: POST
+  body: username=superman&passwd=talent&loginSubmitIpt=%B5%C7%C2%BC

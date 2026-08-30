@@ -1,0 +1,30 @@
+id: ueditor_1433_net-upload-catchimage
+info:
+  name: UEditor Arbitrary File Upload
+  author:
+  - princechaddha
+  description: |-
+    UEditor .Net 1.4.3.3 arbitrary file upload vulnerability
+    UEditor is an open-source WYSIWYG rich text editor that is lightweight, customizable and offers an excellent user experience, and is widely used by WEB applications. The high-severity vulnerability disclosed this time affects the .NET version; the other versions are not affected for the moment. The root cause is that when fetching remote data sources, the file extension is not validated, leading to an arbitrary file write vulnerability that hackers can use to execute arbitrary commands on the server, with an overall rating of high severity. Please forgive any inaccuracies in this analysis due to time constraints.
+  severity: critical
+  remediation: |-
+    Official remedy:
+    1. Upgrade the system to a non-vulnerable version, or download the security patch from the official website.
+
+    Temporary remedy:
+    1. Modify the net/App_Code/CrawlerHandler.cs file in the project directory to add code that checks the file type.
+    2. Use various WAF software to prevent attackers from uploading malicious files.
+    3. Check whether there are recently uploaded malformed images in the upload path, and whether dangerous files such as asp or aspx exist. If abnormal files are found, judge and delete them in a timely manner.
+requests:
+- matchers:
+  - type: status
+    status:
+    - 200
+  - type: word
+    part: body
+    words:
+    - 没有指定抓取源
+  matchers-condition: and
+  path:
+  - '{{BaseURL}}/ueditor/net/controller.ashx?action=catchimage&encode=utf-8'
+  method: GET

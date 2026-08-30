@@ -1,0 +1,30 @@
+id: WEB-Gateway-FileDownlaod
+info:
+  name: Topsec WEB Application Security Gateway arbitrary file read
+  author:
+  - l0ne1y
+  description: |-
+    Topsec WEB Application Security Gateway system arbitrary file read vulnerability
+    The Topsec WEB Application Security Gateway system is an industrialized product tailored for "website-type" servers.
+
+    The Topsec WEB Application Security Gateway system has an arbitrary file read vulnerability. Attackers can exploit it to read arbitrary file contents.
+  severity: medium
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.topsec.com.cn/
+
+    Temporary remedy:
+    1. Filter "." so that users cannot traverse to parent directories in the URL.
+    2. Use regular expressions to strictly validate the format of user input parameters, hard-code or uniformly encode the file name parameters passed by users, control file types via a whitelist, and reject parameters containing malicious or empty characters.
+    3. Prohibit the system from providing directory traversal services, e.g., configure open_basedir in php.ini to limit the file access scope.
+    4. Store file paths in the database and let users submit the file ID to download files.
+    5. Perform permission checks before users download files.
+requests:
+- matchers:
+  - type: dsl
+    dsl:
+    - status_code==200 && contains(body,"?php") && contains(body,"file_get_contents")
+  path:
+  - '{{BaseURL}}/function/content/tamper/file_tamper_show.php?filename=file_tamper_show.php'
+  method: GET

