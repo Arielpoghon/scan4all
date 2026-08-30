@@ -1,24 +1,24 @@
 {
-    "Name": "摄像头检测",
-    "Description": " 摄像头专项检测",
+    "Name": "Shiro Detection",
+    "Description": "Shiro Detection",
     "Product": "apache",
     "author": "chumeng",
     "Request":[
         {
         "Method": "GET",
-        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
+        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36","Cookie":"rememberMe=1"},
         "Uri":"/",
         "Port":"",
         "Data":"",
-        "Follow_redirects":"false",
+        "Follow_redirects":"true",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{
         "Check_Steps":"AND",
         "Checks": [
                 {
                 "Operation": "contains", 
-                "Key":"",
-                "Value": "doc/page/login."
+                "Key":"Set-Cookie",
+                "Value": "rememberMe=deleteMe"
                 },
                  {
                 "Operation": "code", 

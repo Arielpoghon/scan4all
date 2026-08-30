@@ -1,6 +1,6 @@
 {
-    "Name": "uWSGI 目录穿越",
-    "Description": "uWSGI是一款Web应用程序服务器，它实现了WSGI、uwsgi和http等协议，并支持通过插件来运行各种语言,uWSGI 2.0.17之前的PHP插件，没有正确的处理DOCUMENT_ROOT检测，导致用户可以通过..%2f来跨越目录，读取或运行DOCUMENT_ROOT目录以外的文件",
+    "Name": "uWSGI Directory Traversal",
+    "Description": "uWSGI is a Web application server that implements protocols such as WSGI, uwsgi and http, and supports running various languages through plugins. The PHP plugin in uWSGI versions prior to 2.0.17 does not correctly handle DOCUMENT_ROOT detection, allowing users to use ..%2f to traverse directories and read or run files outside the DOCUMENT_ROOT directory.",
     "Product": "uWSGI",
     "author": "chumeng",
     "Request":[

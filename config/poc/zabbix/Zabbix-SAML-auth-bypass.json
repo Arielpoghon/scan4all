@@ -1,6 +1,6 @@
 {
-    "Name": "Zabbix SAML身份绕过漏洞",
-    "Description": "Zabbix SAML身份绕过漏洞 CVE-2022-23131",
+    "Name": "Zabbix SAML Authentication Bypass",
+    "Description": "Zabbix SAML Authentication Bypass CVE-2022-23131",
     "Product": "zabbix",
     "author": "chumeng",
     "Request":[
