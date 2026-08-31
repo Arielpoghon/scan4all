@@ -1,21 +1,21 @@
 id: Metinfo-Front-Getshell
 info:
-  name: MetInfo_前台GETSHELL
+  name: MetInfo frontend GETSHELL
   author:
   - l0ne1y
   description: |-
-    MetInfo_前台命令执行GETSHELL漏洞
-    MetInfo是一款适合企业建站的开源免费CMS建站系统，MetInfo企业网站管理系统主要用于搭建企业网站，采用PHP+Mysql架构。
+    MetInfo frontend command execution GETSHELL vulnerability.
+    MetInfo is an open-source, free CMS building system suitable for enterprise websites. The MetInfo enterprise website management system is mainly used to build enterprise websites and uses a PHP+Mysql architecture.
 
-    MetInfoCMS中admin/include/common.inc.php页面存在命令执行漏洞，攻击者可利用此漏洞来获取敏感信息。
+    In MetInfoCMS, the admin/include/common.inc.php page has a command execution vulnerability. An attacker can exploit it to obtain sensitive information.
   reference:
   - http://wooyun.org/bugs/wooyun-2015-094886
   severity: critical
   remediation: |-
-    官方修复方案：<br />1、升级系统至无漏洞版本，或于官网下载安全补丁
+    Official Fix:<br />1. Upgrade to a non-vulnerable version of the system, or download the security patch from the official site.
     https://www.mituo.cn/
 
-    临时修复方案：<br />1、尽量不去执行外部的应用程序或命令。<br />2、使用自定义函数或函数库实现外部应用程序或命令的功能。<br />3、在执行system、eval等命令执行功能的函数前，校验参数内容。<br />4、使用escapeshellarg函数处理相关参数。Escapeshellarg函数会将任何引起参数或命令结束的字符进行转义，如单引号“’”会被转义为“\\’”，双引号“””会被转义为“\\””，分号“;”会被转义为“\\;”，这样escapeshellarg会将参数内容限制在一对单引号或双引号里面，转义参数中所包含的单引号或双引号，使其无法对当前执行进行截断，实现防范命令注入攻击的目的。<br />5、使用safe_mode_exec_dir执行可执行的文件路径。将php.ini文件中的safe_mode设置为On，然后将允许执行的文件放入一个目录中，并使用safe_mode_exec_dir指定这个可执行的文件路径。在需要执行相应的外部程序时，程序必须在safe_mode_exec_dir指定的目录中才会允许执行，否则执行将失败。'
+    Temporary Fix:<br />1. Avoid executing external applications or commands whenever possible.<br />2. Use custom functions or function libraries to implement the functionality of external applications or commands.<br />3. Validate parameter content before executing functions that run commands, such as system and eval.<br />4. Use the escapeshellarg function to handle related parameters. escapeshellarg escapes any characters that could terminate arguments or commands. For example, a single quote is escaped, a double quote is escaped, and a semicolon (";") is escaped, restricting the parameter content within a pair of single or double quotes, escaping any single or double quotes it contains so they cannot truncate the current execution, thereby preventing command injection attacks.<br />5. Use safe_mode_exec_dir to specify the path for executable files. Set safe_mode in php.ini to On, place the allowed executable files in a directory, and use safe_mode_exec_dir to specify that executable file path. When an external program needs to run, it will only be allowed to execute if it is in the directory specified by safe_mode_exec_dir; otherwise execution will fail.
 requests:
 - matchers:
   - type: dsl

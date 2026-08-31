@@ -1,28 +1,28 @@
 id: JCMS-Que_Recemsg_Jsp-SQLi
 info:
-  name: 大汉JCMS que_recemsg.jsp 注入漏洞
+  name: Hanweb JCMS que_recemsg.jsp injection vulnerability
   author:
   - l0ne1y
   description: |-
-    大汉JCMS que_recemsg.jsp SQL注入漏洞
-    大汉JCMS是一款内容管理系统，基于J2EE构架设计。系统提供了从内容采集、创建、管理、传递、发布、共享呈送等信息全生命周期过程中所需的各项功能。
+    Hanweb JCMS que_recemsg.jsp SQL injection vulnerability.
+    Hanweb JCMS is a content management system designed on a J2EE architecture. The system provides all the functions needed throughout the information lifecycle, including content collection, creation, management, delivery, publishing, and shared distribution.
 
-    大汉JCMS存在SQL注入漏洞，攻击者可利用该漏洞执行SQL语句，对数据库中的信息进行查看、添加、修改或删除。
+    Hanweb JCMS has an SQL injection vulnerability. An attacker can exploit it to execute SQL statements and view, add, modify, or delete information in the database.
   severity: high
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official Fix:
+    1. It is recommended that users obtain the latest patch or the latest version from the official site:
     https://www.hanweb.com/
 
-    临时修复方案：
-    1、使用预编译语句，使用PDO需要注意不要将变量直接拼接到PDO语句中。所有的查询语句都使用数据库提供的参数化查询接口，参数化的语句使用参数而不是将用户输入变量嵌入到SQL语句中。当前几乎所有的数据库系统都提供了参数化SQL语句执行接口，使用此接口可以非常有效的防止SQL注入攻击。
-    2、对进入数据库的特殊字符（’”<>&*;等）进行转义处理，或编码转换。
-    3、确认每种数据的类型，比如数字型的数据就必须是数字，数据库中的存储字段必须对应为int型。
-    4、数据长度应该严格规定，能在一定程度上防止比较长的SQL注入语句无法正确执行。
-    5、网站每个数据层的编码统一，建议全部使用UTF-8编码，上下层编码不一致有可能导致一些过滤模型被绕过。
-    6、严格限制网站用户的数据库的操作权限，给此用户提供仅仅能够满足其工作的权限，从而最大限度的减少注入攻击对数据库的危害。
-    7、避免网站显示SQL错误信息，比如类型错误、字段不匹配等，防止攻击者利用这些错误信息进行一些判断。
-    8、过滤危险字符，例如：采用正则表达式匹配union、sleep、and、select、load_file等关键字，如果匹配到则终止运行。
+    Temporary Fix:
+    1. Use prepared statements. When using PDO, be careful not to concatenate variables directly into PDO statements. All queries should use the parameterized query interface provided by the database; parameterized statements use parameters instead of embedding user-input variables into SQL statements. Virtually all database systems provide a parameterized SQL execution interface, which can very effectively prevent SQL injection attacks.
+    2. Escape special characters (such as '"<>&*;) entering the database, or perform encoding conversion.
+    3. Validate the type of each piece of data; for example, numeric data must be numeric and the corresponding database field must be of type int.
+    4. Strictly enforce data length limits, which to some degree prevents long SQL injection statements from executing correctly.
+    5. Use consistent encoding across every data layer of the website; UTF-8 is recommended. Inconsistent encoding between layers may allow some filtering mechanisms to be bypassed.
+    6. Strictly limit the database privileges of the website user, granting only the privileges needed to perform their work, thereby minimizing the damage injection attacks can cause to the database.
+    7. Avoid displaying SQL error messages, such as type errors or field mismatches, to prevent attackers from using such error information for reconnaissance.
+    8. Filter dangerous characters; for example, use regular expressions to match keywords such as union, sleep, and, select, and load_file, and stop execution if matched.
 requests:
 - matchers:
   - type: dsl

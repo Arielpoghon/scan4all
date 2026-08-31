@@ -1,18 +1,18 @@
 id: Metinfo-V6_1_0-phpinfo
 info:
-  name: Metinfo v6.1.0 phpinfo.php 敏感信息泄露
+  name: Metinfo v6.1.0 phpinfo.php sensitive information disclosure
   author:
   - l0ne1y
   description: |-
-    Metinfo  v6.1.0 phpinfo.php 敏感信息泄露
-    MetInfo是一款采用PHP Mysql架构的企业网站管理系统。
-    MetInfo系统phpinfo新泄露。攻击者可利用此漏洞获取敏感信息。
+    Metinfo v6.1.0 phpinfo.php sensitive information disclosure.
+    MetInfo is an enterprise website management system based on a PHP Mysql architecture.
+    The MetInfo system has a phpinfo information disclosure. An attacker can exploit it to obtain sensitive information.
   severity: low
   remediation: |-
-    官方修复方案：
-    MetInfo 建议用户升级至最新版下载使用：
+    Official Fix:
+    MetInfo recommends that users upgrade to the latest version and download it for use:
     http://www.metinfo.cn/
-    临时修复方案：<br/>1、去除页面、cookie或缓存中涉及的敏感信息或删除泄露信息页面<br/>2、将敏感信息进行加密存储，非必要不可发送前端<br/>3、发送敏感信息时需加密传输，如有必要需脱敏处理<br/>4、禁止用自己开发的加密算法，必须使用公开、安全的标准加密算法。<br/>5、禁止在日志中记录明文的敏感数据：禁止在日志中记录明文的敏感数据（如口<br/>令、会话标识jsessionid等）， 防止敏感信息泄漏。<br/>6、禁止带有敏感数据的Web页面缓存：带有敏感数据的Web页面都应该禁止缓<br/>存，以防止敏感信息泄漏或通过代理服务器上网的用户数据互窜问题。<br/>7、对必须发送的敏感数据或页面请求接口做好严格的权限认证
+    Temporary Fix:<br/>1. Remove sensitive information involved in pages, cookies, or caches, or delete the pages that leak information.<br/>2. Store sensitive information encrypted; do not send it to the frontend unless necessary.<br/>3. Send sensitive information encrypted, and mask it if necessary.<br/>4. Do not use self-developed encryption algorithms; use public, secure standard encryption algorithms.<br/>5. Do not record plaintext sensitive data in logs (such as passwords or session identifiers like jsessionid), to prevent sensitive information leakage.<br/>6. Disable caching of web pages containing sensitive data. All pages with sensitive data should be non-cacheable, to prevent sensitive information leakage or cross-user data issues for users behind proxy servers.<br/>7. Enforce strict permission authentication for sensitive data that must be sent or for page request interfaces.
 requests:
 - matchers:
   - type: dsl

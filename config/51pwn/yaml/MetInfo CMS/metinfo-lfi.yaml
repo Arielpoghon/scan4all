@@ -7,21 +7,21 @@ info:
   - metinfo
   - lfi
   description: |-
-    Metinfo 6.0.0/6.1.0 任意文件读取漏洞
-    metinfo是由php与mysql开发的一套建站cms。在此cms的6.0.0-6.1.0版本中存在任意文件读取漏洞。攻击者可利用该漏洞读取目标服务器任意敏感文件。
+    Metinfo 6.0.0/6.1.0 arbitrary file read vulnerability.
+    metinfo is a website-building CMS developed with PHP and Mysql. Versions 6.0.0-6.1.0 of this CMS have an arbitrary file read vulnerability. An attacker can exploit it to read any sensitive file on the target server.
   reference:
   - https://paper.seebug.org/676/
   severity: high
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://www.metinfo.cn
+    Official Fix:
+    1. It is recommended that users obtain the latest patch or the latest version from the official site: https://www.metinfo.cn
 
-    临时修复方案：
-    1、过滤\".\"，使用户在url中不能回溯上级目录。
-    2、正则匹配严格判断用户输入参数的格式，对用户传过来的文件名参数进行硬编码或统一编码，对文件类型进行白名单控制，对包含恶意字符或者空字符的参数进行拒绝。
-    3、禁止系统提供目录遍历服务，如：php.ini配置open_basedir限定文件访问范围。
-    4、文件路径保存至数据库，让用户提交文件对应ID下载文件。
-    5、用户下载文件之前进行权限校验。
+    Temporary Fix:
+    1. Filter ".", preventing users from traversing to parent directories in the URL.
+    2. Use strict regular-expression validation of user-input parameter formats. Hard-code or uniformly encode filename parameters passed by the user, use a whitelist for file types, and reject parameters containing malicious or null characters.
+    3. Disable directory traversal services; for example, configure open_basedir in php.ini to restrict file access scope.
+    4. Store file paths in the database and let users download files by submitting the corresponding file ID.
+    5. Verify permissions before allowing a user to download a file.
 requests:
 - matchers:
   - type: word

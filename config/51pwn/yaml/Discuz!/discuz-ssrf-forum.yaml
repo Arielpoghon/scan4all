@@ -1,25 +1,25 @@
 id: discuz-ssrf-forum
 info:
-  name: discuz 3.x forum.php ssrf漏洞
+  name: Discuz 3.x forum.php SSRF vulnerability
   author:
   - 折跃
   description: |-
-    Discuz! 3.x forum.php 服务器端请求伪造（SSRF）漏洞
-    Discuz!是一套通用的社区论坛软件系统。
+    Discuz! 3.x forum.php server-side request forgery (SSRF) vulnerability.
+    Discuz! is a generic community forum software system.
 
-    Discuz! 3.x 中的forum.php文件存在服务器端请求伪造漏洞。
+    The forum.php file in Discuz! 3.x has a server-side request forgery vulnerability.
   severity: medium
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official Fix:
+    1. It is recommended that users obtain the latest patch or the latest version from the official site:
     http://discuz.net/
 
-    临时修复方案：
-    1、过滤内网服务器对公网服务器请求的响应。如果Web应用是获取某一类型的文件，在把返回结果展示给用户之前应先验证返回的信息是否符合文件类型标准，比如返回信息应为图片，如果返回信息是HTML，则停止将返回信息返回客户端。
-    2、统一错误提示信息，避免用户可以根据错误信息来判断远端服务器的端口状态。
-    3、在内网服务器的防火墙上限制公网服务器的请求端口为HTTP等协议常用端口，如：80、443、8080、8090。
-    4、若公网服务器的内网IP与内网无业务通信，建议将公网服务器对应的内网IP列入黑名单，避免应用被用来获取内网数据。
-    5、内网服务器禁用不必要的协议，仅允许HTTP和HTTPS请求，防止类似于file:///、gopher://、ftp:// 等协议引起的安全问题。
+    Temporary Fix:
+    1. Filter the responses to requests made by internal servers to public servers. If a web application fetches a certain type of file, it should first verify that the returned information meets the file type standard before showing it to the user. For example, if the returned data should be an image but is HTML, stop returning it to the client.
+    2. Standardize error messages to prevent users from determining the remote server port status based on error information.
+    3. On the internal server firewall, restrict the request ports from public servers to common protocol ports such as 80, 443, 8080, and 8090.
+    4. If the public server for the internal IP has no business communication with the internal network, it is recommended to add the corresponding internal IP to a blacklist to prevent the application from being used to obtain internal network data.
+    5. Disable unnecessary protocols on internal servers and allow only HTTP and HTTPS requests, to prevent security issues caused by protocols such as file:///, gopher://, and ftp://.
 requests:
 - matchers:
   - type: dsl

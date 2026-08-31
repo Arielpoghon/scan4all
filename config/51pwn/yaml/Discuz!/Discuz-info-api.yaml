@@ -1,21 +1,21 @@
 id: Discuz-info-api
 info:
-  name: Discuz x2.5 物理路径泄露漏洞
+  name: Discuz x2.5 physical path disclosure vulnerability
   author:
   - 折跃
   description: |-
-    Discuz! x2.5 物理路径泄露漏洞
-    Discuz!是一套通用的社区论坛软件系统。
+    Discuz! x2.5 physical path disclosure vulnerability.
+    Discuz! is a generic community forum software system.
 
-    Discuz! x2.5存在物理路径泄露漏洞。
+    Discuz! x2.5 has a physical path disclosure vulnerability.
   severity: low
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official Fix:
+    1. It is recommended that users obtain the latest patch or the latest version from the official site:
     http://discuz.net/
 
-    临时修复方案：
-    1、屏蔽报错信息输出
+    Temporary Fix:
+    1. Suppress the output of error messages.
 requests:
 - matchers:
   - type: dsl

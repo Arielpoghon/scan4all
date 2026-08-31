@@ -1,21 +1,21 @@
 id: Metinfo-V5_1_FileUpload-Getshell
 info:
-  name: MetInfo5.1任意文件上传getshell
+  name: MetInfo5.1 arbitrary file upload getshell
   author:
   - l0ne1y
   description: |-
-    MetInfoV5.1任意文件上传getshell
-    MetInfo是一款适合企业建站的开源免费CMS建站系统，MetInfo企业网站管理系统主要用于搭建企业网站，采用PHP+Mysql架构。
+    MetInfo V5.1 arbitrary file upload getshell.
+    MetInfo is an open-source, free CMS building system suitable for enterprise websites. The MetInfo enterprise website management system is mainly used to build enterprise websites and uses a PHP+Mysql architecture.
 
-    MetInfo V5.1版本中存在任意文件上传漏洞，攻击者可利用此漏洞来获取敏感信息。
+    MetInfo V5.1 has an arbitrary file upload vulnerability. An attacker can exploit it to obtain sensitive information.
   reference:
   - http://wooyun.org/bugs/wooyun-2015-094886
   severity: critical
   remediation: |-
-    官方修复方案：<br />1、升级系统至无漏洞版本，或于官网下载安全补丁。
+    Official Fix:<br />1. Upgrade to a non-vulnerable version of the system, or download the security patch from the official site.
     https://www.mituo.cn/
 
-    临时修复方案：<br />文件上传：<br />1、服务器端将文件上传目录直接设置为不可执行。<br />2、文件类型检查：建议使用白名单方式（比黑名单更可靠），并结合MIME Type、后缀检查等方式（文件类型做白名单限制）。此外对于图片的处理可以使用压缩函数或resize函数，处理图片的同时破坏其包含的HTML代码。<br />3、使用随机数改写文件名和文件路径，使得用户不能轻易访问自己上传的文件。<br />4、单独设置文件服务器的域名。<br />5、验证文件内容，使用正则匹配恶意代码（过滤恶意代码各种绕过方式，如大小写、BASE64编码）限制上传。<br />6、修复服务器可能存在的解析漏洞。<br />7、严格限制可以修改服务器配置的文件上传如：.htaccess。<br />8、隐藏上传文件路径。<br />9、升级Web Server。<br />10、及时修复Web上传代码。<br />11、不能有本地文件包含漏洞。<br />12、注意0x00截断攻击（PHP更新到最新版本）。
+    Temporary Fix:<br />File upload:<br />1. Set the server-side file upload directory to be non-executable.<br />2. File type check: it is recommended to use a whitelist approach (more reliable than a blacklist), combined with MIME type and extension checks (restrict file types via a whitelist). In addition, for images, use compression or resize functions, which break any embedded HTML code while processing the image.<br />3. Rename files and paths using random numbers so users cannot easily access the files they upload.<br />4. Set up a separate domain for the file server.<br />5. Validate file content using regular expressions to match malicious code (filtering various bypass techniques such as case variations and BASE64 encoding) to restrict uploads.<br />6. Fix any parsing vulnerabilities that may exist on the server.<br />7. Strictly restrict uploads of files that can modify server configuration, such as .htaccess.<br />8. Hide uploaded file paths.<br />9. Upgrade the web server.<br />10. Timely fix web upload code.<br />11. There must be no local file inclusion vulnerability.<br />12. Be aware of 0x00 truncation attacks (update PHP to the latest version).
 requests:
 - raw:
   - |

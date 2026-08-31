@@ -1,24 +1,24 @@
 id: discuz-info-config_ucenter
 info:
-  name: discuz config_ucenter.php 文件备份漏洞
+  name: Discuz config_ucenter.php backup file vulnerability
   author:
   - 折跃
   description: |-
-    Discuz! 备份文件泄露漏洞
-    Discuz!是一套通用的社区论坛软件系统。
+    Discuz! backup file disclosure vulnerability.
+    Discuz! is a generic community forum software system.
 
-    Discuz!存在备份文件泄露漏洞，攻击者可通过下载备份文件获取系统敏感信息。
+    Discuz! has a backup file disclosure vulnerability. An attacker can download backup files to obtain sensitive system information.
   severity: high
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official Fix:
+    1. It is recommended that users obtain the latest patch or the latest version from the official site:
     http://discuz.net/
 
-    临时修复方案：
-    1、去除页面中涉及的敏感信息或删除泄露信息的页面。
-    2、将敏感信息进行加密存储，非必要不可发送前端。
-    3、发送敏感信息时需加密传输，如有必要需脱敏处理。
-    4、禁止外部用户访问.bak等后缀文件
+    Temporary Fix:
+    1. Remove sensitive information involved in pages, or delete the pages that leak the information.
+    2. Store sensitive information encrypted; do not send it to the frontend unless necessary.
+    3. Transmit sensitive information encrypted, and mask it if necessary.
+    4. Prevent external users from accessing files with suffixes such as .bak.
 requests:
 - matchers:
   - type: dsl

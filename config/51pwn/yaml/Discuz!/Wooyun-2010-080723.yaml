@@ -1,22 +1,22 @@
 id: Wooyun-2010-080723
 info:
-  name: Discuz 7.x/6.x 全局变量防御绕过导致代码执行
+  name: Discuz 7.x/6.x global variable defense bypass leading to code execution
   author:
   - l0ne1y
   description: |-
-    Discuz! 6.x/7.x 全局变量防御绕过导致代码执行漏洞
-    Discuz!一套通用的社区论坛软件系统。
+    Discuz! 6.x/7.x global variable defense bypass leading to code execution vulnerability.
+    Discuz! is a generic community forum software system.
 
-    越权漏洞包括水平越权、垂直越权和未授权访问。在Web程序中由于权限控制不当，导致用户可以访问或操作到本身没有权限访问的数据即使越权访问。
+    Unauthorized-access vulnerabilities include horizontal privilege escalation, vertical privilege escalation, and unauthorized access. In web programs, improper permission control allows users to access or operate on data they are not authorized to access, i.e., unauthorized access.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official Fix:
+    1. It is recommended that users obtain the latest patch or the latest version from the official site:
     http://discuz.net/
 
-    临时修复方案：
-    1、在执行涉及到可以将字符串作为代码执行的函数时，需要严格验证用户传递的参数，同时尽量避免用户控制参数。
-    2、使用escapeshellarg函数处理相关参数。Escapeshellarg函数会将任何引起参数或命令结束的字符进行转义，如单引号“’”会被转义为“\\’”，双引号“””会被转义为“\\””，分号“;”会被转义为“\\;”，这样escapeshellarg会将参数内容限制在一对单引号或双引号里面，转义参数中所包含的单引号或双引号，使其无法对当前执行进行截断，实现防范命令注入攻击的目的。
+    Temporary Fix:
+    1. When executing functions that can evaluate strings as code, strictly validate the parameters passed by the user, and avoid letting users control parameters when possible.
+    Temporary Fix:<br />1. Avoid executing external applications or commands whenever possible.<br />2. Use custom functions or function libraries to implement the functionality of external applications or commands.<br />3. Validate parameter content before executing functions that run commands, such as system and eval.<br />4. Use the escapeshellarg function to handle related parameters. escapeshellarg escapes any characters that could terminate arguments or commands. For example, a single quote is escaped, a double quote is escaped, and a semicolon (";") is escaped, restricting the parameter content within a pair of single or double quotes, escaping any single or double quotes it contains so they cannot truncate the current execution, thereby preventing command injection attacks.
 requests:
 - matchers:
   - type: word

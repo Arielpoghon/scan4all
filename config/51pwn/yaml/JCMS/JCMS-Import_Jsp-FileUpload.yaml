@@ -1,30 +1,30 @@
 id: JCMS-Import_Jsp-FileUpload
 info:
-  name: 大汉JCMS import.jsp上传漏洞
+  name: Hanweb JCMS import.jsp upload vulnerability
   author:
   - l0ne1y
   description: |-
-    大汉JCMS import.jsp 任意文件上传漏洞
-    大汉JCMS是一款内容管理系统，基于J2EE构架设计。系统提供了从内容采集、创建、管理、传递、发布、共享呈送等信息全生命周期过程中所需的各项功能。
+    Hanweb JCMS import.jsp arbitrary file upload vulnerability.
+    Hanweb JCMS is a content management system designed on a J2EE architecture. The system provides all the functions needed throughout the information lifecycle, including content collection, creation, management, delivery, publishing, and shared distribution.
 
-    大汉JCMS存在任意文件上传漏洞。远程攻击者可以利用该漏洞上传文件并执行代码。
+    Hanweb JCMS has an arbitrary file upload vulnerability. A remote attacker can exploit it to upload files and execute code.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official Fix:
+    1. It is recommended that users obtain the latest patch or the latest version from the official site:
     https://www.hanweb.com/
 
-    临时修复方案：
-    1、服务器端将文件上传目录直接设置为不可执行。
-    2、文件类型检查：建议使用白名单方式（比黑名单更可靠），并结合MIME Type、后缀检查等方式（文件类型做白名单限制）。此外对于图片的处理可以使用压缩函数或resize函数，处理图片的同时破坏其包含的HTML代码。
-    3、使用随机数改写文件名和文件路径，使得用户不能轻易访问自己上传的文件。
-    4、单独设置文件服务器的域名。
-    5、验证文件内容，使用正则匹配恶意代码（过滤恶意代码各种绕过方式，如大小写、BASE64编码）限制上传。
-    6、修复服务器可能存在的解析漏洞。
-    7、严格限制可以修改服务器配置的文件上传如：.htaccess。
-    8、隐藏上传文件路径。
-    9、及时修复Web上传代码。
-    10、不能有本地文件包含漏洞。
+    Temporary Fix:
+    1. Set the server-side file upload directory to be non-executable.
+    2. File type check: it is recommended to use a whitelist approach (more reliable than a blacklist), combined with MIME type and extension checks. Additionally, for images, use compression or resize functions, which break any embedded HTML code while processing the image.
+    3. Rename files and paths using random numbers so users cannot easily access the files they upload.
+    4. Set up a separate domain for the file server.
+    5. Validate file content using regular expressions to match malicious code (filtering various bypass techniques such as case variations and BASE64 encoding) to restrict uploads.
+    6. Fix any parsing vulnerabilities that may exist on the server.
+    7. Strictly restrict uploads of files that can modify server configuration, such as .htaccess.
+    8. Hide uploaded file paths.
+    9. Timely fix web upload code.
+    10. There must be no local file inclusion vulnerability.
 requests:
 - matchers:
   - type: dsl
