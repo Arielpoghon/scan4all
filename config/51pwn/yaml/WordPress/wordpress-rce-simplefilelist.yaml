@@ -4,22 +4,22 @@ info:
   author:
   - l0ne1y
   description: |-
-    WordPress Plugin SimpleFilelist 未授权问题导致任意文件上传漏洞
-    WordPress和WordPress plugin都是WordPress基金会的产品。WordPress是一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。WordPress plugin是一个应用插件。
-    WordPress plugin The Simple File List 3.2.7及其之前版本存在安全漏洞，该漏洞源于~/wp-content/plugins/simple-file-list/ee-upload-engine.php 缺少身份验证。攻击者利用该漏洞可以进行任意文件上传。
+    Unauthorized issue with WordPress Plugin SimpleFilelist leads to arbitrary file upload vulnerability
+    WordPress and WordPress plugin are both products of the WordPress Foundation. WordPress is a blogging platform developed using PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers. WordPress plugin is an application plugin.
+    There is a security vulnerability in WordPress plugin The Simple File List 3.2.7 and previous versions. The vulnerability is caused by a lack of authentication in ~/wp-content/plugins/simple-file-list/ee-upload-engine.php. An attacker can exploit this vulnerability to upload arbitrary files.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.com/plugins
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.com/plugins
 
-    临时修复方案：
-    1、前后端同时对用户输入信息进行校验，双重验证机制。
-    2、调用功能前验证用户是否有权限调用相关功能。
-    3、直接对象引用的加密资源ID，防止攻击者枚举ID，敏感数据特殊化处理。
-    4、采用成熟的权限管理框架，如spring security。
-    5、用户进行访问操作的凭证（如用户ID、产品号码、订单流水号等）优先采用在服务端关联session或加密后放在session中的方式获取。
-    6、必须采用表单或其他参数提交用户进行访问操作的凭证（如用户ID、产品号码、订单流水号等）时，应尽可能采用难以猜测的构造方式（增加字母及随机数字等）或采用复杂的加密算法加密后提交，应对客户端提交的凭证与会话的权限进行严格的验证，如提交的产品号码是否为隶属于登录用户的产品号码。
-    7、对管理功能模块进行严格的权限验证，如非必要建议不对互联网开放或进行网络层的访问控制。
+    Temporary fix:
+    1. The front and back ends verify user input information at the same time, a double verification mechanism.
+    2. Before calling the function, verify whether the user has the permission to call the relevant function.
+    3. The encrypted resource ID referenced by the direct object prevents attackers from enumerating IDs and specializes in handling sensitive data.
+    4. Use a mature permission management framework, such as spring security.
+    5. The user's credentials for access operations (such as user ID, product number, order serial number, etc.) are preferably obtained by associating the session on the server side or encrypting it and placing it in the session.
+    6. When a form or other parameters must be used to submit the user's credentials for access operations (such as user ID, product number, order serial number, etc.), a construction method that is difficult to guess (adding letters and random numbers, etc.) should be used as much as possible or a complex encryption algorithm should be used to encrypt and submit. The credentials and session permissions submitted by the client should be strictly verified, such as whether the submitted product number is a product number belonging to the logged-in user.
+    7. Conduct strict permission verification on the management function modules. If not necessary, it is recommended not to open the Internet or perform access control at the network layer.
 requests:
 - matchers:
   - type: word

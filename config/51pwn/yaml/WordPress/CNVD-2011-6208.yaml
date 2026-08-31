@@ -4,15 +4,15 @@ info:
   author:
   - l0ne1y
   description: |-
-    WordPress Plugin eShop 6.2.8 跨站脚本漏洞
-    WordPress是一种使用PHP语言开发的博客平台，用户可以在支持PHP和MySQL数据库的服务器上架设自己的网志。 WordPress的eShop插件没有对用户提供的输入进行正确过滤，导致存在多个跨站脚本攻击漏洞。远程攻击者可利用这些漏洞执行受影响站点上下文用户浏览器中的任意脚本代码并窃取基于cookie的认证证书。
+    WordPress Plugin eShop 6.2.8 Cross-site Scripting Vulnerability
+    WordPress is a blogging platform developed using PHP language. Users can set up their own blogs on servers that support PHP and MySQL databases. The WordPress eShop plugin does not properly filter user-supplied input, resulting in multiple cross-site scripting vulnerabilities. A remote attacker could exploit these vulnerabilities to execute arbitrary script code in the user's browser in the context of an affected site and steal cookie-based authentication credentials.
   severity: medium
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：http://wordpress.org/extend/plugins/eshop/
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: http://wordpress.org/extend/plugins/eshop/
 
-    临时修复方案：
-    1、对输入(和URL参数)进行过滤，对输出进行编码，白名单和黑名单结合。也就是对提交的所有内容进行过滤，对url中的参数进行过滤，过滤掉会导致脚本执行的相关内容；然后对动态输出到页面的内容进行html编码，使脚本无法在浏览器中执行。虽然对输入过滤可以被绕过，但是也还是会拦截很大一部分的XSS攻击；最后对字符进行白名单或者黑名单限制。
+    Temporary fix:
+    1. Filter the input (and URL parameters), encode the output, and combine the whitelist and blacklist. That is to say, filter all submitted content, filter the parameters in the URL, and filter out relevant content that will cause the script to be executed; and then HTML-encode the content dynamically output to the page so that the script cannot be executed in the browser. Although input filtering can be bypassed, a large number of XSS attacks will still be intercepted; finally, characters are whitelisted or blacklisted.
 requests:
 - matchers:
   - type: dsl

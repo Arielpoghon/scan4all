@@ -1,17 +1,17 @@
 id: Wordpress-MainWP_Plugins-BypassLogin
 info:
-  name: WordPress MainWP V2.0.9.1 登录绕过漏洞检测
+  name: WordPress MainWP V2.0.9.1 login bypass vulnerability detection
   author:
   - l0ne1y
   description: |-
-    WordPress Plugin MainWP V2.0.9.1 代码逻辑问题导致登录绕过漏洞
-    WordPress和WordPress plugin都是WordPress基金会的产品。WordPress是一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。WordPress plugin是一种应用插件。
+    WordPress Plugin MainWP V2.0.9.1 code logic problem leads to login bypass vulnerability
+    WordPress and WordPress plugin are both products of the WordPress Foundation. WordPress is a blogging platform developed using PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers. WordPress plugin is an application plugin.
 
-    WordPress MainWP V2.0.9.1代码安全问题，在被"init"调用的该函式中，其对用户认证的检查并不完善，任何人都能触发该插件用户的登录机制，因此入侵者就可以利用这一点接管任何管理员帐户。
+    WordPress MainWP V2.0.9.1 code security issue. In the function called by "init", the check of user authentication is not perfect. Anyone can trigger the login mechanism of the plug-in user, so the intruder can use this to take over any administrator account.
   reference:
   - http://www.beebeeto.com/pdb/poc-2015-0080
   severity: critical
-  remediation: "官方修复方案：\n1、建议用户到官方获取最新补丁或者最新版本程序：https://security-advisory-mainwp-child-wordpress-plugin "
+  remediation: "Official fix:\n1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://security-advisory-mainwp-child-wordpress-plugin"
 requests:
 - matchers:
   - type: status

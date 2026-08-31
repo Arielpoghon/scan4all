@@ -1,24 +1,24 @@
 id: CNVD-2014-02541
 info:
-  name: WordPress LineNity主题 任意文件包含漏洞 POC
+  name: WordPress LineNity theme arbitrary file contains vulnerability POC
   author:
   - l0ne1y
   description: |-
-    WordPress Theme Linenity  'download.php'本地文件包含漏洞
-    WordPress是一种使用PHP语言开发的博客平台，用户可以在支持PHP和MySQL数据库的服务器上架设自己的网志。
+    WordPress Theme Linenity 'download.php' local file contains vulnerability
+    WordPress is a blogging platform developed using PHP language. Users can set up their own blogs on servers that support PHP and MySQL databases.
 
-    WordPress Linenity Theme 'download.php'脚本未能正确过滤'imgurl'参数数据，允许远程攻击者利用漏洞进行目录遍历攻击，可以WEB权限查看系统文件。
+    The WordPress Linenity Theme 'download.php' script failed to properly filter the 'imgurl' parameter data, allowing remote attackers to exploit the vulnerability to conduct directory traversal attacks and view system files with WEB permissions.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：http://themeforest.net/item/linenity-clean-responsive-wordpress-magazine/4417803
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patch or the latest version of the program: http://themeforest.net/item/linenity-clean-responsive-wordpress-magazine/4417803
 
-    临时修复方案：
-    1、PHP 中使用 open_basedir 配置限制访问在指定的区域，路径长短截断
-    2、过滤.（点）/（反斜杠）\\（反斜杠），编码绕过
-    3、禁止服务器远程文件包含
-    4、对于限制了包含文件后缀的情况，PHP版本小于5.3，php.ini magic_quotes_gpc = off，对可控参数未使用addslashes函数，满足这三个条件就可以使用%00截断。
-    5、问号、井号、空格绕过（远程）
+    Temporary fix:
+    1. Use open_basedir configuration in PHP to restrict access to specified areas and truncate the path length.
+    2. Filter. (dot)/(backslash)\\(backslash), encoding bypass
+    3. Disable server remote file inclusion
+    4. For the situation where the included file suffix is ​​restricted, the PHP version is less than 5.3, php.ini magic_quotes_gpc = off, and the addslashes function is not used for controllable parameters. If these three conditions are met, %00 truncation can be used.
+    5. Question mark, pound sign, and space bypass (remote)
 requests:
 - matchers:
   - type: dsl

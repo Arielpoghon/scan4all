@@ -1,17 +1,15 @@
 id: WordPress-Ad_Buttons_Plugins-DatabaseDownload
 info:
-  name: WordPress Ad Buttons Plugins 3.1 Database  下载漏洞
+  name: WordPress Ad Buttons Plugins 3.1 Database download vulnerability
   author:
   - l0ne1y
   description: |-
-    WordPress Plugin Ad Buttons 3.1 数据库备份文件泄漏漏洞
-    WordPress是WordPress基金会的一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。
+    WordPress Plugin Ad Buttons 3.1 Database Backup File Leak Vulnerability
+    WordPress is a blogging platform developed by the WordPress Foundation using the PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers.
 
-    WordPress ad-buttons插件3.1版本中存在数据库信息泄漏漏洞
+    Database information leakage vulnerability exists in WordPress ad-buttons plugin version 3.1
   severity: high
-  remediation: "官方修复方案：\n1、建议用户到官方获取最新补丁或者最新版本程序：wordpress.org/plugins/ad-buttons/
-    \n\n临时修复方案：\n1、去除页面、cookie或缓存中涉及的敏感信息或删除泄露信息页面\n2、将敏感信息进行加密存储，非必要不可发送前端\n3、发送敏感信息时需加密传输，如有必要需脱敏处理\n4、禁止用自己开发的加密算法，必须使用公开、安全的标准加密算法。\n5、禁止在日志中记录明文的敏感数据：禁止在日志中记录明文的敏感数据（如口\n令、会话标识jsessionid等），
-    防止敏感信息泄漏。\n6、禁止带有敏感数据的Web页面缓存：带有敏感数据的Web页面都应该禁止缓\n存，以防止敏感信息泄漏或通过代理服务器上网的用户数据互窜问题。\n7、对必须发送的敏感数据或页面请求接口做好严格的权限认证"
+  remediation: "Official repair plan:\\n1. It is recommended that users go to the official website to obtain the latest patch or the latest version of the program: wordpress.org/plugins/ad-buttons/\n\\n\\nTemporary fixes:\\n1. Remove sensitive information involved in pages, cookies or caches or delete leaked information pages\\n2. Encrypt and store sensitive information and do not send it to the front end unless necessary\\n3. Encrypted transmission is required when sending sensitive information, and desensitization is required if necessary\\n4. It is prohibited to use self-developed encryption algorithms and must use public, secure standard encryption algorithms. \\n5. It is forbidden to record plain text sensitive data in the log: It is forbidden to record plain text sensitive data in the log (such as password, session ID jsessionid, etc.).\nPrevent the leakage of sensitive information. \\n6. Disable caching of Web pages containing sensitive data: Web pages containing sensitive data should be prohibited from caching\\n to prevent leakage of sensitive information or mutual exchange of user data through proxy servers. \\n7. Perform strict permission authentication for sensitive data or page request interfaces that must be sent."
 requests:
 - matchers:
   - type: status

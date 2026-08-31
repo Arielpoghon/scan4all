@@ -1,28 +1,28 @@
 id: Wordpress-Simple_Forum_Plugins-DatabaseDownload
 info:
-  name: WordPress Simple-Forum Plugins 4.0 Database 文件下载漏洞
+  name: WordPress Simple-Forum Plugins 4.0 Database file download vulnerability
   author:
   - l0ne1y
   description: |-
-    WordPress Plugin Simple-Forum 4.0 数据库文件泄漏漏洞
-    WordPress是WordPress基金会的一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。
+    WordPress Plugin Simple-Forum 4.0 database file leak vulnerability
+    WordPress is a blogging platform developed by the WordPress Foundation using the PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers.
 
-    WordPress Simple-Forum Plugins 4.0版本中存在数据库信息泄漏漏洞
+    Database information leakage vulnerability exists in WordPress Simple-Forum Plugins version 4.0
   severity: medium
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.org/plugins/
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.org/plugins/
 
-    临时修复方案：
-    1、去除页面、cookie或缓存中涉及的敏感信息或删除泄露信息页面
-    2、将敏感信息进行加密存储，非必要不可发送前端
-    3、发送敏感信息时需加密传输，如有必要需脱敏处理
-    4、禁止用自己开发的加密算法，必须使用公开、安全的标准加密算法。
-    5、禁止在日志中记录明文的敏感数据：禁止在日志中记录明文的敏感数据（如口
-    令、会话标识jsessionid等）， 防止敏感信息泄漏。
-    6、禁止带有敏感数据的Web页面缓存：带有敏感数据的Web页面都应该禁止缓
-    存，以防止敏感信息泄漏或通过代理服务器上网的用户数据互窜问题。
-    7、对必须发送的敏感数据或页面请求接口做好严格的权限认证
+    Temporary fix:
+    1. Remove sensitive information involved in pages, cookies or caches or delete pages that reveal information.
+    2. Encrypt and store sensitive information and do not send it to the front end unless necessary.
+    3. When sending sensitive information, it must be encrypted and desensitized if necessary.
+    4. It is prohibited to use self-developed encryption algorithms. Public and secure standard encryption algorithms must be used.
+    5. It is prohibited to record plain text sensitive data in logs: It is prohibited to record plain text sensitive data (such as oral
+    command, session ID jsessionid, etc.) to prevent the leakage of sensitive information.
+    6. Disable caching of Web pages containing sensitive data: Web pages containing sensitive data should be prohibited from caching.
+    storage to prevent the leakage of sensitive information or the exchange of user data through proxy servers.
+    7. Perform strict permission authentication for sensitive data or page request interfaces that must be sent
 requests:
 - matchers:
   - type: dsl

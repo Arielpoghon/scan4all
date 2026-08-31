@@ -8,24 +8,24 @@ info:
   - wp-plugin
   - lfi
   description: |-
-    Wordpress Plugin Advanced Access Manager < 5.9.9 - 未经身份验证的本地文件包含漏洞
-    Advanced Access Manager WordPress 插件（5.9.9 之前的版本）允许读取任意文件。这样就可以下载 wp-config.php 文件并访问数据库，该数据库可在许多服务器上公开访问。
+    Wordpress Plugin Advanced Access Manager < 5.9.9 - Unauthenticated Local File Inclusion Vulnerability
+    The Advanced Access Manager WordPress plugin (versions prior to 5.9.9) allows reading of arbitrary files. This will download the wp-config.php file and access the database, which is publicly accessible on many servers.
 
-    受影响的函数是 application/Core/Media.php 文件中的 printMedia() 函数。
+    The affected function is the printMedia() function in the application/Core/Media.php file.
   reference:
   - https://wpscan.com/vulnerability/9873
   - https://id.wordpress.org/plugins/advanced-access-manager/
   severity: high
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.com/zh-cn/install-plugins/
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.com/zh-cn/install-plugins/
 
-    临时修复方案：
-    1、PHP 中使用 open_basedir 配置限制访问在指定的区域，路径长短截断
-    2、过滤.（点）/（反斜杠）\\（反斜杠），编码绕过
-    3、禁止服务器远程文件包含
-    4、对于限制了包含文件后缀的情况，PHP版本小于5.3，php.ini magic_quotes_gpc = off，对可控参数未使用addslashes函数，满足这三个条件就可以使用%00截断。
-    5、问号、井号、空格绕过（远程）
+    Temporary fix:
+    1. Use open_basedir configuration in PHP to restrict access to specified areas and truncate the path length.
+    2. Filter. (dot)/(backslash)\\(backslash), encoding bypass
+    3. Disable server remote file inclusion
+    4. For the situation where the included file suffix is ​​restricted, the PHP version is less than 5.3, php.ini magic_quotes_gpc = off, and the addslashes function is not used for controllable parameters. If these three conditions are met, %00 truncation can be used.
+    5. Question mark, pound sign, and space bypass (remote)
 requests:
 - matchers:
   - type: word

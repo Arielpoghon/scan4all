@@ -8,17 +8,17 @@ info:
   - config
   - fpd
   description: |-
-    WordPress 数据库修复工具 repair.php 未授权访问漏洞
-    WordPress是Wordpress基金会的一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。repair.php是数据库修复工具，旨在数据库出问题时重置恢复。
+    WordPress database repair tool repair.php unauthorized access vulnerability
+    WordPress is a blogging platform developed by the WordPress Foundation using the PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers. repair.php is a database repair tool, designed to reset and recover when there is a database problem.
   severity: low
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.com/
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.com/
 
-    临时修复方案：
-    1、repair.php 禁止直接暴漏在互联网，需通过VPN等较为安全的接入方式访问内部系统。
-    2、repair.php 开启身份认证，根据情况选择对应方式（认证用户，用户名密码）。
-    3、限制IP访问，绑定固定的IP访问后台管理系统。
+    Temporary fix:
+    1. Repair.php is prohibited from being directly exposed to the Internet. Internal systems need to be accessed through VPN and other relatively secure access methods.
+    2. Repair.php turns on identity authentication and selects the corresponding method (authentication user, username and password) according to the situation.
+    3. Restrict IP access and bind fixed IP to access the backend management system.
 requests:
 - matchers:
   - type: word

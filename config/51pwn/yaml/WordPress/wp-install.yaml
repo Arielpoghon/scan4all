@@ -4,21 +4,21 @@ info:
   author:
   - l0ne1y
   description: |-
-    Wordpress install 安装文件未删除漏洞
-    WordPress和WordPress plugin都是WordPress基金会的产品。WordPress是一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。WordPress plugin是一个应用插件。
+    Wordpress install installation file is not deleted vulnerability
+    WordPress and WordPress plugin are both products of the WordPress Foundation. WordPress is a blogging platform developed using PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers. WordPress plugin is an application plugin.
 
-    WordPress 存在访问控制不严，导致install.php可被攻击者访问，继而重装cms获取网站控制权。
+    WordPress has lax access control, which allows attackers to access install.php and then reinstall CMS to gain control of the website.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.com
-    临时修复方案：
-    1、配置所有的安全机制
-    2、最小原则，关掉或限制不使用的服务
-    3、更改默认账户信息
-    4、使用日志和警报
-    5、回显信息不显示任何与实际错误相关的信息
-    6、检查和修复安全配置项
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.com
+    Temporary fix:
+    1. Configure all security mechanisms
+    2. Minimum principle, turn off or limit unused services
+    3. Change default account information
+    4. Use logs and alerts
+    5. The echo information does not display any information related to the actual error.
+    6. Check and repair security configuration items
 requests:
 - matchers:
   - type: word

@@ -1,17 +1,15 @@
 id: Wordpress-Diarise_Plugins-LFI
 info:
-  name: WordPress Diarise 1.5.9本地文件包含
+  name: WordPress Diarise 1.5.9 local files include
   author:
   - l0ne1y
   description: |-
-    WordPress Theme Diarise 1.5.9 本地文件包含漏洞
-    WordPress和WordPress plugin都是WordPress基金会的产品。WordPress是一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。WordPress plugin是一种应用插件。
+    WordPress Theme Diarise 1.5.9 local file contains vulnerability
+    WordPress and WordPress plugin are both products of the WordPress Foundation. WordPress is a blogging platform developed using PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers. WordPress plugin is an application plugin.
 
-    WordPress Diarise 1.5.9 存在路径遍历漏洞，该漏洞允许远程攻击者通过calendar参数实行文件包含攻击。
+    WordPress Diarise 1.5.9 has a path traversal vulnerability that allows remote attackers to conduct file inclusion attacks via the calendar parameter.
   severity: critical
-  remediation: "官方修复方案：\n1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.org/plugins/Diarise
-    \n\n临时修复方案：\n1、PHP 中使用 open_basedir 配置限制访问在指定的区域，路径长短截断\n2、过滤.（点）/（反斜杠）\\\\（反斜杠），编码绕过\n3、禁止服务器远程文件包含\n4、对于限制了包含文件后缀的情况，PHP版本小于5.3，php.ini
-    magic_quotes_gpc = off，对可控参数未使用addslashes函数，满足这三个条件就可以使用%00截断。\n5、问号、井号、空格绕过（远程）"
+  remediation: "Official repair plan:\\n1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.org/plugins/Diarise\n\\n\\nTemporary fix:\\n1. Use open_basedir configuration in PHP to restrict access to the specified area, path length truncation\\n2. Filter. (dot)/(backslash)\\\\\\\\(backslash), encoding bypass\\n3. Disable server remote file inclusion\\n4. For the case where the included file suffix is restricted, the PHP version is less than 5.3, php.ini\nmagic_quotes_gpc = off, the addslashes function is not used for controllable parameters, and %00 truncation can be used if these three conditions are met. \\n5. Question mark, pound sign, and space bypass (remote)"
 requests:
 - matchers:
   - type: dsl

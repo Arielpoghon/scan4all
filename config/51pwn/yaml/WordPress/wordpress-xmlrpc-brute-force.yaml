@@ -4,16 +4,16 @@ info:
   author:
   - l0ne1y
   description: |-
-    Wordpress XMLRPC.php 暴力破解弱口令漏洞
-    WordPress和WordPress plugin都是WordPress基金会的产品。WordPress是一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。
-    Wordpress XMLRPC.php可通过暴力破解获得后台口令。
+    Wordpress XMLRPC.php brute force weak password vulnerability
+    WordPress and WordPress plugin are both products of the WordPress Foundation. WordPress is a blogging platform developed using PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers.
+    Wordpress XMLRPC.php can obtain the background password through brute force cracking.
   severity: high
   remediation: |-
-    1、建议系统管理人员将已发现的弱口令立即改成强口令，并拉网式排查所有系统管理员、用户、设备的弱口令，清扫未发现的弱口令。
-    2、弱口令重在管理。企业应制定强口令制度（如：密码需包含大小写字母、数字、特殊字符至少三种格式，长度不少于十位，并且密码键盘排列无序，密码企业、个人信息无关联。
-    3、弱口令排查方式可以通过汇总企业所有人员账户后根据强口令规则匹配自查、个性化制定字典暴力破解两种方式。
-    4、推荐强口令在线生成:[https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
-    5、推荐口令强度在线检测:[https://howsecureismypassword.net/](https://howsecureismypassword.net/)
+    1. It is recommended that system administrators immediately change the discovered weak passwords to strong passwords, and conduct a network search for weak passwords of all system administrators, users, and devices, and clean up undiscovered weak passwords.
+    2. Weak passwords focus on management. Enterprises should develop a strong password system (for example: passwords must contain at least three formats of uppercase and lowercase letters, numbers, and special characters, with a length of no less than ten digits, and the password keyboard must be arranged in an disordered manner, and passwords must be unrelated to company and personal information.
+    3. There are two ways to check for weak passwords: self-checking by aggregating all accounts of the company's personnel and matching strong password rules, and brute force cracking using a personalized dictionary.
+    4. It is recommended to generate strong passwords online: [https://suijimimashengcheng.51240.com/](https://suijimimashengcheng.51240.com/)
+    5. Recommended password strength online testing: [https://howsecureismypassword.net/](https://howsecureismypassword.net/)
 requests:
 - matchers:
   - type: status

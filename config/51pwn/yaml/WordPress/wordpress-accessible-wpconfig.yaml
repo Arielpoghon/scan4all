@@ -4,20 +4,20 @@ info:
   author:
   - l0ne1y
   description: |-
-    WordPress wp-config 配置文件备份泄漏漏洞
-    WordPress是Wordpress基金会的一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。
-    wp-config是wordpress的配置文件，其中包含数据库账号等敏感信息。通常建站人员会处于业务连续性考虑备份配置文件，如果访问权限不当就会给攻击者可趁之机。
+    WordPress wp-config configuration file backup leak vulnerability
+    WordPress is a blogging platform developed by the WordPress Foundation using the PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers.
+    wp-config is the WordPress configuration file, which contains sensitive information such as database accounts. Usually website builders will consider backing up configuration files for business continuity. If the access rights are improper, attackers will take advantage of it.
   severity: medium
   remediation: |-
-    1、去除页面、cookie或缓存中涉及的敏感信息或删除泄露信息页面
-    2、将敏感信息进行加密存储，非必要不可发送前端
-    3、发送敏感信息时需加密传输，如有必要需脱敏处理
-    4、禁止用自己开发的加密算法，必须使用公开、安全的标准加密算法。
-    5、禁止在日志中记录明文的敏感数据：禁止在日志中记录明文的敏感数据（如口
-    令、会话标识jsessionid等）， 防止敏感信息泄漏。
-    6、禁止带有敏感数据的Web页面缓存：带有敏感数据的Web页面都应该禁止缓
-    存，以防止敏感信息泄漏或通过代理服务器上网的用户数据互窜问题。
-    7、对必须发送的敏感数据或页面请求接口做好严格的权限认证
+    1. Remove sensitive information involved in pages, cookies or caches or delete pages that reveal information.
+    2. Encrypt and store sensitive information and do not send it to the front end unless necessary.
+    3. When sending sensitive information, it must be encrypted and desensitized if necessary.
+    4. It is prohibited to use self-developed encryption algorithms. Public and secure standard encryption algorithms must be used.
+    5. It is prohibited to record plain text sensitive data in logs: It is prohibited to record plain text sensitive data (such as oral
+    command, session ID jsessionid, etc.) to prevent the leakage of sensitive information.
+    6. Disable caching of Web pages containing sensitive data: Web pages containing sensitive data should be prohibited from caching.
+    storage to prevent the leakage of sensitive information or the exchange of user data through proxy servers.
+    7. Perform strict permission authentication for sensitive data or page request interfaces that must be sent
 requests:
 - matchers:
   - type: word

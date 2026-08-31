@@ -9,19 +9,19 @@ info:
   - lfi
   - rfi
   description: |-
-    Wordpress Plugin  Brandfolder 存在URL重定向漏洞
-    WordPress Brandfolder 中的一个漏洞允许远程攻击者通过“wp_abspath”参数将任意 URL 注入到“callback.php”端点，这会将受害者重定向到该端点。
+    Wordpress Plugin Brandfolder has URL redirection vulnerability
+    A vulnerability in WordPress Brandfolder allows remote attackers to inject arbitrary URLs via the "wp_abspath" parameter to the "callback.php" endpoint, which will redirect the victim to that endpoint.
   reference:
   - https://www.exploit-db.com/exploits/39591
   severity: low
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.com/zh-cn/install-plugins/
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.com/zh-cn/install-plugins/
 
-    临时修复方案：
-    1、代码固定跳转地址，不让用户控制变量。
-    2、跳转目标地址采用白名单映射机制、只对合法的 URL 做跳转。
-    3、合理充分的校验校验跳转的目标地址，非己方地址时告知用户跳转风险。
+    Temporary fix:
+    1. The code fixes the jump address and does not allow users to control variables.
+    2. The redirect target address adopts a whitelist mapping mechanism and only redirects to legal URLs.
+    3. Verify the target address of the jump reasonably and fully, and inform the user of the risk of jump if it is not your own address.
 requests:
 - matchers:
   - type: regex

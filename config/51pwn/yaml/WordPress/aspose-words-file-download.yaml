@@ -9,23 +9,23 @@ info:
   - lfi
   - aspose
   description: |-
-    Wordpress Plugin  Aspose Words Exporter < 2.0 存在任意文件下载漏洞
-    Aspose.Words Exporter WordPress 插件受到任意文件下载安全漏洞的影响。
-    插件的 aspose_doc_exporter_download.php 文件不限制访问、检查权限或验证文件参数，允许未经身份验证的用户从博客下载任何文件
+    Wordpress Plugin Aspose Words Exporter < 2.0 has an arbitrary file download vulnerability
+    The Aspose.Words Exporter WordPress plugin is affected by an arbitrary file download security vulnerability.
+    The plugin's aspose_doc_exporter_download.php file does not restrict access, check permissions, or validate file parameters, allowing unauthenticated users to download any file from the blog
   reference:
   - https://wpscan.com/vulnerability/7869
   - https://wordpress.org/plugins/aspose-doc-exporter
   severity: high
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.com/zh-cn/install-plugins/
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.com/zh-cn/install-plugins/
 
-    临时修复方案：
-    1、过滤\".\"，使用户在url中不能回溯上级目录。
-    2、正则匹配严格判断用户输入参数的格式，对用户传过来的文件名参数进行硬编码或统一编码，对文件类型进行白名单控制，对包含恶意字符或者空字符的参数进行拒绝。
-    3、禁止系统提供目录遍历服务，如：php.ini配置open_basedir限定文件访问范围。
-    4、文件路径保存至数据库，让用户提交文件对应ID下载文件。
-    5、用户下载文件之前进行权限校验。
+    Temporary fix:
+    1. Filter \".\" so that users cannot go back to the upper directory in the URL.
+    2. Regular matching strictly determines the format of user input parameters, hard-codes or uniformly encodes the file name parameters passed by the user, performs whitelist control on file types, and rejects parameters containing malicious characters or null characters.
+    3. Prohibit the system from providing directory traversal services, such as: php.ini configures open_basedir to limit file access scope.
+    4. Save the file path to the database and let the user submit the file corresponding to the ID to download the file.
+    5. Verify permissions before users download files.
 requests:
 - matchers:
   - type: word

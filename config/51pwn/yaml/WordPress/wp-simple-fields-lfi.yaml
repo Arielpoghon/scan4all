@@ -4,21 +4,21 @@ info:
   author:
   - l0ne1y
   description: |-
-    WordPress Plugin Simple Fields 文件包含漏洞
-    WordPress和WordPress plugin都是WordPress基金会的产品。WordPress是一套使用PHP语言开发的博客平台。该平台支持在PHP和MySQL的服务器上架设个人博客网站。WordPress plugin是一种应用插件。
+    WordPress Plugin Simple Fields file contains vulnerability
+    WordPress and WordPress plugin are both products of the WordPress Foundation. WordPress is a blogging platform developed using PHP language. The platform supports setting up personal blog websites on PHP and MySQL servers. WordPress plugin is an application plugin.
 
-    WordPress Plugin Simple Fields 0.2 - 0.3.5 存在路径遍历漏洞，该漏洞允许远程攻击者通过wp_abspath参数实现文件包含攻击。
+    WordPress Plugin Simple Fields 0.2 - 0.3.5 has a path traversal vulnerability that allows remote attackers to conduct file inclusion attacks via the wp_abspath parameter.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：https://wordpress.org/plugins/
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program: https://wordpress.org/plugins/
 
-    临时修复方案：
-    1、过滤\".\"，使用户在url中不能回溯上级目录。
-    2、正则匹配严格判断用户输入参数的格式，对用户传过来的文件名参数进行硬编码或统一编码，对文件类型进行白名单控制，对包含恶意字符或者空字符的参数进行拒绝。
-    3、禁止系统提供目录遍历服务，如：php.ini配置open_basedir限定文件访问范围。
-    4、文件路径保存至数据库，让用户提交文件对应ID下载文件。
-    5、用户下载文件之前进行权限校验。
+    Temporary fix:
+    1. Filter \".\" so that users cannot go back to the upper directory in the URL.
+    2. Regular matching strictly determines the format of user input parameters, hard-codes or uniformly encodes the file name parameters passed by the user, performs whitelist control on file types, and rejects parameters containing malicious characters or null characters.
+    3. Prohibit the system from providing directory traversal services, such as: php.ini configures open_basedir to limit file access scope.
+    4. Save the file path to the database and let the user submit the file corresponding to the ID to download the file.
+    5. Verify permissions before users download files.
 requests:
 - matchers:
   - type: regex
