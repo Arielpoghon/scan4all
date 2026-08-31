@@ -1,24 +1,24 @@
 id: joomla-unserialized-user_agent
 info:
-  name: joomla反序列化漏洞
+  name: joomla deserialization vulnerability
   author:
   - 折跃
   description: |-
-    Joomla! 反序列化漏洞
-    Joomla! 是一款开放源码的内容管理系统(CMS)。
+    Joomla! Deserialization Vulnerability
+    Joomla! is an open source content management system (CMS).
 
-    Joomla! 存在反序列化漏洞，攻击者可以通过该漏洞执行代码。
+    A deserialization vulnerability exists in Joomla! that allows an attacker to execute code.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program:
     http://www.joomla.org/
 
-    临时修复方案：
-    1、不要把用户的输入或者是用户可控的参数直接放进反序列化的操作中去。
-    2、在进入反序列化函数之前,对参数进行限制过滤。
-    3、给反序列数据加密签名，并确保解密在反序列之前
-    4、给反序列化接口添加认证授权
+    Temporary fix:
+    1. Do not put user input or user-controllable parameters directly into the deserialization operation.
+    2. Before entering the deserialization function, limit the parameters and filter them.
+    3. Encrypt and sign the deserialized data, and ensure that decryption occurs before desequencing.
+    4. Add authentication and authorization to the deserialization interface
 requests:
 - matchers:
   - type: dsl

@@ -4,16 +4,16 @@ info:
   author:
   - l0ne1y
   description: |-
-    Joomla 3.0.0 版到 3.4.6 版远程代码执行漏洞
-    Joomla CMS 上从 3.0.0 版到 3.4.6 版（从 2012 年到 2015 年 12 月发布）发现 了一个未公开的 PHP 对象注入 ，导致远程代码执行。
+    Remote code execution vulnerability in Joomla versions 3.0.0 to 3.4.6
+    An undocumented PHP object injection was discovered on Joomla CMS from version 3.0.0 to version 3.4.6 (released from 2012 to December 2015), leading to remote code execution.
   severity: critical
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program:
     http://www.joomla.org/
 
-    临时修复方案：
-    1、在执行涉及到可以将字符串作为代码执行的函数时，需要严格验证用户传递的参数，同时尽量避免用户控制参数。
+    Temporary fix:
+    1. When executing a function that can execute strings as code, it is necessary to strictly verify the parameters passed by the user, and try to avoid user control of the parameters.
 requests:
 - matchers:
   - type: word

@@ -4,16 +4,16 @@ info:
   author:
   - l0ne1y
   description: |-
-    joomla配置文件泄露
-    php-dist是Joomla创建的用来保存Joomla设置的文件，未经允许的访问会导致敏感信息泄露
+    joomla configuration file leaked
+    php-dist is a file created by Joomla to save Joomla settings. Unauthorized access may lead to the leakage of sensitive information.
   severity: low
   remediation: |-
-    官方修复方案：
-    1、建议用户到官方获取最新补丁或者最新版本程序：
+    Official fix:
+    1. It is recommended that users go to the official website to obtain the latest patches or the latest version of the program:
     http://www.joomla.org/
-    临时修复方案：
-    1、禁止带有敏感数据的Web页面展示，以防止敏感信息泄漏。
-    2、对必须发送的敏感数据或页面请求接口做好严格的权限认证
+    Temporary fix:
+    1. Prohibit the display of web pages containing sensitive data to prevent the leakage of sensitive information.
+    2. Conduct strict permission authentication for sensitive data or page request interfaces that must be sent.
 requests:
 - matchers:
   - type: word
