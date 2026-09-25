@@ -18,7 +18,7 @@ const DefaultUa = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (
 
 const defaultTimeout int = 15
 
-// 最大获取100K的响应，适用于绝大部分场景
+// Fetches up to 100K of the response, which is sufficient for most scenarios.
 const defaultResponseLength = 10240
 const defaultRetry = 0
 
@@ -30,7 +30,7 @@ var ContentTypes = map[string]string{
 	"form":      "application/x-www-form-urlencoded; charset=utf-8",
 }
 
-// ReqInfo 是一个HTTP请求元素的封装，可以快速进行简单的http请求
+// ReqInfo encapsulates an HTTP request element for making simple requests quickly.
 type ReqInfo struct {
 	Verb    string
 	Url     string
@@ -40,7 +40,7 @@ type ReqInfo struct {
 
 type ReqOptions struct {
 	Timeout       int    // in seconds
-	Retry         int    // 0为默认值，-1 代表关闭不retry
+	Retry         int    // 0 uses the default; -1 disables retries
 	VerifySSL     bool   // default false
 	AllowRedirect bool   // default false
 	Proxy         string // proxy settings, support http/https proxy only, e.g. http://127.0.0.1:8080
@@ -51,12 +51,12 @@ type session struct {
 	client *http.Client
 }
 
-// getSessionByOptions 根据配置获取一个session
+// getSessionByOptions creates a session from the given configuration.
 func getSessionByOptions(options *ReqOptions) *session {
 	if options == nil {
 		options = &ReqOptions{}
 	}
-	// 设置client的超时与ssl验证
+	// Set the client's timeout and SSL verification.
 	timeout := time.Duration(options.Timeout) * time.Second
 	if options.Timeout == 0 {
 		timeout = time.Duration(defaultTimeout) * time.Second
@@ -73,13 +73,13 @@ func getSessionByOptions(options *ReqOptions) *session {
 	client := &http.Client{
 		Timeout:   timeout,
 		Transport: tr}
-	// 设置是否跟踪跳转
+	// Configure whether redirects are followed.
 	if !options.AllowRedirect {
 		client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		}
 	}
-	// options内容同步到session中
+	// Copy the options into the session.
 	return &session{
 		ReqOptions: ReqOptions{
 			options.Timeout,
@@ -92,13 +92,13 @@ func getSessionByOptions(options *ReqOptions) *session {
 	}
 }
 
-// Get GET请求
+// Get sends a GET request.
 func Get(url string, headers map[string]string, options *ReqOptions) (*Response, error) {
 	sess := getSessionByOptions(options)
 	return sess.doRequest("GET", url, headers, nil)
 }
 
-// Request 自定义请求类型
+// Request sends a request with the specified method.
 func Request(verb string, url string, headers map[string]string, body []byte, options *ReqOptions) (*Response, error) {
 	sess := getSessionByOptions(options)
 	return sess.doRequest(verb, url, headers, body)
@@ -106,22 +106,22 @@ func Request(verb string, url string, headers map[string]string, body []byte, op
 
 // session functions
 
-// Get Session的GET请求
+// Get sends a GET request using the session.
 func (sess *session) Get(url string, headers map[string]string) (*Response, error) {
 	return sess.doRequest("GET", url, headers, nil)
 }
 
-// Post Session的POST请求
+// Post sends a POST request using the session.
 func (sess *session) Post(url string, headers map[string]string, body []byte) (*Response, error) {
 	return sess.doRequest("POST", url, headers, body)
 }
 
-// Request Session的自定义请求类型
+// Request sends a request with the specified method using the session.
 func (sess *session) Request(verb string, url string, headers map[string]string, body []byte) (*Response, error) {
 	return sess.doRequest(verb, url, headers, body)
 }
 
-// Request reqInfo的快速调用
+// Request sends the request described by reqInfo.
 func (r *ReqInfo) Request() (*Response, error) {
 	return Request(r.Verb, r.Url, r.Headers, r.Body, nil)
 }
@@ -146,14 +146,14 @@ func (r *ReqInfo) SetHeader(name, value string) {
 	r.Headers[name] = value
 }
 
-// doRequest 实际请求的函数
+// doRequest performs the HTTP request.
 func (sess *session) doRequest(verb string, url string, headers map[string]string, body []byte) (*Response, error) {
 	logger.Logger.Debug("do request to ", url)
 	verb = strings.ToUpper(verb)
 	bodyReader := bytes.NewReader(body)
 	req, err := http.NewRequest(verb, url, bodyReader)
 	if err != nil {
-		// 多数情况下是url中包含%
+		// Most of the time, the URL contains a %.
 		url = escapePercentSign(url)
 		req, err = http.NewRequest(verb, url, bodyReader)
 	}
@@ -161,11 +161,11 @@ func (sess *session) doRequest(verb string, url string, headers map[string]strin
 		return nil, errors.Wrap(err, "build request error")
 	}
 
-	// 设置headers头
+	// Set the headers.
 	for key, value := range headers {
 		req.Header.Set(key, value)
 	}
-	// 设置默认的headers头
+	// Set the default headers.
 	defaultHeaders := map[string]string{
 		"User-Agent": DefaultUa,
 		"Range":      fmt.Sprintf("bytes=0-%d", defaultResponseLength),
@@ -176,19 +176,19 @@ func (sess *session) doRequest(verb string, url string, headers map[string]strin
 			req.Header.Set(key, value)
 		}
 	}
-	// 设置Host头
+	// Set the Host header.
 	if host, ok := headers["Host"]; ok {
 		req.Host = host
 	}
-	// 设置默认的Content-Type头
+	// Set the default Content-Type header.
 	if verb == "POST" && headers["Content-Type"] == "" {
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-		// 应该手动设置Referer、Origin、和X-Requested-With字段
+		// The Referer, Origin, and X-Requested-With fields should be set manually.
 	}
-	// 覆盖Connection头
+	// Override the Connection header.
 	req.Header.Set("Connection", "close")
 
-	// 设置重试次数
+	// Set the retry count.
 	retry := sess.Retry
 	if retry == 0 {
 		retry = defaultRetry
@@ -196,12 +196,12 @@ func (sess *session) doRequest(verb string, url string, headers map[string]strin
 		retry = 0
 	}
 
-	// 请求
+	// Send the request.
 	var resp *http.Response
 	for i := 0; i <= retry; i++ {
 		resp, err = sess.client.Do(req)
 		if err != nil {
-			// sleep 0.1s
+			// Sleep for 0.1s.
 			time.Sleep(100 * time.Microsecond)
 			continue
 		} else {
@@ -212,7 +212,7 @@ func (sess *session) doRequest(verb string, url string, headers map[string]strin
 	if err != nil {
 		return nil, errors.Wrap(err, "error occurred during request")
 	}
-	// 带Range头后一般webserver响应都是206 PARTIAL CONTENT，修正为200 OK
+	// Web servers generally respond with 206 PARTIAL CONTENT when the Range header is set; change it to 200 OK.
 	if resp.StatusCode == 206 {
 		resp.StatusCode = 200
 		resp.Status = "200 OK"
