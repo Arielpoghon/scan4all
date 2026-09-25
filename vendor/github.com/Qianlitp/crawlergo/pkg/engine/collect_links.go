@@ -12,8 +12,9 @@ import (
 	"github.com/chromedp/chromedp"
 )
 
-/**
-最后收集所有的链接
+/*
+*
+Collect all links at the end
 */
 func (tab *Tab) collectLinks() {
 	go tab.collectHrefLinks()
@@ -24,7 +25,7 @@ func (tab *Tab) collectLinks() {
 func (tab *Tab) collectHrefLinks() {
 	defer tab.collectLinkWG.Done()
 	ctx := tab.GetExecutor()
-	// 收集 src href data-url 属性值
+	// Collect src, href, and data-url attribute values
 	attrNameList := []string{"src", "href", "data-url", "data-href"}
 	for _, attrName := range attrNameList {
 		tCtx, cancel := context.WithTimeout(ctx, time.Second*1)
@@ -40,7 +41,7 @@ func (tab *Tab) collectHrefLinks() {
 func (tab *Tab) collectObjectLinks() {
 	defer tab.collectLinkWG.Done()
 	ctx := tab.GetExecutor()
-	// 收集 object[data] links
+	// Collect object[data] links
 	tCtx, cancel := context.WithTimeout(ctx, time.Second*1)
 	defer cancel()
 	var attrs []map[string]string
@@ -53,7 +54,7 @@ func (tab *Tab) collectObjectLinks() {
 func (tab *Tab) collectCommentLinks() {
 	defer tab.collectLinkWG.Done()
 	ctx := tab.GetExecutor()
-	// 收集注释中的链接
+	// Collect links from comments
 	var nodes []*cdp.Node
 	tCtxComment, cancel := context.WithTimeout(ctx, time.Second*1)
 	defer cancel()
