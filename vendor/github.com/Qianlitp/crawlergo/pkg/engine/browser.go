@@ -25,17 +25,17 @@ func InitBrowser(chromiumPath string, extraHeaders map[string]interface{}, proxy
 	var bro Browser
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 
-		// 执行路径
+		// Executable path
 		chromedp.ExecPath(chromiumPath),
-		// 无头模式
+		// Headless mode
 		chromedp.Flag("headless", !noHeadless),
 		// https://github.com/chromedp/chromedp/issues/997#issuecomment-1030596050
 		// incognito mode not used
-		// 禁用GPU，不显示GUI
+		// Disable the GPU and GUI
 		chromedp.Flag("disable-gpu", true),
-		// 取消沙盒模式
+		// Disable the sandbox
 		chromedp.Flag("no-sandbox", true),
-		// 忽略证书错误
+		// Ignore certificate errors
 		chromedp.Flag("ignore-certificate-errors", true),
 
 		chromedp.Flag("disable-images", true),
@@ -54,7 +54,7 @@ func InitBrowser(chromiumPath string, extraHeaders map[string]interface{}, proxy
 
 		chromedp.WindowSize(1920, 1080),
 	)
-	// 设置浏览器代理
+	// Configure the browser proxy
 	if proxy != "" {
 		opts = append(opts, chromedp.ProxyServer(proxy))
 	}
@@ -64,7 +64,7 @@ func InitBrowser(chromiumPath string, extraHeaders map[string]interface{}, proxy
 		chromedp.WithLogf(log.Printf),
 	)
 	// https://github.com/chromedp/chromedp/issues/824#issuecomment-845664441
-	// 如果需要在一个浏览器上创建多个tab，则需要先创建浏览器的上下文，即运行下面的语句
+	// To create multiple tabs in one browser, first create the browser context by running the following statement
 	err := chromedp.Run(bctx)
 	if err != nil {
 		// not found chrome process need exit
