@@ -41,9 +41,10 @@ type Request struct {
 
 var supportContentType = []string{config.JSON, config.URLENCODED}
 
-/**
-获取Request对象
-可选设置headers和postData
+/*
+*
+Create a Request object.
+Headers and PostData can optionally be set.
 */
 func GetRequest(method string, URL *URL, options ...Options) Request {
 	var req Request
@@ -65,8 +66,9 @@ func GetRequest(method string, URL *URL, options ...Options) Request {
 	return req
 }
 
-/**
-完整格式化输出
+/*
+*
+Print the fully formatted request
 */
 func (req *Request) FormatPrint() {
 	var tempStr = req.Method
@@ -81,8 +83,9 @@ func (req *Request) FormatPrint() {
 	fmt.Println(tempStr)
 }
 
-/**
-简要输出
+/*
+*
+Print a concise representation
 */
 func (req *Request) SimplePrint() {
 	var tempStr = req.Method
@@ -102,8 +105,9 @@ func (req *Request) SimpleFormat() string {
 	return tempStr
 }
 
-/**
-不加入Header的请求ID
+/*
+*
+Return a request ID that excludes headers
 */
 func (req *Request) NoHeaderId() string {
 	return tools.StrMd5(req.Method + req.URL.String() + req.PostData)
@@ -117,12 +121,13 @@ func (req *Request) UniqueId() string {
 	}
 }
 
-/**
-返回POST请求数据解析后的map结构
+/*
+*
+Return the parsed POST data as a map.
 
-支持 application/x-www-form-urlencoded 、application/json
+Supports application/x-www-form-urlencoded and application/json.
 
-如果解析失败，则返回 key: postDataStr 的map结构
+If parsing fails, returns a map with the key "key" and the raw POST data as its value.
 */
 func (req *Request) PostDataMap() map[string]interface{} {
 	contentType, err := req.getContentType()
@@ -166,15 +171,17 @@ func (req *Request) PostDataMap() map[string]interface{} {
 	}
 }
 
-/**
-返回GET请求参数解析后的map结构
+/*
+*
+Return the parsed GET parameters as a map
 */
 func (req *Request) QueryMap() map[string][]string {
 	return req.URL.Query()
 }
 
-/**
-获取content-type
+/*
+*
+Get the Content-Type
 */
 func (req *Request) getContentType() (string, error) {
 	headers := req.Headers
