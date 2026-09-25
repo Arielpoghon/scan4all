@@ -7,7 +7,7 @@ import (
 	"github.com/Qianlitp/crawlergo/pkg/logger"
 )
 
-// 自定义一些函数
+// Response extends the standard HTTP response with its raw text.
 type Response struct {
 	http.Response
 	// raw text Response
@@ -15,7 +15,7 @@ type Response struct {
 }
 
 func getTextFromResp(r *http.Response) string {
-	// TODO: 编码转换
+	// TODO: Convert the character encoding.
 	if r.ContentLength == 0 {
 		return ""
 	}
