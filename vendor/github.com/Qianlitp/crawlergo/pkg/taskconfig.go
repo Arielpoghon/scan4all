@@ -3,28 +3,28 @@ package pkg
 import "time"
 
 type TaskConfig struct {
-	MaxCrawlCount           int    // 最大爬取的数量
-	FilterMode              string // simple、smart、strict
+	MaxCrawlCount           int    // Maximum number of requests to crawl
+	FilterMode              string // simple, smart, or strict
 	ExtraHeaders            map[string]interface{}
 	ExtraHeadersString      string
-	AllDomainReturn         bool // 全部域名收集
-	SubDomainReturn         bool // 子域名收集
-	NoHeadless              bool // headless模式
+	AllDomainReturn         bool // Collect all domains
+	SubDomainReturn         bool // Collect subdomains
+	NoHeadless              bool // Headless mode
 	DomContentLoadedTimeout time.Duration
-	TabRunTimeout           time.Duration     // 单个标签页超时
-	PathByFuzz              bool              // 通过字典进行Path Fuzz
-	FuzzDictPath            string            //Fuzz目录字典
-	PathFromRobots          bool              // 解析Robots文件找出路径
-	MaxTabsCount            int               // 允许开启的最大标签页数量 即同时爬取的数量
-	ChromiumPath            string            // Chromium的程序路径  `/home/zhusiyu1/chrome-linux/chrome`
-	EventTriggerMode        string            // 事件触发的调用方式： 异步 或 顺序
-	EventTriggerInterval    time.Duration     // 事件触发的间隔
-	BeforeExitDelay         time.Duration     // 退出前的等待时间，等待DOM渲染，等待XHR发出捕获
-	EncodeURLWithCharset    bool              // 使用检测到的字符集自动编码URL
-	IgnoreKeywords          []string          // 忽略的关键字，匹配上之后将不再扫描且不发送请求
-	Proxy                   string            // 请求代理
-	CustomFormValues        map[string]string // 自定义表单填充参数
-	CustomFormKeywordValues map[string]string // 自定义表单关键词填充内容
+	TabRunTimeout           time.Duration     // Timeout for a single tab
+	PathByFuzz              bool              // Fuzz paths with a dictionary
+	FuzzDictPath            string            // Path-fuzzing dictionary
+	PathFromRobots          bool              // Parse the robots file to discover paths
+	MaxTabsCount            int               // Maximum number of tabs to open, equal to the number of concurrent crawls
+	ChromiumPath            string            // Path to the Chromium executable, for example `/home/zhusiyu1/chrome-linux/chrome`
+	EventTriggerMode        string            // Event trigger mode: asynchronous or sequential
+	EventTriggerInterval    time.Duration     // Interval between event triggers
+	BeforeExitDelay         time.Duration     // Delay before exit to allow DOM rendering and XHR capture
+	EncodeURLWithCharset    bool              // Encode URLs using the detected character set
+	IgnoreKeywords          []string          // Keywords to ignore; matching requests are not crawled or sent
+	Proxy                   string            // Request proxy
+	CustomFormValues        map[string]string // Custom form values
+	CustomFormKeywordValues map[string]string // Custom values for form keywords
 }
 
 type TaskConfigOptFunc func(*TaskConfig)
