@@ -39,7 +39,7 @@ func Base64Encode(s string) string {
 	return base.EncodeToString(bytes)
 }
 
-// StrToStrs 字符串转化字符数组
+// StrToStrs converts a string into an array of characters.
 func StrToStrs(s string, lenth int) []string {
 	base := make([]string, lenth)
 	for i := 0; i < lenth; i++ {
@@ -48,7 +48,7 @@ func StrToStrs(s string, lenth int) []string {
 	return base
 }
 
-// StrToStrs4 每隔四个字符转换成一个字符串
+// StrToStrs4 converts each group of four characters into a string.
 func StrToStrs4(s string, lenth int) []string {
 	base := make([]string, lenth/4)
 	var j = 0
@@ -60,7 +60,7 @@ func StrToStrs4(s string, lenth int) []string {
 	return base
 }
 
-// Add 加权
+// Add applies a weight.
 func Add(uint64 []int, int int) []int {
 	lens := len(uint64)
 	for i := 0; i < 32; i++ {
@@ -78,7 +78,7 @@ func Add(uint64 []int, int int) []int {
 	return uint64
 }
 
-// Int32StrToInts   将uint64转换成string
+// Int32StrToInts converts a string into a slice of ints.
 func Int32StrToInts(ins string) []int {
 	uints := make([]int, 32)
 
@@ -93,7 +93,7 @@ func Int32StrToInts(ins string) []int {
 
 }
 
-// IntsToStr []int 转换成string
+// IntsToStr converts a slice of ints into a string.
 func IntsToStr(ins []int) string {
 	res := ""
 	for _, v := range ins {
