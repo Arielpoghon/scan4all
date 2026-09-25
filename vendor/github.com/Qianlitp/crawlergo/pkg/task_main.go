@@ -15,23 +15,23 @@ import (
 
 type CrawlerTask struct {
 	Browser       *engine2.Browser    //
-	RootDomain    string              // 当前爬取根域名 用于子域名收集
-	Targets       []*model.Request    // 输入目标
-	Result        *Result             // 最终结果
-	Config        *TaskConfig         // 配置信息
-	smartFilter   filter2.SmartFilter // 过滤对象
-	Pool          *ants.Pool          // 协程池
-	taskWG        sync.WaitGroup      // 等待协程池所有任务结束
-	crawledCount  int                 // 爬取过的数量
-	taskCountLock sync.Mutex          // 已爬取的任务总数锁
+	RootDomain    string              // Root domain used for subdomain collection
+	Targets       []*model.Request    // Input targets
+	Result        *Result             // Final results
+	Config        *TaskConfig         // Configuration
+	smartFilter   filter2.SmartFilter // Filter
+	Pool          *ants.Pool          // Goroutine pool
+	taskWG        sync.WaitGroup      // Wait for all tasks in the goroutine pool
+	crawledCount  int                 // Number of requests crawled
+	taskCountLock sync.Mutex          // Lock for the total number of crawled tasks
 }
 
 type Result struct {
-	ReqList       []*model.Request // 返回的同域名结果
-	AllReqList    []*model.Request // 所有域名的请求
-	AllDomainList []string         // 所有域名列表
-	SubDomainList []string         // 子域名列表
-	resultLock    sync.Mutex       // 合并结果时加锁
+	ReqList       []*model.Request // Results for the target domain
+	AllReqList    []*model.Request // Requests for all domains
+	AllDomainList []string         // List of all domains
+	SubDomainList []string         // List of subdomains
+	resultLock    sync.Mutex       // Lock while merging results
 }
 
 type tabTask struct {
@@ -40,8 +40,9 @@ type tabTask struct {
 	req         *model.Request
 }
 
-/**
-新建爬虫任务
+/*
+*
+Create a crawler task
 */
 func NewCrawlerTask(targets []*model.Request, taskConf TaskConfig) (*CrawlerTask, error) {
 	crawlerTask := CrawlerTask{
@@ -72,8 +73,8 @@ func NewCrawlerTask(targets []*model.Request, taskConf TaskConfig) (*CrawlerTask
 		req.Source = config.FromTarget
 	}
 
-	// 业务代码与数据代码分离, 初始化一些默认配置
-	// 使用 funtion option 和一个代理来初始化 taskConf 的配置
+	// Keep business logic separate from configuration and initialize default settings
+	// Initialize taskConf using functional options
 	for _, fn := range []TaskConfigOptFunc{
 		WithTabRunTimeout(config.TabRunTimeout),
 		WithMaxTabsCount(config.MaxTabsCount),
@@ -100,15 +101,16 @@ func NewCrawlerTask(targets []*model.Request, taskConf TaskConfig) (*CrawlerTask
 
 	crawlerTask.smartFilter.Init()
 
-	// 创建协程池
+	// Create the goroutine pool
 	p, _ := ants.NewPool(taskConf.MaxTabsCount)
 	crawlerTask.Pool = p
 
 	return &crawlerTask, nil
 }
 
-/**
-根据请求列表生成tabTask协程任务列表
+/*
+*
+Generate a tabTask goroutine from a request
 */
 func (t *CrawlerTask) generateTabTask(req *model.Request) *tabTask {
 	task := tabTask{
@@ -119,12 +121,13 @@ func (t *CrawlerTask) generateTabTask(req *model.Request) *tabTask {
 	return &task
 }
 
-/**
-开始当前任务
+/*
+*
+Run the current task
 */
 func (t *CrawlerTask) Run() {
-	defer t.Pool.Release()  // 释放协程池
-	defer t.Browser.Close() // 关闭浏览器
+	defer t.Pool.Release()  // Release the goroutine pool
+	defer t.Browser.Close() // Close the browser
 
 	if t.Config.PathFromRobots {
 		reqsFromRobots := GetPathsFromRobots(*t.Targets[0])
@@ -165,7 +168,7 @@ func (t *CrawlerTask) Run() {
 
 	t.taskWG.Wait()
 
-	// 对全部请求进行唯一去重
+	// Deduplicate all requests
 	todoFilterAll := make([]*model.Request, len(t.Result.AllReqList))
 	copy(todoFilterAll, t.Result.AllReqList)
 
@@ -177,15 +180,16 @@ func (t *CrawlerTask) Run() {
 		}
 	}
 
-	// 全部域名
+	// All domains
 	t.Result.AllDomainList = AllDomainCollect(t.Result.AllReqList)
-	// 子域名
+	// Subdomains
 	t.Result.SubDomainList = SubDomainCollect(t.Result.AllReqList, t.RootDomain)
 }
 
-/**
-添加任务到协程池
-添加之前实时过滤
+/*
+*
+Add a task to the goroutine pool.
+Filter it immediately before adding it.
 */
 func (t *CrawlerTask) addTask2Pool(req *model.Request) {
 	t.taskCountLock.Lock()
@@ -208,8 +212,9 @@ func (t *CrawlerTask) addTask2Pool(req *model.Request) {
 	}()
 }
 
-/**
-单个运行的tab标签任务，实现了workpool的接口
+/*
+*
+Run a single tab task and implement the worker pool interface
 */
 func (t *tabTask) Task() {
 	defer t.crawlerTask.taskWG.Done()
@@ -226,7 +231,7 @@ func (t *tabTask) Task() {
 	})
 	tab.Start()
 
-	// 收集结果
+	// Collect results
 	t.crawlerTask.Result.resultLock.Lock()
 	t.crawlerTask.Result.AllReqList = append(t.crawlerTask.Result.AllReqList, tab.ResultList...)
 	t.crawlerTask.Result.resultLock.Unlock()
