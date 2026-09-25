@@ -6,15 +6,15 @@ import (
 	"strings"
 )
 
-// 提取供应链信息
+// Extract supply-chain information.
 var SupplyChainReg *regexp.Regexp
 
 var UrlMt []*regexp.Regexp = []*regexp.Regexp{
 	regexp.MustCompile("^http[s]:\\/\\/[^\\/]+\\/?$"),
 	regexp.MustCompile("^http[s]:\\/\\/[^\\/]+\\/[^\\/]+$")}
 
-// url上下文识别、处理
-// 确保每个url上下文只计算一次开发商信息
+// Identify and process URL contexts.
+// Ensure developer information is calculated only once per URL context.
 func isCheck(szUrl string) bool {
 	for _, x := range UrlMt {
 		if x.MatchString(szUrl) {
@@ -24,7 +24,7 @@ func isCheck(szUrl string) bool {
 	return false
 }
 
-// body中开发商信息提取
+// DoBody extracts developer information from the response body.
 func DoBody(szUrl, szBody string, head *http.Header) {
 	if ok := head.Get("Content-Type"); -1 < strings.Index(ok, "text/html") {
 		a := SupplyChainReg.FindAllString(szBody, -1)
@@ -33,9 +33,9 @@ func DoBody(szUrl, szBody string, head *http.Header) {
 	}
 }
 
-// 提取供应链信息
-// 相同上下文、成功时只提取一次
-// 提取header信息：server、X*，不同上下文提取
+// Extract supply-chain information.
+// Extract information only once for each successful context.
+// Extract header information such as server and X* for each context.
 func SupplyChain(szUrl, szBody string, head *http.Header) {
 	szBody = strings.TrimSpace(szBody)
 	if nil == head || "" == szBody || "" == szUrl || !isCheck(szUrl) {
