@@ -20,14 +20,15 @@ import (
 	"github.com/chromedp/cdproto/network"
 )
 
-/**
-处理每一个HTTP请求
+/*
+*
+Handle each HTTP request
 */
 func (tab *Tab) InterceptRequest(v *fetch.EventRequestPaused) {
 	defer tab.WG.Done()
 	ctx := tab.GetExecutor()
 	_req := v.Request
-	// 拦截到的URL格式一定正常 不处理错误
+	// The intercepted URL is always well formed, so do not handle parse errors
 	url, err := model2.GetUrl(_req.URL, *tab.NavigateReq.URL)
 	if err != nil {
 		logger.Logger.Debug("InterceptRequest parse url failed: ", err)
@@ -49,7 +50,7 @@ func (tab *Tab) InterceptRequest(v *fetch.EventRequestPaused) {
 
 	tab.HandleHostBinding(&req)
 
-	// 静态资源 全部阻断
+	// Block all static resources
 	// https://github.com/Qianlitp/crawlergo/issues/106
 	if config.StaticSuffixSet.Contains(url.FileExt()) {
 		_ = fetch.FailRequest(v.RequestID, network.ErrorReasonBlockedByClient).Do(ctx)
@@ -58,7 +59,7 @@ func (tab *Tab) InterceptRequest(v *fetch.EventRequestPaused) {
 		return
 	}
 
-	// 处理导航请求
+	// Handle navigation requests
 	if tab.IsNavigatorRequest(v.NetworkID.String()) {
 		tab.NavNetworkID = v.NetworkID.String()
 		tab.HandleNavigationReq(&req, v)
@@ -72,15 +73,17 @@ func (tab *Tab) InterceptRequest(v *fetch.EventRequestPaused) {
 	_ = fetch.ContinueRequest(v.RequestID).Do(ctx)
 }
 
-/**
-判断是否为导航请求
+/*
+*
+// Report whether this is a navigation request
 */
 func (tab *Tab) IsNavigatorRequest(networkID string) bool {
 	return networkID == tab.LoaderID
 }
 
-/**
-处理 401 407 认证弹窗
+/*
+*
+// Handle 401 and 407 authentication prompts
 */
 func (tab *Tab) HandleAuthRequired(req *fetch.EventAuthRequired) {
 	defer tab.WG.Done()
@@ -91,12 +94,13 @@ func (tab *Tab) HandleAuthRequired(req *fetch.EventAuthRequired) {
 		Username: "Crawlergo",
 		Password: "Crawlergo",
 	}
-	// 取消认证
+	// Cancel authentication
 	_ = fetch.ContinueWithAuth(req.RequestID, &authRes).Do(ctx)
 }
 
-/**
-处理导航请求
+/*
+*
+Handle navigation requests
 */
 func (tab *Tab) HandleNavigationReq(req *model2.Request, v *fetch.EventRequestPaused) {
 	navReq := tab.NavigateReq
@@ -105,7 +109,7 @@ func (tab *Tab) HandleNavigationReq(req *model2.Request, v *fetch.EventRequestPa
 	defer cancel()
 	overrideReq := fetch.ContinueRequest(v.RequestID).WithURL(req.URL.String())
 
-	// 处理后端重定向请求
+	// Handle a backend redirection request
 	if tab.FoundRedirection && tab.IsTopFrame(v.FrameID.String()) {
 		logger.Logger.Debug("redirect navigation req: " + req.URL.String())
 		//_ = fetch.FailRequest(v.RequestID, network.ErrorReasonConnectionAborted).Do(ctx)
@@ -118,7 +122,7 @@ func (tab *Tab) HandleNavigationReq(req *model2.Request, v *fetch.EventRequestPa
 		navReq.RedirectionFlag = true
 		navReq.Source = config.FromNavigation
 		tab.AddResultRequest(navReq)
-		// 处理重定向标记
+		// Handle the redirection flag
 	} else if navReq.RedirectionFlag && tab.IsTopFrame(v.FrameID.String()) {
 		navReq.RedirectionFlag = false
 		logger.Logger.Debug("has redirection_flag: " + req.URL.String())
@@ -137,32 +141,33 @@ func (tab *Tab) HandleNavigationReq(req *model2.Request, v *fetch.EventRequestPa
 		if errR != nil {
 			logger.Logger.Debug(errR)
 		}
-		// 主导航请求
+		// Main navigation request
 	} else if tab.IsTopFrame(v.FrameID.String()) && req.URL.NavigationUrl() == navReq.URL.NavigationUrl() {
 		logger.Logger.Debug("main navigation req: " + navReq.URL.String())
-		// 手动设置POST信息
+		// Set the POST data manually
 		if navReq.Method == config.POST || navReq.Method == config.PUT {
 			overrideReq = overrideReq.WithPostData(navReq.PostData)
 		}
 		overrideReq = overrideReq.WithMethod(navReq.Method)
 		overrideReq = overrideReq.WithHeaders(MergeHeaders(navReq.Headers, req.Headers))
 		_ = overrideReq.Do(tCtx)
-		// 子frame的导航
+		// Child-frame navigation
 	} else if !tab.IsTopFrame(v.FrameID.String()) {
 		_ = overrideReq.Do(tCtx)
-		// 前端跳转 返回204
+		// Frontend navigation; return 204
 	} else {
 		_ = fetch.FulfillRequest(v.RequestID, 204).Do(ctx)
 	}
 }
 
-/**
-处理Host绑定
+/*
+*
+// Handle Host header rebinding
 */
 func (tab *Tab) HandleHostBinding(req *model2.Request) {
 	url := req.URL
 	navUrl := tab.NavigateReq.URL
-	// 导航请求的域名和HOST绑定中的域名不同，且当前请求的domain和导航请求header中的Host相同，则替换当前请求的domain并绑定Host
+	// If the navigation and bound host domains differ, and the current request domain matches the navigation Host header, replace the current domain and bind the Host header
 	if host, ok := tab.NavigateReq.Headers["Host"]; ok {
 		if navUrl.Hostname() != host && url.Host == host {
 			urlObj, _ := model2.GetUrl(strings.Replace(req.URL.String(), "://"+url.Hostname(), "://"+navUrl.Hostname(), -1), *navUrl)
@@ -172,11 +177,11 @@ func (tab *Tab) HandleHostBinding(req *model2.Request) {
 		} else if navUrl.Hostname() != host && url.Host == navUrl.Host {
 			req.Headers["Host"] = host
 		}
-		// 修正Origin
+		// Correct Origin
 		if _, ok := req.Headers["Origin"]; ok {
 			req.Headers["Origin"] = strings.Replace(req.Headers["Origin"].(string), navUrl.Host, host.(string), 1)
 		}
-		// 修正Referer
+		// Correct Referer
 		if _, ok := req.Headers["Referer"]; ok {
 			req.Headers["Referer"] = strings.Replace(req.Headers["Referer"].(string), navUrl.Host, host.(string), 1)
 		} else {
@@ -189,8 +194,9 @@ func (tab *Tab) IsTopFrame(FrameID string) bool {
 	return FrameID == tab.TopFrameId
 }
 
-/**
-解析响应内容中的URL 使用正则匹配
+/*
+*
+// Extract URLs from response content using regular expressions
 */
 func (tab *Tab) ParseResponseURL(v *network.EventResponseReceived) {
 	defer tab.WG.Done()
@@ -219,7 +225,7 @@ func (tab *Tab) ParseResponseURL(v *network.EventResponseReceived) {
 func (tab *Tab) HandleRedirectionResp(v *network.EventResponseReceivedExtraInfo) {
 	defer tab.WG.Done()
 	statusCode := tab.GetStatusCode(v.HeadersText)
-	// 导航请求，且返回重定向
+	// Navigation request that returned a redirect
 	if 300 <= statusCode && statusCode < 400 {
 		logger.Logger.Debug("set redirect flag.")
 		tab.FoundRedirection = true
