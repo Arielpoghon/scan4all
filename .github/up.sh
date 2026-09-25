@@ -16,11 +16,11 @@ cat ./go.mod|grep projectdiscovery|grep -E "subfinder|nuclei|wappalyzergo"|awk '
 
 cp -rf $HOME/MyWork/xray/pocs/*.yml $HOME/MyWork/scan4all/pocs_yml/ymlFiles/
 ls ../nuclei-templates|xargs -I % cp -rf ../nuclei-templates/% config/nuclei-templates/
-echo "start 静态go.mod去除不相关依赖"
+echo "start removing unrelated dependencies from go.mod"
 go mod tidy
-echo "更新 vendor "
+echo "update vendor"
 go mod vendor
-echo "工具静态分析代码实现"
+echo "statically analyze the tools"
 go vet
 #cat ./pkg/fingerprint/dicts/eHoleFinger.json|jq ".fingerprint[].cms"|wc -l
 #cat ./pkg/fingerprint/dicts/localFinger.json|jq ".fingerprint[].cms"|wc -l
