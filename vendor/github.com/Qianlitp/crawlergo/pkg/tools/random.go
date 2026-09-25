@@ -1,4 +1,4 @@
-// 随机数相关函数
+// Random-number utilities
 package tools
 
 import (
@@ -23,7 +23,7 @@ const (
 
 var src = rand.NewSource(time.Now().UnixNano())
 
-// RandSeq 生成长度为n的随机序列，包含大小写字母，数字
+// RandSeq returns a random sequence of the requested length containing uppercase and lowercase letters and digits
 func RandSeq(n int) string {
 	sb := strings.Builder{}
 	sb.Grow(n)
