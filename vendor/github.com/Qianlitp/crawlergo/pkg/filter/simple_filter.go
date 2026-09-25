@@ -23,31 +23,27 @@ func init() {
 	}
 }
 
-/**
-需要过滤则返回 true
-*/
+// Returns true if the request should be filtered.
 func (s *SimpleFilter) DoFilter(req *model.Request) bool {
 	if s.UniqueSet == nil {
 		s.UniqueSet = mapset.NewSet()
 	}
-	// 首先判断是否需要过滤域名
+	// First check whether the domain should be filtered.
 	if s.HostLimit != "" && s.DomainFilter(req) {
 		return true
 	}
-	// 去重
+	// Filter duplicate requests.
 	if s.UniqueFilter(req) {
 		return true
 	}
-	// 过滤静态资源
+	// Filter static resources.
 	if s.StaticFilter(req) {
 		return true
 	}
 	return false
 }
 
-/**
-请求去重
-*/
+// Filters duplicate requests.
 func (s *SimpleFilter) UniqueFilter(req *model.Request) bool {
 	if s.UniqueSet == nil {
 		s.UniqueSet = mapset.NewSet()
@@ -60,14 +56,12 @@ func (s *SimpleFilter) UniqueFilter(req *model.Request) bool {
 	}
 }
 
-/**
-静态资源过滤
-*/
+// Filters static resources.
 func (s *SimpleFilter) StaticFilter(req *model.Request) bool {
 	if s.UniqueSet == nil {
 		s.UniqueSet = mapset.NewSet()
 	}
-	// 首先将slice转换成map
+	// First convert the slice to a map.
 
 	if req.URL.FileExt() == "" {
 		return false
@@ -78,9 +72,7 @@ func (s *SimpleFilter) StaticFilter(req *model.Request) bool {
 	return false
 }
 
-/**
-只保留指定域名的链接
-*/
+// Keeps only links belonging to the specified domain.
 func (s *SimpleFilter) DomainFilter(req *model.Request) bool {
 	if s.UniqueSet == nil {
 		s.UniqueSet = mapset.NewSet()
