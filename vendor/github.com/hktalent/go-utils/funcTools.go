@@ -10,16 +10,16 @@ type RegFuncs struct {
 	FuncList []func()
 }
 
-// 注册
+// RegFunc registers a function.
 func (r *RegFuncs) RegFunc(fn func()) {
 	r.FuncList = append(r.FuncList, fn)
 }
 
-// tick 检测
+// Tick-related registry.
 var TickFunc = new(RegFuncs)
 var ReleaseFunc = new(RegFuncs)
 
-// 串行tick
+// DoFunc invokes registered functions serially.
 func (r *RegFuncs) DoFunc() {
 	for _, c := range r.FuncList {
 		c()
@@ -35,7 +35,7 @@ func CatchPanic() {
 	}
 }
 
-// 将该方法放到方法中运行，就可以打印出所有调用该方法的链路出来
+// PrintCaller prints the full call chain up to this method.
 func PrintCaller() {
 	var i = 0
 	for {
