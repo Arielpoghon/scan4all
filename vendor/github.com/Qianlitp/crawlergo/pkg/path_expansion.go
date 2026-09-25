@@ -39,8 +39,9 @@ const pathStr = "11/123/2017/2018/message/mis/model/abstract/account/act/action"
 var pathFuzzWG sync.WaitGroup
 var validateUrl mapset.Set
 
-/**
-从robots.txt文件中获取路径信息
+/*
+*
+Get paths from the robots.txt file
 */
 func GetPathsFromRobots(navReq model2.Request) []*model2.Request {
 	logger.Logger.Info("starting to get paths from robots.txt.")
@@ -56,7 +57,7 @@ func GetPathsFromRobots(navReq model2.Request) []*model2.Request {
 			Timeout: 5,
 			Proxy:   navReq.Proxy})
 	if err != nil {
-		//for
+		// Iterate over discovered paths
 		//logger.Logger.Error("request to robots.txt error ", err)
 		return result
 	}
@@ -79,8 +80,9 @@ func GetPathsFromRobots(navReq model2.Request) []*model2.Request {
 	return result
 }
 
-/**
-使用常见路径列表进行fuzz
+/*
+*
+Fuzz paths using the common path list
 */
 func GetPathsByFuzz(navReq model2.Request) []*model2.Request {
 	logger.Logger.Info("starting to get paths by fuzzing.")
@@ -88,8 +90,9 @@ func GetPathsByFuzz(navReq model2.Request) []*model2.Request {
 	return doFuzz(navReq, pathList)
 }
 
-/**
-使用字典列表进行fuzz
+/*
+*
+Fuzz paths using a dictionary list
 */
 func GetPathsByFuzzDict(navReq model2.Request, dictPath string) []*model2.Request {
 	logger.Logger.Infof("starting to get dict path by fuzzing: %s", dictPath)
@@ -138,8 +141,8 @@ func doFuzz(navReq model2.Request, pathList []string) []*model2.Request {
 	return result
 }
 
-/**
-
+/*
+*
  */
 func (s singleFuzz) doRequest() {
 	defer pathFuzzWG.Done()
