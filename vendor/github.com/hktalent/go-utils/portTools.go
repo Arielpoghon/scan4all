@@ -5,8 +5,8 @@ import (
 	"net"
 )
 
-// 127.0.0.1:0 实现动态端口，避免端口被占用的情况
-// :0 也可以
+// 127.0.0.1:0 selects a dynamic port to avoid conflicts with ports in use.
+// :0 also works.
 func GetAddr(s, szType string) string {
 	if "udp" == szType {
 		udpAddr, err := net.ResolveUDPAddr("udp4", s)
