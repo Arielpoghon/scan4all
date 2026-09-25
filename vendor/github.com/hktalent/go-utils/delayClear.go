@@ -5,28 +5,28 @@ import (
 	"time"
 )
 
-// 延时自动初对象
+// delayClearObj supports delayed automatic cleanup.
 type delayClearObj struct {
-	GetCacheObj func() interface{} // 返回缓存对象
-	FnCbk       func()             // 回调函数
-	Time        int64              // 开始及时的时间
-	DelayCall   int64              // 延时多少秒调用FnCbk
+	GetCacheObj func() interface{} // Returns the cached object.
+	FnCbk       func()             // Callback function.
+	Time        int64              // Time when the initial period began.
+	DelayCall   int64              // Delay in seconds before calling FnCbk.
 }
 
-// cache 延时sec
+// Cache delay in sec.
 //var nCacheTime = time.Second * 60
 
-// 内存清理注册
+// Registry for in-memory cleanup.
 var delayClear sync.Map
 
-// 注册延时清理
+// Registers a delayed cleanup.
 //
-//	n0 0表示60秒后执行
+//	n0; 0 means execute after 60 seconds.
 func RegDelayCbk(szKey string, fnCbk func(), cache func() interface{}, n0 int64, DelayCall int64) {
 	delayClear.Store(szKey, &delayClearObj{Time: time.Now().Unix() - n0, FnCbk: fnCbk, GetCacheObj: cache, DelayCall: DelayCall})
 }
 
-// 重时间计数器
+// UpTime resets the timer.
 func UpTime(szKey string) {
 	if o, ok := delayClear.Load(szKey); ok {
 		x1 := o.(*delayClearObj)
@@ -35,7 +35,7 @@ func UpTime(szKey string) {
 	}
 }
 
-// 获取缓存对象
+// GetCache returns the cached object.
 func GetCache(szKey string, bUpTime bool) interface{} {
 	if o, ok := delayClear.Load(szKey); ok {
 		x1 := o.(*delayClearObj)
@@ -47,7 +47,7 @@ func GetCache(szKey string, bUpTime bool) interface{} {
 	return nil
 }
 
-// 立刻执行
+// DoNow executes the callback immediately.
 func DoNow(szKey string) {
 	if o, ok := delayClear.Load(szKey); ok {
 		x1 := o.(*delayClearObj)
@@ -56,14 +56,14 @@ func DoNow(szKey string) {
 	}
 }
 
-// 单实例运行
+// Single-instance execution.
 var IsDo = make(chan struct{}, 1)
 
 func DoSleep() {
 	time.Sleep(4 * time.Second)
 }
 
-// 延时清理
+// DoDelayClear performs delayed cleanup.
 func DoDelayClear() {
 	IsDo <- struct{}{}
 	Wg.Add(1)
